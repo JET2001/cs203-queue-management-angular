@@ -1,5 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+
+/* Define variables for reusability */
+$primary-blue-1: #2E90FA;
+$primary-blue-2: #F5FBFF;
+$secondary-orange-1: #FEF0C7;
+$secondary-orange-2: #D16F05;
+$secondary-orange-3: #7D4304;
+$gray-1: #F3F4F5;
+$gray-2: #7A8086;
+$gray-3: #60676E;
+$gray-4: #363F47;
+$black: #000000;
+$success-1: #D1FADF;
+$success-2: #5EDD60;
+$error-1: #F04438;
+$error-2: #D92D20;
+
 html, body {
     height: 100%;
 }
@@ -7,3 +24,4 @@ html, body {
 body {
     font-family: 'Inter', sans-serif;
 }
+
