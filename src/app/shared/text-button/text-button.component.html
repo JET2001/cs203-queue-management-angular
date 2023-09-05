@@ -1,3 +1,4 @@
+<div>
 <button
   class="button"
   [ngClass]="{
@@ -8,9 +9,11 @@
     'button-important': buttonVariants == 'important',
     'button-important-outline': buttonVariants == 'importantOutline',
     'button-white-outline': buttonVariants == 'whiteOutline',
-    'disabled': isDisabled
+    'disabled': isDisabled,
+    'button-warning': buttonVariants == 'warning'
   }"
   (click)="onClick()"
 >
   {{ buttonText }}
 </button>
+</div>

@@ -1,9 +1,20 @@
 @import "/src/styles.scss";
+div{
+  display: inline-flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .button {
   border-radius: 35px;
-  height: 54px;
-  padding: 10px 20px;
-  font: $button-text-font, "Inter", sans-serif;
+  height: 40px;
+  width: 182px;
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  -webkit-text-fill-color: $white;
   cursor: pointer;
 }
 
@@ -14,13 +25,12 @@
 
 .button-secondary {
   border: none;
-  background-color: $secondary-orange-2;
+  background-color: $secondary-orange-3;
 }
 
 .button-black {
   border: none;
   background-color: $black;
-  -webkit-text-fill-color: $white;
 }
 
 .button-back {
@@ -30,6 +40,11 @@
 
 .button-important {
   border: none;
+  background-color: $secondary-orange-2;
+}
+
+.button-warning {
+  border: none;
   background-color: $error-2;
 }
 
@@ -37,14 +52,18 @@
   border-color: $error-2;
   border-style: solid;
   background-color: transparent;
+  -webkit-text-fill-color: $black;
 }
 
 .button-white-outline {
   border-color: $white;
   border-style: solid;
   background-color: transparent;
+  -webkit-text-fill-color: $black;
 }
 
 .disabled {
+  background-color: $gray-3;
+  -webkit-text-fill-color: $gray-2;
   pointer-events: none;
 }
