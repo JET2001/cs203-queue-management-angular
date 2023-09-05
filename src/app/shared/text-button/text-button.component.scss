@@ -44,3 +44,7 @@
   border-style: solid;
   background-color: transparent;
 }
+
+.disabled {
+  pointer-events: none;
+}

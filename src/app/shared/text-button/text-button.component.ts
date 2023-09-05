@@ -8,9 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class TextButtonComponent {
   @Input() buttonVariants: string = 'default';
   @Input() buttonText: string = 'Text';
+  @Input() isDisabled: boolean = false;
   @Output() buttonClick: EventEmitter<void> = new EventEmitter<void>();
 
   onClick(): void {
-    this.buttonClick.emit();
+    if (!this.isDisabled) this.buttonClick.emit();
   }
 }

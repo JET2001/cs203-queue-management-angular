@@ -35,10 +35,18 @@ describe('TextButtonComponent', () => {
     expect(buttonElement.classList.contains('button-secondary')).toBe(true);
   });
 
-  it('should call onClick when button is clicked', () => {
-    spyOn(component, 'onClick');
+  it('should emit button click', () => {
+    const emitSpy = spyOn(component.buttonClick, 'emit');
     const buttonElement: HTMLButtonElement = fixture.nativeElement.querySelector('button');
     buttonElement.click();
-    expect(component.onClick).toHaveBeenCalled();
+    expect(emitSpy).toHaveBeenCalled();
+  })
+
+  it('should not emit button click when isDisabled is true', () => {
+    const emitSpy = spyOn(component.buttonClick, 'emit');
+    component.isDisabled = true;
+    const buttonElement: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    buttonElement.click();
+    expect(emitSpy).not.toHaveBeenCalled();
   })
 });

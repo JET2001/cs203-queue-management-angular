@@ -6,11 +6,11 @@
     'button-black': buttonVariants == 'black',
     'button-back': buttonVariants == 'back',
     'button-important': buttonVariants == 'important',
-    'button-important-outline':
-      buttonVariants == 'importantOutline',
-    'button-white-outline': buttonVariants == 'whiteOutline'
+    'button-important-outline': buttonVariants == 'importantOutline',
+    'button-white-outline': buttonVariants == 'whiteOutline',
+    'disabled': isDisabled
   }"
   (click)="onClick()"
 >
-{{ buttonText }}
+  {{ buttonText }}
 </button>
