@@ -1,0 +1,16 @@
+<button
+  class="button"
+  [ngClass]="{
+    'button-primary': buttonVariants == 'primary',
+    'button-secondary': buttonVariants == 'secondary',
+    'button-black': buttonVariants == 'black',
+    'button-back': buttonVariants == 'back',
+    'button-important': buttonVariants == 'important',
+    'button-important-outline':
+      buttonVariants == 'importantOutline',
+    'button-white-outline': buttonVariants == 'whiteOutline'
+  }"
+  (click)="onClick()"
+>
+{{ buttonText }}
+</button>

@@ -1,0 +1,46 @@
+@import "/src/styles.scss";
+.button {
+  border-radius: 35px;
+  height: 54px;
+  padding: 10px 20px;
+  font: $button-text-font, "Inter", sans-serif;
+  cursor: pointer;
+}
+
+.button-primary {
+  border: none;
+  background-color: $primary-blue-1;
+}
+
+.button-secondary {
+  border: none;
+  background-color: $secondary-orange-2;
+}
+
+.button-black {
+  border: none;
+  background-color: $black;
+  -webkit-text-fill-color: $white;
+}
+
+.button-back {
+  border: none;
+  background-color: $gray-2;
+}
+
+.button-important {
+  border: none;
+  background-color: $error-2;
+}
+
+.button-important-outline {
+  border-color: $error-2;
+  border-style: solid;
+  background-color: transparent;
+}
+
+.button-white-outline {
+  border-color: $white;
+  border-style: solid;
+  background-color: transparent;
+}
