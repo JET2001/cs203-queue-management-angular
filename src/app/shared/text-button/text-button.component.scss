@@ -1,20 +1,15 @@
 @import "/src/styles.scss";
 div{
   display: inline-flex;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .button {
   border-radius: 35px;
-  height: 40px;
-  width: 182px;
   font-family: "Inter", sans-serif;
   font-size: 18px;
   font-weight: bold;
   -webkit-text-fill-color: $white;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
