@@ -38,3 +38,16 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+/* Global Styles */
+
+.h1 {
+  font: $header-1-font;
+}
+
+.h2 {
+  font: $header-2-font;
+}
+
+.p {
+  font: $body-font;
+}
