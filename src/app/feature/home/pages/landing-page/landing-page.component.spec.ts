@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LandingPageComponent } from './landing-page.component';
-import { TextButtonComponent } from 'src/app/shared/text-button/text-button.component';
+import { TextButtonComponent } from 'src/app/shared/components/text-button/text-button.component';
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent;
