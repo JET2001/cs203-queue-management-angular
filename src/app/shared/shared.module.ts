@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TextButtonComponent } from './text-button/text-button.component';
+import { TextButtonComponent } from './components/text-button/text-button.component';
 
 @NgModule({
   declarations: [TextButtonComponent],
