@@ -24,4 +24,5 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
+
 }
