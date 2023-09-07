@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, ViewEncapsulation } from '@angular/core';
 import { TextButtonComponent } from './components/text-button/text-button.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { CarouselModule } from 'primeng/carousel';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
-  declarations: [TextButtonComponent],
-  imports: [CommonModule],
-  exports: [CommonModule, TextButtonComponent],
+  declarations: [TextButtonComponent, CarouselComponent],
+  imports: [CommonModule, CarouselModule, ButtonModule],
+  exports: [CommonModule, TextButtonComponent, CarouselComponent],
 })
 export class SharedModule {}

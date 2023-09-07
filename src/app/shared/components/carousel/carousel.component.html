@@ -1,0 +1,19 @@
+<div>
+    <p-carousel [value]="concerts" [numVisible]="1" [numScroll]="1" [circular]="true" autoPlayInterval="1000">
+        <ng-template let-concert pTemplate="item">
+                <div class="carousel-slide">
+                    <img src="assets/icons/{{ concert.image }}"  width="400" height="500" />
+                    <div class="carousel-concert-details">
+                        <div class="carousel-concert-text">
+                            <h1>{{ concert.name }}</h1>
+                            <p>{{ concert.description }}</p>
+                        </div>
+                        <div class="carousel-buttons">
+                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(concert.registerLink)"></app-text-button>
+                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleRegisterButtonClick(concert.learnMoreLink)"></app-text-button>
+                        </div>
+                    </div>
+                </div>
+        </ng-template>
+    </p-carousel>
+</div>

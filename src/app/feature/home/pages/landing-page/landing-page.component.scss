@@ -1,9 +1,8 @@
 @import '/src/styles.scss';
 
-// .h2 {
-//     font: $header-1-font;
-// }
 
-// .p {
-//     font: $body-font;
-// }
+.landing-carousel-container {
+    height: 700px;
+    background-color: $primary-blue-1;
+    padding-top: 150px;
+}
