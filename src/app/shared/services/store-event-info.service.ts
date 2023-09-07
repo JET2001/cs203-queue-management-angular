@@ -10,7 +10,7 @@ export interface EventInfoParams {
 })
 export class StoreEventInfoService {
 
-  _eventInfo!: EventInfoParams;
+  _eventInfo: EventInfoParams = {};
 
   public get eventInfo(): EventInfoParams {
     return this._eventInfo;
