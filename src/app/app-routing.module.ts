@@ -14,7 +14,13 @@ export const appRoutes: Routes = [
     path: 'events',
     loadChildren: () => import('./feature/events/events.module').then(m => m.EventsModule)
   },
+  // event-register routing
+  {
+    path: 'events/register',
+    loadChildren: () => import('./feature/events-register/events-register.module').then(m => m.EventsRegisterModule)
+  },
+  // Route all other paths to home page.
   {
     path: '**', redirectTo: '/home', pathMatch: 'full'
-  }
+  },
 ];
