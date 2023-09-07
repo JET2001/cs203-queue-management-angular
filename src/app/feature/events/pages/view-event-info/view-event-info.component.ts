@@ -18,10 +18,13 @@ export class ViewEventInfoComponent implements OnInit {
   ngOnInit(): void {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.userID = this.storeEventInfoService.eventInfo.userID;
-    console.log(this.eventID, this.userID);
     if (this.eventID == undefined){
       this.router.navigate(['/home']);
     }
+  }
+
+  registerForGroup(): void {
+    this.router.navigate(['/events', 'register','group']);
   }
 
 
