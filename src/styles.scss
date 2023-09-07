@@ -1,53 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
-/* Define variables for reusability */
-/* Colours */
-$primary-blue-1: #2E90FA;
-$primary-blue-2: #F5FBFF;
-$secondary-orange-1: #FEF0C7;
-$secondary-orange-2: #D16F05;
-$secondary-orange-3: #7D4304;
-$white: #FFFFFF;
-$gray-1: #F3F4F5;
-$gray-2: #CFCFCF;
-$gray-3: #7A8086;
-$gray-4: #60676E;
-$gray-5: #363F47;
-$black: #000000;
-$success-1: #D1FADF;
-$success-2: #5EDD60;
-$error-1: #F04438;
-$error-2: #D92D20;
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
 
-/* Font sizes */
-$header-1-font: 40px bold;
-$header-2-font: 20px bold;
-$body-font: 18px regular;
-$sub-text-1-font: 15px medium;
-$sub-text-2-font: 14px medium;
-$sub-text-3-font: 15px bold;
-$sub-text-4-font: 14px regular;
-$button-text-font: 18px bold;
+@import '/src/variables';
 
 html, body {
     height: 100%;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
+    background-color: $gray-1;
+    font-family: 'Inter', sans-serif !important;
 }
 
 /* Global Styles */
-
-.h1 {
-  font: $header-1-font;
+h1 {
+  font-size: $header-1-font-size;
+  font-weight: bold;
+  font-family: 'Inter', sans-serif !important;
 }
 
-.h2 {
-  font: $header-2-font;
+h2 {
+  font-size: $header-2-font-size;
+  font-weight: bold;
+  font-family: 'Inter', sans-serif !important;
 }
 
-.p {
+p {
   font: $body-font;
+  font-family: 'Inter', sans-serif !important;
 }

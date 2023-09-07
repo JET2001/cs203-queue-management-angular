@@ -5,11 +5,11 @@ div{
 
 .button {
   border-radius: 35px;
-  font-family: "Inter", sans-serif;
-  font-size: 18px;
-  font-weight: bold;
+  font-weight: $button-text-font-weight;
+  font-size: $button-text-font-size;
   -webkit-text-fill-color: $white;
   padding: 10px 20px;
+  min-height: 60px;
   cursor: pointer;
 }
 
@@ -54,7 +54,7 @@ div{
   border-color: $white;
   border-style: solid;
   background-color: transparent;
-  -webkit-text-fill-color: $black;
+  -webkit-text-fill-color: $white;
 }
 
 .disabled {
