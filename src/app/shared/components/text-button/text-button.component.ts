@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./text-button.component.scss'],
 })
 export class TextButtonComponent {
-  @Input() buttonVariants: string = 'default';
+  @Input() buttonVariants: 'primary' | 'secondary' | 'back' | 'black' | 'important' | 'importantOutline' | 'whiteOutline' | 'warning';
   @Input() buttonText: string = 'Text';
   @Input() isDisabled: boolean = false;
   @Output() buttonClick: EventEmitter<void> = new EventEmitter<void>();
