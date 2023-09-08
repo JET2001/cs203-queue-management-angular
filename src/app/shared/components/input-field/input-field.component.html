@@ -1,0 +1,18 @@
+<div class="custom-input-container">
+  <input
+    class="custom-input"
+    [type]="getInputType()"
+    [formControl]="inputValue"
+    [placeholder]="placeholder"
+    [ngClass]="{ 'input-border-error': inputValue.hasError }"
+  />
+  <div class="input-error-message" *ngIf="inputValue.hasError('required')">
+    This field is required.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('email')">
+    Invalid email format.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'mobile'">
+    Invalid mobile number format.
+  </div>
+</div>
