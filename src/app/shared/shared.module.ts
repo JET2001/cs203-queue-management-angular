@@ -4,7 +4,7 @@ import { TextButtonComponent } from './components/text-button/text-button.compon
 import { CarouselComponent } from '../feature/home/components/carousel/carousel.component';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputFieldComponent } from './components/input-field/input-field.component';
 
 @NgModule({
@@ -14,12 +14,14 @@ import { InputFieldComponent } from './components/input-field/input-field.compon
     CarouselModule,
     ButtonModule,
     ReactiveFormsModule,
+    FormsModule
   ],
   exports: [
     CommonModule,
     TextButtonComponent,
     CarouselComponent,
     InputFieldComponent,
+    FormsModule
   ],
 })
 export class SharedModule {}
