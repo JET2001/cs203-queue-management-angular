@@ -6,29 +6,29 @@ import { events } from 'src/app/mock-db/MockDB';
 })
 export class GetEventInfoService {
   loadAllCarousellEvents() : Promise<Event[]> {
-    return Promise.resolve(this.getCarousellEventData());
+    return Promise.resolve(this._getCarousellEventData());
   }
 
   loadEvent(eventID: number): Promise<Event> {
-    return Promise.resolve(this.getEventData(eventID));
+    return Promise.resolve(this._getEventData(eventID));
   }
 
-  private getCarousellEventData(): Event[] {
+  private _getCarousellEventData(): Event[] {
     let carousellEvents : Event[] = [];
     for (let event of events){
       if (event.isHighlighted){
-        this.buildEventSummary(event);
+        this._buildEventSummary(event);
         carousellEvents.push(event);
       }
     }
     return carousellEvents;
   }
 
-  private getEventData(eventID: number): Event {
+  private _getEventData(eventID: number): Event {
     return events[eventID];
   }
 
-  private buildEventSummary(event: Event): void {
+  private _buildEventSummary(event: Event): void {
     let summaryStringBuilder = "Coming to "
     console.log(summaryStringBuilder);
 
