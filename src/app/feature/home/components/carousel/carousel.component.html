@@ -9,8 +9,8 @@
                             <p>{{ event.description }}</p>
                         </div>
                         <div class="carousel-buttons">
-                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(event.registerLink)"></app-text-button>
-                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleRegisterButtonClick(event.learnMoreLink)"></app-text-button>
+                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(event.eventID)"></app-text-button>
+                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleLearnMoreButtonClick(event.eventID)"></app-text-button>
                         </div>
                     </div>
                 </div>

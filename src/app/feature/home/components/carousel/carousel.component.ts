@@ -19,15 +19,29 @@ export class CarouselComponent implements OnInit{
     private storeEventInfoService: StoreEventInfoService
   ) {}
 
+  mockUserID : number = 1;
   ngOnInit(): void {
     this.getEventInfoService.loadAllCarousellEvents().then((events) => {
       this.events = events;
     })
   }
 
-  handleRegisterButtonClick(link: string): void {
+  handleRegisterButtonClick(eventID: number): void {
     // to be implemented once we have other pages to route to
     // this.router.navigate()
-    window.location.href = link;
+    // window.location.href = link;
+    this.storeEventInfoService.eventInfo = {
+      userID: this.mockUserID,
+      eventID: eventID
+    };
+    this.router.navigate(['/events','register','group']);
+  }
+
+  handleLearnMoreButtonClick(eventID: number): void {
+    this.storeEventInfoService.eventInfo = {
+      userID: this.mockUserID,
+      eventID: eventID
+    };
+    this.router.navigate(['/events']);
   }
 }
