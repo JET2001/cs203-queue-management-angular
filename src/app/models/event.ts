@@ -1,7 +1,12 @@
 export interface Event {
-  name: string;
-  image: string;
-  description: string;
-  registerLink: string;
-  learnMoreLink: string;
+  eventID: number;
+  name?: string;
+  image?: string;
+  description?: string;
+  summary?: string;
+  registerLink?: string;
+  learnMoreLink?: string;
+  countries: string[];
+  isHighlighted: boolean;
+  maxPreference?: number;
 }

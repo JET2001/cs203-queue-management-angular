@@ -20,7 +20,7 @@ export class CarouselComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.getEventInfoService.loadAllEvents().then((events) => {
+    this.getEventInfoService.loadAllCarousellEvents().then((events) => {
       this.events = events;
     })
   }
