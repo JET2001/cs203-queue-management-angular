@@ -1,6 +1,6 @@
 import { GetEventInfoService } from './../../services/get-event-info-service';
 import { Component, OnInit } from '@angular/core';
-import { Event } from './event';
+import { Event } from '../../../../models/event';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
 
