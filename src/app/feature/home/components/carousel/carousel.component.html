@@ -1,16 +1,16 @@
 <div>
-    <p-carousel [value]="concerts" [numVisible]="1" [numScroll]="1" [circular]="true" autoPlayInterval="1000">
-        <ng-template let-concert pTemplate="item">
+    <p-carousel [value]="events" [numVisible]="1" [numScroll]="1" [circular]="true" autoPlayInterval="1000">
+        <ng-template let-event pTemplate="item">
                 <div class="carousel-slide">
-                    <img src="assets/icons/{{ concert.image }}"  width="400" height="500" />
+                    <img src="assets/icons/{{ event.image }}"  width="400" height="500" />
                     <div class="carousel-concert-details">
                         <div class="carousel-concert-text">
-                            <h1>{{ concert.name }}</h1>
-                            <p>{{ concert.description }}</p>
+                            <h1>{{ event.name }}</h1>
+                            <p>{{ event.description }}</p>
                         </div>
                         <div class="carousel-buttons">
-                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(concert.registerLink)"></app-text-button>
-                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleRegisterButtonClick(concert.learnMoreLink)"></app-text-button>
+                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(event.registerLink)"></app-text-button>
+                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleRegisterButtonClick(event.learnMoreLink)"></app-text-button>
                         </div>
                     </div>
                 </div>

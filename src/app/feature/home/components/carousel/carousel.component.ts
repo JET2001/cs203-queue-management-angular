@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ConcertService } from '../../services/concert.service';
-import { Concert } from './concert';
+import { GetEventInfoService } from './../../services/get-event-info-service';
+import { Component, OnInit } from '@angular/core';
+import { Event } from './event';
 import { Router } from '@angular/router';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
 
 
 @Component({
@@ -11,12 +12,16 @@ import { Router } from '@angular/router';
 })
 
 export class CarouselComponent implements OnInit{
-  concerts: Concert[];
-  constructor(private concertService: ConcertService, private router: Router) {}
+  events: Event[];
+  constructor(
+    private getEventInfoService: GetEventInfoService,
+    private router: Router,
+    private storeEventInfoService: StoreEventInfoService
+  ) {}
 
   ngOnInit(): void {
-    this.concertService.getConcerts().then((concerts) => {
-      this.concerts = concerts;
+    this.getEventInfoService.loadAllEvents().then((events) => {
+      this.events = events;
     })
   }
 
