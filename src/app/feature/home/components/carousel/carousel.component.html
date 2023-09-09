@@ -6,7 +6,7 @@
                     <div class="carousel-concert-details">
                         <div class="carousel-concert-text">
                             <h1>{{ event.name }}</h1>
-                            <p>{{ event.description }}</p>
+                            <p>{{ event.summary }}</p>
                         </div>
                         <div class="carousel-buttons">
                             <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(event.eventID)"></app-text-button>

@@ -1,8 +1,8 @@
 export interface RegGroup {
   groupID: number;
+  eventID: number;
   userIDs: number[];
-
-  size(): number {
-    return userIDs.length;
-  }
+  hasAllUsersConfirmed: boolean;
+  queueIDs?: number[];
+  purchaseID?: number;
 }
