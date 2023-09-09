@@ -1,6 +1,21 @@
-<h1>Event Details Page</h1>
-<p>We are viewing information for eventID {{eventID}}.</p>
-<p *ngIf = "userID">You are logged in as userID {{userID}}.</p>
+<app-header></app-header>
+<body>
+  <h1>{{eventInfo.name}}</h1>
+  <section id ="top">
+    <div id = "poster" >
+      <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster" width="400" height="500"/>
+    </div>
+    <div id = 'event-info'>
+      <div class = 'event-details'>
+        <h2>Event Details</h2>
+        <p *ngIf = "datesAreValid">{{earliestShowDate.getDate() | date}} ~ {{latestShowDate.getDate() | date }}</p>
+      </div>
+    </div>
+  </section>
+  <p>We are viewing information for eventID {{eventID}}.</p>
+  <p *ngIf = "userID">You are logged in as userID {{userID}}.</p>
 
-<app-text-button buttonVariants="primary" buttonText="Form a group" (buttonClick)="registerForGroup()"></app-text-button>
+  <app-text-button buttonVariants="primary" buttonText="Form a group" (buttonClick)="registerForGroup()"></app-text-button>
+
+</body>
 

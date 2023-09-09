@@ -4,12 +4,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ViewEventInfoComponent } from './pages/view-event-info/view-event-info.component';
 import { RouterModule } from '@angular/router';
 import { eventRoutes } from './events.routing';
+import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 
 
 
 @NgModule({
   declarations: [
-    ViewEventInfoComponent
+    ViewEventInfoComponent,
   ],
   imports: [
     SharedModule,

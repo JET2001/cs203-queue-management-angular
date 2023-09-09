@@ -18,6 +18,11 @@ export class ViewEventInfoComponent implements OnInit {
   eventInfo!: Event;
   userRegGroupInfo !: RegGroup | undefined;
   showInfo!: ShowInfo[] | undefined;
+  earliestShowDate!: Date;
+  latestShowDate!: Date;
+
+  // Utility variables
+  datesAreValid: boolean = false;
 
   constructor(
     private storeEventInfoService: StoreEventInfoService,
@@ -27,13 +32,14 @@ export class ViewEventInfoComponent implements OnInit {
     private getShowInfoService: GetShowInfoService
   ){}
 
-  ngOnInit(): void {
+  async ngOnInit() : Promise<void> {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.userID = this.storeEventInfoService.eventInfo.userID;
     // for debugging
-    this.eventID = Number(prompt("Enter an eventID (0 to 4)"));
-    this.userID = Number(prompt("Enter a userID (0 to 4)"));
-
+    // this.eventID = Number(prompt("Enter an eventID (0 to 4)"));
+    // this.userID = Number(prompt("Enter a userID (0 to 4)"));
+    this.eventID = 0;
+    this.userID = 0;
     if (this.eventID == undefined){
       this.router.navigate(['/home']);
     }
@@ -42,41 +48,67 @@ export class ViewEventInfoComponent implements OnInit {
       // TODO: Should prompt for login once log in is complete.
     }
     console.log("eventID = ", this.eventID, "userID = ", this.userID);
-    this.getEventInfoService.loadEvent(this.eventID!).then(
+    await this.getEventInfoService.loadEvent(this.eventID).then(
       (event: Event) => {
-        this.eventInfo = event
-        console.log("I am done!");
+        this.eventInfo = event;
+        // console.log("I am done!");
       }
     );
-
-    this.getShowInfoService.loadShowInfo(this.eventID!).then(
+    // console.log("Event info = ", this.eventInfo);
+    await this.getShowInfoService.loadShowInfo(this.eventID).then(
       (showInfo: ShowInfo[] | undefined) => {
         this.showInfo = showInfo;
-        console.log("I am done2!");
+        this._calculateEarliestAndLatestShow();
+        this.datesAreValid = true;
+        // console.log("I am done2!");
       }
     );
-
-    this.getRegGroupService.getRegGroupOfUser(this.eventID, this.userID).then(
+    // console.log("Show Info = ", this.showInfo);
+    await this.getRegGroupService.getRegGroupOfUser(this.eventID, this.userID).then(
       (group: RegGroup | undefined) => this.userRegGroupInfo = group
     );
-
-    // console.log("Event info = ", this.eventInfo);
-    // console.log("Show Info = ", this.showInfo);
-    // console.log("Registration Group info = ", this.userRegGroupInfo);
+    console.log("Registration Group info = ", this.userRegGroupInfo);
+    this._calculateEarliestAndLatestShow();
+    console.log("End of ngOninit!")
   }
 
-  ngAfterViewChecked(): void{
-    console.log("Event info = ", this.eventInfo);
-    console.log("Show Info = ", this.showInfo);
-    console.log("Registration Group info = ", this.userRegGroupInfo);
+  ngAfterContentChecked(): void{
+    console.log("Earliest show = ", this.earliestShowDate);
+    console.log("Latest show = ", this.latestShowDate);
   }
 
   registerForGroup(): void {
     this.router.navigate(['/events', 'register','group']);
   }
 
-  private _loadUserRegStatus(): void {
+  private _calculateEarliestAndLatestShow(): void {
+    if(this.showInfo == undefined || this.showInfo.length == 0) {
+      this.earliestShowDate = new Date(0);
+      this.latestShowDate = new Date(0);
+      return;
+    }
 
+    this.earliestShowDate = this.showInfo[0].showDateTime;
+    this.latestShowDate = this.showInfo[0].showDateTime;
+    for (let show of this.showInfo){
+      // Set earliest time
+      if(this._isEarlier(show.showDateTime, this.earliestShowDate)){
+        this.earliestShowDate = show.showDateTime;
+      }
+      // Set latest time
+      else if (this._isLater(show.showDateTime, this.latestShowDate)){
+        this.latestShowDate = show.showDateTime;
+      }
+      else;
+    }
+    console.log("Calculation complete!");
   }
 
+  private _isEarlier(timeA: Date, timeB: Date): boolean {
+    return (timeA.getTime() - timeB.getTime()) < 0;
+  }
+
+  private _isLater(timeA: Date, timeB: Date): boolean {
+    return (timeB.getTime() - timeA.getTime()) < 0;
+  }
 }
