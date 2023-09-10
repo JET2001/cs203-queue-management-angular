@@ -5,9 +5,24 @@
     <div id = 'event-title'>
       <h1>{{eventInfo.name}}</h1>
     </div>
-    <div id = 'reg-status-group'>
-      <div>
+    <div id = 'reg-status-group' [ngSwitch] = "registerStatus">
+      <div *ngSwitchCase="'0'">
         <app-text-button buttonVariants="primary" buttonText="REGISTER"></app-text-button>
+      </div>
+      <div *ngSwitchCase="'1'">
+        <app-text-button buttonVariants="primary" [isDisabled]="true" buttonText = 'PENDING CONFIRMATION'></app-text-button>
+      </div>
+      <div *ngSwitchCase="'2'">
+        <app-text-button buttonVariants="important" buttonText = "NEXT STEPS"></app-text-button>
+      </div>
+      <div *ngSwitchCase="'3'">
+        <app-text-button buttonVariants="successful" buttonText = "REGISTERED"></app-text-button>
+      </div>
+      <div *ngSwithcase = "'4'">
+        <app-text-button buttonVariants="primary" [isDisabled] = "true" buttonText = "PURCHASED"></app-text-button>
+      </div>
+      <div *ngSwitchDefault>
+        <app-text-button buttonVariants ="warning" buttonText = "INTERNAL ERROR"></app-text-button>
       </div>
     </div>
   </div>
@@ -28,7 +43,9 @@
     <div id = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
       <h2>Group Members</h2>
       <app-group-member-list [memberEmailList]="otherMemberEmailList" [confirmList]="otherMemberConfirmList"></app-group-member-list>
+      <app-text-button buttonVariants="warning" buttonText = "Modify Group"></app-text-button>
     </div>
+
   </div>
 </div>
 
