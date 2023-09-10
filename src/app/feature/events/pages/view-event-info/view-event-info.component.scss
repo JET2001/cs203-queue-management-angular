@@ -5,7 +5,49 @@ body{
   margin-bottom: 44px;
 }
 
-#poster, #event-info {
-  display: inline-flex;
+.parent {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+}
+#container-top {
+  height: 5vh;
+  margin-bottom: 2vh;
+}
 
+#event-group-outer {
+  height: 50vh;
+}
+
+#event-title {
+  width: 80vw;
+}
+
+#reg-status-group {
+  width: 10vw;
+}
+
+#poster {
+  width: 30vw;
+  height: 50vh;
+  img {
+    height: auto;
+    max-width: 95%;
+  }
+}
+
+app-text-button {
+  display: block;
+  margin-bottom: 2vh;
+  width: 100%;
+}
+
+#event-info-group {
+  width: 30vw;
+  height: 50vh;
+}
+
+#reg-info-group {
+  width: 30vw;
+  height: 50vh;
 }

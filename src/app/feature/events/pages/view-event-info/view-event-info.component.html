@@ -1,21 +1,36 @@
 <app-header></app-header>
 <body>
-  <h1>{{eventInfo.name}}</h1>
-  <section id ="top">
-    <div id = "poster" >
-      <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster" width="400" height="500"/>
+<div id = 'container-top'>
+  <div class = 'parent' id = 'container'>
+    <div id = 'event-title'>
+      <h1>{{eventInfo.name}}</h1>
     </div>
-    <div id = 'event-info'>
-      <div class = 'event-details'>
-        <h2>Event Details</h2>
-        <p *ngIf = "datesAreValid">{{earliestShowDate.getDate() | date}} ~ {{latestShowDate.getDate() | date }}</p>
+    <div id = 'reg-status-group'>
+      <div>
+        <app-text-button buttonVariants="primary" buttonText="REGISTER"></app-text-button>
       </div>
     </div>
-  </section>
-  <p>We are viewing information for eventID {{eventID}}.</p>
-  <p *ngIf = "userID">You are logged in as userID {{userID}}.</p>
+  </div>
+</div>
+<div id = 'event-group-outer'>
+  <div class = 'parent' id = 'event-group-container'>
+    <div id = "poster">
+      <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster"/>
+    </div>
 
-  <app-text-button buttonVariants="primary" buttonText="Form a group" (buttonClick)="registerForGroup()"></app-text-button>
+    <div id = 'event-info-group'>
+      <h2>Event Details</h2>
+      <p *ngIf = "datesAreValid">{{earliestShowDate.getDate() | date}} ~ {{latestShowDate.getDate() | date }}</p>
+      <app-text-button buttonVariants="secondary" buttonText="View Seat Map"></app-text-button>
+      <app-text-button buttonVariants="secondary" buttonText="Conditions of Entry"></app-text-button>
+    </div>
+
+    <div id = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
+      <h2>Group Members</h2>
+      <app-group-member-list [memberEmailList]="otherMemberEmailList" [confirmList]="otherMemberConfirmList"></app-group-member-list>
+    </div>
+  </div>
+</div>
 
 </body>
 
