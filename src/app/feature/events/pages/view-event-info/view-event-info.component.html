@@ -3,7 +3,7 @@
 <div id = 'container-top'>
   <div class = 'parent' id = 'container'>
     <div id = 'event-title'>
-      <h1>{{eventInfo.name}}</h1>
+      <h1 *ngIf = "hasEventLoaded">{{eventInfo.name}}</h1>
     </div>
     <div id = 'reg-status-group' [ngSwitch] = "registerStatus">
       <div *ngSwitchCase="'0'">
@@ -18,7 +18,7 @@
       <div *ngSwitchCase="'3'">
         <app-text-button buttonVariants="successful" buttonText = "REGISTERED"></app-text-button>
       </div>
-      <div *ngSwitchcase = "'4'">
+      <div *ngSwitchCase = "'4'">
         <app-text-button buttonVariants="primary" [isDisabled] = "true" buttonText = "PURCHASED"></app-text-button>
       </div>
       <div *ngSwitchDefault>
@@ -29,7 +29,7 @@
 </div>
 <div id = 'event-group-outer'>
   <div class = 'parent' id = 'event-group-container'>
-    <div id = "poster">
+    <div *ngIf = "hasEventLoaded" id = "poster">
       <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster"/>
     </div>
 

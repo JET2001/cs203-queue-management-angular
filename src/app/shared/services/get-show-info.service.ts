@@ -43,7 +43,6 @@ export class GetShowInfoService {
           queueStartTime: queue.queueStartTime,
           queueEndTime: queue.queueEndTime
         };
-        console.log("eventID, showID, showInfoItem", eventID,  show.showID, showInfoItem);
 
         showInfo.push(showInfoItem);
       }

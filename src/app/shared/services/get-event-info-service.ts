@@ -30,7 +30,6 @@ export class GetEventInfoService {
 
   private _buildEventSummary(event: Event): void {
     let summaryStringBuilder = "Coming to "
-    console.log(summaryStringBuilder);
 
     // Build event summary
     for (let i = 0; i < event.countries.length -1; ++i){

@@ -36,6 +36,9 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Variables for registration status
   registerStatus: RegStatus = RegStatus.NOT_REGISTERED;
+
+  // Utility variables
+  hasEventLoaded: boolean = false;
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
@@ -60,11 +63,11 @@ export class ViewEventInfoComponent implements OnInit {
     if (this.userID == undefined){
       // TODO: Should prompt for login once log in is complete.
     }
-    console.log("eventID = ", this.eventID, "userID = ", this.userID);
+
     await this.getEventInfoService.loadEvent(this.eventID).then(
       (event: Event) => {
         this.eventInfo = event;
-
+        this.hasEventLoaded = true;
       }
     );
 
@@ -79,7 +82,6 @@ export class ViewEventInfoComponent implements OnInit {
     await this.getRegGroupService.getRegGroupOfUser(this.eventID, this.userID).then(
       (group: RegGroup | undefined) => this.userRegGroupInfo = group
     );
-    console.log("Registration Group info = ", this.userRegGroupInfo);
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
@@ -105,8 +107,6 @@ export class ViewEventInfoComponent implements OnInit {
         }
       }
     }
-
-    console.log("End of ngOninit!")
   }
 
   showGroupMembersInfo(): boolean {
@@ -121,7 +121,6 @@ export class ViewEventInfoComponent implements OnInit {
   }
 
   private _calculateEarliestAndLatestShow(): void {
-    console.log("Show info = ", this.showInfo);
     if(this.showInfo == undefined || this.showInfo.length == 0) {
       this.earliestShowDate = new Date(0);
       this.latestShowDate = new Date(0);
