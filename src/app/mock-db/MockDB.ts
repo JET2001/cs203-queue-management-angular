@@ -108,6 +108,7 @@ export const RegGroups: RegGroup[] = [
     groupID: 0,
     userIDs: [1,2,3],
     eventID: 0,
+    confirmed:[1,1,1],
     hasAllUsersConfirmed: true,
   },
   { // userIDs 0,2,3 go for Coldplay (id 1), all users confirmed and selected queues
@@ -115,12 +116,14 @@ export const RegGroups: RegGroup[] = [
     userIDs: [0,2,3],
     eventID: 1,
     queueIDs: [0,1],
+    confirmed: [1,1,1],
     hasAllUsersConfirmed: true
   },
   { // userIDs 0,2,3 go for Anson Seabra (id 3), not all users have confirmed.
     groupID: 2,
     userIDs: [0,2,3],
     eventID: 3,
+    confirmed:[1,0,0],
     hasAllUsersConfirmed: false
   },
   { // userID 0 goes alone to Taylor Swift (id 0), all users have confirmed, and he purchased a ticket.
@@ -129,6 +132,7 @@ export const RegGroups: RegGroup[] = [
     eventID: 0,
     queueIDs: [101,102,103],
     hasAllUsersConfirmed: true,
+    confirmed: [1,1,1],
     purchaseID: 1
   }
 ];

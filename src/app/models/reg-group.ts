@@ -5,4 +5,5 @@ export interface RegGroup {
   hasAllUsersConfirmed: boolean;
   queueIDs?: number[];
   purchaseID?: number;
+  confirmed: number[];
 }
