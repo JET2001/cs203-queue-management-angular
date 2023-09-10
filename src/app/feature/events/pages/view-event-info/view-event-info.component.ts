@@ -34,9 +34,6 @@ export class ViewEventInfoComponent implements OnInit {
   earliestShowDate!: Date;
   latestShowDate!: Date;
 
-  // Utility variables
-  datesAreValid: boolean = false;
-
   // Variables for registration status
   registerStatus: RegStatus = RegStatus.NOT_REGISTERED;
   constructor(
@@ -54,7 +51,7 @@ export class ViewEventInfoComponent implements OnInit {
     // for debugging
     // this.eventID = Number(prompt("Enter an eventID (0 to 4)"));
     // this.userID = Number(prompt("Enter a userID (0 to 4)"));
-    this.eventID = 1;
+    this.eventID = 0;
     this.userID = 0;
     if (this.eventID == undefined){
       this.router.navigate(['/home']);
@@ -67,24 +64,26 @@ export class ViewEventInfoComponent implements OnInit {
     await this.getEventInfoService.loadEvent(this.eventID).then(
       (event: Event) => {
         this.eventInfo = event;
-        // console.log("I am done!");
+
       }
     );
-    // console.log("Event info = ", this.eventInfo);
+
     await this.getShowInfoService.loadShowInfo(this.eventID).then(
       (showInfo: ShowInfo[] | undefined) => {
         this.showInfo = showInfo;
         this._calculateEarliestAndLatestShow();
-        this.datesAreValid = true;
-        // console.log("I am done2!");
+
       }
     );
-    // console.log("Show Info = ", this.showInfo);
+
     await this.getRegGroupService.getRegGroupOfUser(this.eventID, this.userID).then(
       (group: RegGroup | undefined) => this.userRegGroupInfo = group
     );
     console.log("Registration Group info = ", this.userRegGroupInfo);
 
+    // Registration status of the user affects what button the user sees
+    // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
+    // see reg-status.ts file for the statuses.
     this._getRegistrationStatusOfUser();
 
     if (this.userRegGroupInfo){
@@ -113,36 +112,38 @@ export class ViewEventInfoComponent implements OnInit {
   showGroupMembersInfo(): boolean {
     return this.registerStatus != RegStatus.NOT_REGISTERED;
   }
-  // ngAfterContentChecked(): void{
-  //   console.log("Earliest show = ", this.earliestShowDate);
-  //   console.log("Latest show = ", this.latestShowDate);
-  // }
 
+  datesAreValid(): boolean {
+    return (this.earliestShowDate != undefined) && (this.latestShowDate != undefined);
+  }
   registerForGroup(): void {
     this.router.navigate(['/events', 'register','group']);
   }
 
   private _calculateEarliestAndLatestShow(): void {
+    console.log("Show info = ", this.showInfo);
     if(this.showInfo == undefined || this.showInfo.length == 0) {
       this.earliestShowDate = new Date(0);
       this.latestShowDate = new Date(0);
       return;
     }
+    let earliestShow = this.showInfo[0].showDateTime;
+    let latestShow = this.showInfo[0].showDateTime;
 
-    this.earliestShowDate = this.showInfo[0].showDateTime;
-    this.latestShowDate = this.showInfo[0].showDateTime;
     for (let show of this.showInfo){
       // Set earliest time
-      if(this._isEarlier(show.showDateTime, this.earliestShowDate)){
-        this.earliestShowDate = show.showDateTime;
+      if(this._isEarlier(show.showDateTime, earliestShow)){
+        earliestShow = show.showDateTime;
       }
       // Set latest time
-      else if (this._isLater(show.showDateTime, this.latestShowDate)){
-        this.latestShowDate = show.showDateTime;
+      else if (this._isLater(show.showDateTime, latestShow)){
+        latestShow = show.showDateTime;
       }
       else;
     }
-    console.log("Calculation complete!");
+    this.earliestShowDate = earliestShow;
+    this.latestShowDate = latestShow;
+
   }
 
   private _getRegistrationStatusOfUser(): void {
