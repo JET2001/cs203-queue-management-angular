@@ -1,0 +1,16 @@
+.item {
+  display: flex;
+  flex-direction: row;
+}
+
+.email {
+  width: 85%;
+}
+
+.confirm {
+  width: 5%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
