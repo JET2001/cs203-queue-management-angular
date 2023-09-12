@@ -95,7 +95,6 @@ export class ViewEventInfoComponent implements OnInit {
           await this.getUserInfoService.loadUserInfo(groupUserIDs[i]).then(
             (user: User | undefined) => {
               if (user == undefined) {
-                console.log("User is unexpectedly undefined");
                 return;
               }
               this.confirmationOfMembers.set(user.email, (this.userRegGroupInfo!.confirmed[i] == 1));

@@ -9,11 +9,6 @@ export class GroupMemberListComponent {
   @Input() memberEmailList : string[] = [];
   @Input() confirmList: number[] = [];
 
-  ngOnInit(): void{
-    if (this.memberEmailList.length != this.confirmList.length) {
-      console.log("GroupMemberListError: MemberEmailList is not the same as confirmlist!");
-    }
-  }
   hasConfirmed(index: number): boolean{
     return this.confirmList[index] == 1;
   }
