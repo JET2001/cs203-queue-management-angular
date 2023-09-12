@@ -19,10 +19,14 @@
     </div>
     <div class="auth-input-fields">
       <div class="code-input-field">
-        <app-input-field placeholder="Enter code" inputType="auth-code" [inputValue]="authenticationFC"></app-input-field>
+        <app-input-field
+          placeholder="Enter code"
+          inputType="auth-code"
+          [inputValue]="authenticationFC"
+        ></app-input-field>
       </div>
       <div class="code-input-field">
-        <input type="checkbox" id="trust" /><label
+        <input type="checkbox" id="trust" [(ngModel)]="isChecked" /><label
           for="trust"
           class="checkbox-text"
         >
