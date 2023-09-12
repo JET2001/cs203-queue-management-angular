@@ -1,17 +1,17 @@
-import { GetRegistrationGroupService } from './../../../../shared/services/get-registration-group.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetEventInfoService } from 'src/app/shared/services/get-event-info-service';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
 import { Event } from 'src/app/models/event';
 import { RegGroup } from 'src/app/models/reg-group';
+import { User } from 'src/app/models/user';
+import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
+import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import {
   GetShowInfoService,
   ShowInfo,
-} from 'src/app/shared/services/get-show-info.service';
+} from 'src/app/shared/services/get-show-info/get-show-info.service';
+import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { RegStatus } from '../../constants/reg-status';
-import { GetUserInfoService } from 'src/app/shared/services/get-user-info.service';
-import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-view-event-info',

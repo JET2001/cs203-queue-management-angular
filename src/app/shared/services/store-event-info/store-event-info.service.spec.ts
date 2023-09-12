@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import {
-  StoreEventInfoService,
-  EventInfoParams,
+  StoreEventInfoService
 } from './store-event-info.service';
 
 describe('StoreEventInfoService', () => {

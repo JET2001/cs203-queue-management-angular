@@ -1,6 +1,6 @@
-import { RegGroup } from './../../models/reg-group';
 import { Injectable } from '@angular/core';
 import { RegGroups } from 'src/app/mock-db/MockDB';
+import { RegGroup } from 'src/app/models/reg-group';
 
 @Injectable({
   providedIn: 'root',
