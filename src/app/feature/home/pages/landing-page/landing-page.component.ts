@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GaVerificationPopupComponent } from 'src/app/ga-verification-popup/ga-verification-popup.component';
+import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
 
 @Component({
