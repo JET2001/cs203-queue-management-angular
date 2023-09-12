@@ -1,6 +1,55 @@
-<h1>Event Details Page</h1>
-<p>We are viewing information for eventID {{eventID}}.</p>
-<p *ngIf = "userID">You are logged in as userID {{userID}}.</p>
+<app-header></app-header>
+<body>
+<div class = 'container-top'>
+  <div class = 'parent'>
+    <div class = 'event-title'>
+      <h1 *ngIf = "hasEventLoaded">{{eventInfo.name}}</h1>
+    </div>
+    <div class = 'reg-status-group' [ngSwitch] = "registerStatus">
+      <div *ngSwitchCase="'0'">
+        <app-text-button buttonVariants="primary" buttonText="REGISTER"></app-text-button>
+      </div>
+      <div *ngSwitchCase="'1'">
+        <app-text-button buttonVariants="primary" [isDisabled]="true" buttonText = 'PENDING CONFIRMATION'></app-text-button>
+      </div>
+      <div *ngSwitchCase="'2'">
+        <app-text-button buttonVariants="important" buttonText = "NEXT STEPS"></app-text-button>
+      </div>
+      <div *ngSwitchCase="'3'">
+        <app-text-button buttonVariants="successful" buttonText = "REGISTERED"></app-text-button>
+      </div>
+      <div *ngSwitchCase = "'4'">
+        <app-text-button buttonVariants="primary" [isDisabled] = "true" buttonText = "PURCHASED"></app-text-button>
+      </div>
+      <div *ngSwitchDefault>
+        <app-text-button buttonVariants ="warning" buttonText = "INTERNAL ERROR"></app-text-button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class = 'event-group-outer'>
+  <div class = 'parent event-group-container'>
+    <div *ngIf = "hasEventLoaded" class = "poster">
+      <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster"/>
+    </div>
 
-<app-text-button buttonVariants="primary" buttonText="Form a group" (buttonClick)="registerForGroup()"></app-text-button>
+    <div class = 'event-info-group'>
+      <h2>Event Details</h2>
+      <div *ngIf = "datesAreValid()">
+        <p>{{earliestShowDate.toDateString() }} ~ {{latestShowDate.toDateString() }}</p>
+      </div>
+      <app-text-button buttonVariants="secondary" buttonText="View Seat Map"></app-text-button>
+      <app-text-button buttonVariants="secondary" buttonText="Conditions of Entry"></app-text-button>
+    </div>
+
+    <div class = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
+      <h2>Group Members</h2>
+      <app-group-member-list [memberEmailList]="otherMemberEmailList" [confirmList]="otherMemberConfirmList"></app-group-member-list>
+      <app-text-button buttonVariants="warning" buttonText = "Modify Group"></app-text-button>
+    </div>
+
+  </div>
+</div>
+
+</body>
 

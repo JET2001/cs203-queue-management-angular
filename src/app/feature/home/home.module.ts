@@ -3,12 +3,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { RouterModule } from '@angular/router';
 import { homeRoutes } from './home.routing';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 
 
 @NgModule({
   declarations: [
-    LandingPageComponent
+    LandingPageComponent,
+    CarouselComponent
   ],
   imports: [
     SharedModule,

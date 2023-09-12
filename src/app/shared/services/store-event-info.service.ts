@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
 
 export interface EventInfoParams {
-  eventID ?: number; // optional arguments
-  userID ?: number;
-  groupID ?: number;
-  queueID ?: number[];
+  eventID?: number; // optional arguments
+  userID?: number;
+  groupID?: number;
+  queueID?: number[];
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StoreEventInfoService {
-
   _eventInfo: EventInfoParams = {};
 
   public get eventInfo(): EventInfoParams {
     return this._eventInfo;
   }
-  public set eventInfo(params: EventInfoParams){
+  public set eventInfo(params: EventInfoParams) {
     this._eventInfo = params;
   }
 }

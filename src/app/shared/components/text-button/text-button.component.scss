@@ -49,6 +49,10 @@ div{
   background-color: transparent;
   -webkit-text-fill-color: $black;
 }
+.button-successful {
+  border: none;
+  background-color: $success-2;
+}
 
 .button-white-outline {
   border-color: $white;

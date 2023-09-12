@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TextButtonComponent } from './components/text-button/text-button.component';
-import { CarouselComponent } from '../feature/home/components/carousel/carousel.component';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputFieldComponent } from './components/input-field/input-field.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
-  declarations: [TextButtonComponent, CarouselComponent, InputFieldComponent],
+  declarations: [TextButtonComponent, InputFieldComponent, HeaderComponent],
   imports: [
     CommonModule,
     CarouselModule,
@@ -19,9 +19,10 @@ import { InputFieldComponent } from './components/input-field/input-field.compon
   exports: [
     CommonModule,
     TextButtonComponent,
-    CarouselComponent,
     InputFieldComponent,
-    FormsModule
+    HeaderComponent,
+    FormsModule,
+    CarouselModule
   ],
 })
 export class SharedModule {}

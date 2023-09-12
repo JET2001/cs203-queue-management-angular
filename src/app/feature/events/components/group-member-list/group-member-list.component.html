@@ -1,0 +1,17 @@
+<div class = 'parent'>
+  <div *ngFor = "let email of memberEmailList; index as idx" class = 'item'>
+    <div class = 'email'><p>{{email}}</p></div>
+    <div class = 'confirm' *ngIf = "hasConfirmed(idx) else pending">
+      <img src = "assets/icons/success.svg" alt = "User confirmed"/>
+    </div>
+  </div>
+  <div *ngIf = "hasVacancies()" class = 'item'>
+    <div class = 'email vacant'>
+      <p>{{getNumVacancies()}} slot(s) vacant</p></div>
+  </div>
+</div>
+<ng-template #pending>
+  <div class = 'confirm'>
+    <img src = "assets/icons/pending.png" alt = "Pending Confirmation"/>
+  </div>
+</ng-template>
