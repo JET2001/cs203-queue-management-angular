@@ -1,12 +1,11 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { appRoutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { RouterModule } from '@angular/router';
-import { appRoutes } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UpcomingConcertsComponent } from './feature/home/components/upcoming-concerts/upcoming-concerts.component';
 
 @NgModule({
   declarations: [AppComponent],
