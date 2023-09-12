@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, OnInit, forwardRef } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 @Component({
@@ -13,13 +13,13 @@ import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
     },
   ],
 })
-export class InputFieldComponent {
+export class InputFieldComponent implements OnInit{
   @Input() inputType: 'mobile' | 'text' | 'email' | 'password' | 'auth-code';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
-  inputValue: FormControl = new FormControl('', []);
+  @Input() inputValue: FormControl = new FormControl('', []);
 
-  constructor() {
+  ngOnInit(): void {
     this.inputValue.valueChanges.subscribe(() => {
       this.validateInput();
     });
