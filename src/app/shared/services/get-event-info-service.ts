@@ -5,7 +5,7 @@ import { events } from 'src/app/mock-db/MockDB';
   providedIn: 'root',
 })
 export class GetEventInfoService {
-  loadAllCarousellEvents() : Promise<Event[]> {
+  loadAllCarousellEvents(): Promise<Event[]> {
     return Promise.resolve(this._getCarousellEventData());
   }
 
@@ -14,9 +14,9 @@ export class GetEventInfoService {
   }
 
   private _getCarousellEventData(): Event[] {
-    let carousellEvents : Event[] = [];
-    for (let event of events){
-      if (event.isHighlighted){
+    let carousellEvents: Event[] = [];
+    for (let event of events) {
+      if (event.isHighlighted) {
         this._buildEventSummary(event);
         carousellEvents.push(event);
       }
@@ -29,14 +29,15 @@ export class GetEventInfoService {
   }
 
   private _buildEventSummary(event: Event): void {
-    let summaryStringBuilder = "Coming to "
+    let summaryStringBuilder = 'Coming to ';
 
     // Build event summary
-    for (let i = 0; i < event.countries.length -1; ++i){
-      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ", ";
+    for (let i = 0; i < event.countries.length - 1; ++i) {
+      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ', ';
     }
 
-    summaryStringBuilder += "and " + event.countries[event.countries.length - 1];
-    event.summary = summaryStringBuilder + "!";
+    summaryStringBuilder +=
+      'and ' + event.countries[event.countries.length - 1];
+    event.summary = summaryStringBuilder + '!';
   }
 }

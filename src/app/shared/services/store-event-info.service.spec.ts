@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StoreEventInfoService, EventInfoParams } from './store-event-info.service';
+import {
+  StoreEventInfoService,
+  EventInfoParams,
+} from './store-event-info.service';
 
 describe('StoreEventInfoService', () => {
   let service: StoreEventInfoService;
@@ -16,8 +19,8 @@ describe('StoreEventInfoService', () => {
 
   it('should store the eventInfo when set', () => {
     service.eventInfo = {
-      eventID:3,
-      userID:4
+      eventID: 3,
+      userID: 4,
     };
     expect(service.eventInfo.eventID).toEqual(3);
     expect(service.eventInfo.userID).toEqual(4);
@@ -25,7 +28,7 @@ describe('StoreEventInfoService', () => {
 
   it('should be able to set eventID without userID', () => {
     service.eventInfo = {
-      eventID: 4
+      eventID: 4,
     };
     expect(service.eventInfo.eventID).toEqual(4);
     expect(service.eventInfo.userID).toBeFalsy();

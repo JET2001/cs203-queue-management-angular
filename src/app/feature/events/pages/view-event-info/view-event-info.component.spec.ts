@@ -10,7 +10,11 @@ describe('ViewEventInfoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ViewEventInfoComponent, TextButtonComponent, HeaderComponent],
+      declarations: [
+        ViewEventInfoComponent,
+        TextButtonComponent,
+        HeaderComponent,
+      ],
     });
     fixture = TestBed.createComponent(ViewEventInfoComponent);
     component = fixture.componentInstance;
