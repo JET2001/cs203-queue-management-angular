@@ -1,8 +1,8 @@
-import { GetEventInfoService } from '../../../../shared/services/get-event-info-service';
 import { Component, OnInit } from '@angular/core';
-import { Event } from '../../../../models/event';
 import { Router } from '@angular/router';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { Event } from '../../../../models/event';
+import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 
 @Component({
   selector: 'app-carousel',

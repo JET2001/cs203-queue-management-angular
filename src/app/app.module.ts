@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { appRoutes } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UpcomingConcertsComponent } from './feature/home/components/upcoming-concerts/upcoming-concerts.component';
 
 @NgModule({
   declarations: [AppComponent],

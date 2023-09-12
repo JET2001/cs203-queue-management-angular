@@ -1,0 +1,19 @@
+.upcoming-concerts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 50px;
+    justify-content: space-between;
+}
+
+.upcoming-concert-cell {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.upcoming-concert-preview {
+    width: 500px;
+    height: 300px;
+    object-fit: cover;
+    cursor: pointer;
+}
