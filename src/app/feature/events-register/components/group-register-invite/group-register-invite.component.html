@@ -1,0 +1,21 @@
+<div *ngFor="let invitee of invitees; index as idx">
+  <h2>Invitation {{ idx + 1 }}</h2>
+  <div class="container">
+    <div class="email">
+      <app-input-field
+        [inputType]="'email'"
+        [inputValue]="invitee[0]"
+        [placeholder]="'email'"
+        [isRequired]="false"
+      ></app-input-field>
+    </div>
+    <div class="mobile">
+      <app-input-field
+        [inputType]="'mobile'"
+        [inputValue]="invitee[1]"
+        [placeholder]="'mobile'"
+        [isRequired] = "false"
+      ></app-input-field>
+    </div>
+  </div>
+</div>

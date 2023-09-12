@@ -6,6 +6,7 @@ import { QueueRegistrationComponent } from './pages/queue-registration/queue-reg
 import { RegistrationPreviewComponent } from './pages/registration-preview/registration-preview.component';
 import { RouterModule } from '@angular/router';
 import { eventRegisterRoutes } from './events-register.routing';
+import { GroupRegisterInviteComponent } from './components/group-register-invite/group-register-invite.component';
 
 
 
@@ -13,7 +14,8 @@ import { eventRegisterRoutes } from './events-register.routing';
   declarations: [
     GroupRegistrationComponent,
     QueueRegistrationComponent,
-    RegistrationPreviewComponent
+    RegistrationPreviewComponent,
+    GroupRegisterInviteComponent
   ],
   imports: [
     CommonModule,
