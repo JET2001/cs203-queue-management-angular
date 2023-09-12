@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MemberStatus } from '../../constants/member-status';
+import { MAX_REGISTRATION } from '../../constants/reg-status';
 
 @Component({
   selector: 'app-group-member-list',
@@ -15,10 +16,10 @@ export class GroupMemberListComponent {
   }
 
   getNumVacancies(): number {
-    return 3 - this.memberEmailList.length;
+    return MAX_REGISTRATION - this.memberEmailList.length;
   }
 
   hasVacancies(): boolean {
-    return this.memberEmailList.length < 3;
+    return this.memberEmailList.length < MAX_REGISTRATION;
   }
 }

@@ -5,3 +5,5 @@ export enum RegStatus {
   REGISTERED,
   PURCHASED
 }
+
+export const MAX_REGISTRATION = 3;
