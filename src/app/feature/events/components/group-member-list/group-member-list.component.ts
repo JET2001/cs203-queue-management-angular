@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { MemberStatus } from '../../constants/member-status';
 
 @Component({
   selector: 'app-group-member-list',
@@ -10,7 +11,7 @@ export class GroupMemberListComponent {
   @Input() confirmList: number[] = [];
 
   hasConfirmed(index: number): boolean{
-    return this.confirmList[index] == 1;
+    return this.confirmList[index] == MemberStatus.CONFIRM;
   }
 
   getNumVacancies(): number {
