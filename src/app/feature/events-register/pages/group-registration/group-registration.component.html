@@ -1,3 +1,21 @@
-<h1>Registration for Group {{groupID}}</h1>
-<h2>Event {{eventID}}</h2>
-<app-text-button buttonVariants="primary" buttonText="Register" (buttonClick)="confirm()">Register</app-text-button>
+<app-header></app-header>
+<h1>{{ eventTitle }}</h1>
+<h2>Group Registration</h2>
+<p>
+  Please fill in the following fields if you intend to go for this event with
+  friends or family.
+</p>
+<p class= 'reminder'>
+  Please skip this step if you are attending the event alone.
+</p>
+<app-group-register-invite></app-group-register-invite>
+
+<app-text-button buttonVariants="black" buttonText="Back to Concert Details"></app-text-button>
+
+<app-text-button
+  buttonVariants="primary"
+  buttonText="Register"
+  (buttonClick)="confirm()"
+  >Register</app-text-button>
+
+
