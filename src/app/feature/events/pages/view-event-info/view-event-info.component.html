@@ -1,11 +1,11 @@
 <app-header></app-header>
 <body>
-<div id = 'container-top'>
-  <div class = 'parent' id = 'container'>
-    <div id = 'event-title'>
+<div class = 'container-top'>
+  <div class = 'parent'>
+    <div class = 'event-title'>
       <h1 *ngIf = "hasEventLoaded">{{eventInfo.name}}</h1>
     </div>
-    <div id = 'reg-status-group' [ngSwitch] = "registerStatus">
+    <div class = 'reg-status-group' [ngSwitch] = "registerStatus">
       <div *ngSwitchCase="'0'">
         <app-text-button buttonVariants="primary" buttonText="REGISTER"></app-text-button>
       </div>
@@ -27,13 +27,13 @@
     </div>
   </div>
 </div>
-<div id = 'event-group-outer'>
-  <div class = 'parent' id = 'event-group-container'>
-    <div *ngIf = "hasEventLoaded" id = "poster">
+<div class = 'event-group-outer'>
+  <div class = 'parent event-group-container'>
+    <div *ngIf = "hasEventLoaded" class = "poster">
       <img src="/assets/icons/{{eventInfo.image}}"  alt = "{{eventInfo.name}} poster"/>
     </div>
 
-    <div id = 'event-info-group'>
+    <div class = 'event-info-group'>
       <h2>Event Details</h2>
       <div *ngIf = "datesAreValid()">
         <p>{{earliestShowDate.toDateString() }} ~ {{latestShowDate.toDateString() }}</p>
@@ -42,7 +42,7 @@
       <app-text-button buttonVariants="secondary" buttonText="Conditions of Entry"></app-text-button>
     </div>
 
-    <div id = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
+    <div class = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
       <h2>Group Members</h2>
       <app-group-member-list [memberEmailList]="otherMemberEmailList" [confirmList]="otherMemberConfirmList"></app-group-member-list>
       <app-text-button buttonVariants="warning" buttonText = "Modify Group"></app-text-button>
