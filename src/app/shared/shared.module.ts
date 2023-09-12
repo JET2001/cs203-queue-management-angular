@@ -1,20 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TextButtonComponent } from './components/text-button/text-button.component';
-import { CarouselModule } from 'primeng/carousel';
-import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InputFieldComponent } from './components/input-field/input-field.component';
+import { ButtonModule } from 'primeng/button';
+import { CarouselModule } from 'primeng/carousel';
+import { GaVerificationPopupComponent } from './components/ga-verification-popup/ga-verification-popup.component';
 import { HeaderComponent } from './components/header/header.component';
+import { InputFieldComponent } from './components/input-field/input-field.component';
+import { TextButtonComponent } from './components/text-button/text-button.component';
 
 @NgModule({
-  declarations: [TextButtonComponent, InputFieldComponent, HeaderComponent],
+  declarations: [
+    TextButtonComponent,
+    InputFieldComponent,
+    HeaderComponent,
+    GaVerificationPopupComponent,
+  ],
   imports: [
     CommonModule,
     CarouselModule,
     ButtonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [
     CommonModule,
@@ -22,7 +28,8 @@ import { HeaderComponent } from './components/header/header.component';
     InputFieldComponent,
     HeaderComponent,
     FormsModule,
-    CarouselModule
+    CarouselModule,
+    GaVerificationPopupComponent,
   ],
 })
 export class SharedModule {}
