@@ -19,7 +19,7 @@ export class UpcomingConcertsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getEventInfoService.loadAllCarousellEvents().then((events) => {
+    this.getEventInfoService.loadAllEvents().then((events) => {
       this.events = events;
     });
   }

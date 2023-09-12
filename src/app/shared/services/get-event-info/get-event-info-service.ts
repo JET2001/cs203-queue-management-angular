@@ -9,6 +9,10 @@ export class GetEventInfoService {
     return Promise.resolve(this._getCarousellEventData());
   }
 
+  loadAllEvents(): Promise<Event[]>{
+    return Promise.resolve(this._getAllEventData())
+  }
+
   loadEvent(eventID: number): Promise<Event> {
     return Promise.resolve(this._getEventData(eventID));
   }
@@ -20,6 +24,14 @@ export class GetEventInfoService {
         this._buildEventSummary(event);
         carousellEvents.push(event);
       }
+    }
+    return carousellEvents;
+  }
+
+  private _getAllEventData(): Event[] {
+    let carousellEvents: Event[] = [];
+    for (let event of events) {
+        carousellEvents.push(event);
     }
     return carousellEvents;
   }
