@@ -1,8 +1,8 @@
-import { Location } from './../../models/location';
-import { locations, queues, shows } from 'src/app/mock-db/MockDB';
-import { Show } from './../../models/show';
 import { Injectable } from '@angular/core';
+import { locations, queues, shows } from 'src/app/mock-db/MockDB';
 import { Queue } from 'src/app/models/queue';
+import { Location } from '../../../models/location';
+import { Show } from '../../../models/show';
 
 export interface ShowInfo extends Show, Queue, Location {}
 

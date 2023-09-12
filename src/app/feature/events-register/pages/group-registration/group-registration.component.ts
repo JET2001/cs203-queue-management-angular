@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 
 @Component({
   selector: 'app-group-registration',

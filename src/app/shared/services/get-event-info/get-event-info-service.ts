@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Event } from '../../models/event';
 import { events } from 'src/app/mock-db/MockDB';
+import { Event } from '../../../models/event';
 @Injectable({
   providedIn: 'root',
 })
 export class GetEventInfoService {
   loadAllCarousellEvents(): Promise<Event[]> {
     return Promise.resolve(this._getCarousellEventData());
+  }
+
+  loadAllEvents(): Promise<Event[]>{
+    return Promise.resolve(this._getAllEventData())
   }
 
   loadEvent(eventID: number): Promise<Event> {
@@ -20,6 +24,14 @@ export class GetEventInfoService {
         this._buildEventSummary(event);
         carousellEvents.push(event);
       }
+    }
+    return carousellEvents;
+  }
+
+  private _getAllEventData(): Event[] {
+    let carousellEvents: Event[] = [];
+    for (let event of events) {
+        carousellEvents.push(event);
     }
     return carousellEvents;
   }
