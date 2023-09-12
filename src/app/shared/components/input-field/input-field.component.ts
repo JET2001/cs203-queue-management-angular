@@ -14,7 +14,7 @@ import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
   ],
 })
 export class InputFieldComponent {
-  @Input() inputType: 'mobile' | 'text' | 'email' | 'password';
+  @Input() inputType: 'mobile' | 'text' | 'email' | 'password' | 'auth-code';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
   inputValue: FormControl = new FormControl('', []);
@@ -58,6 +58,8 @@ export class InputFieldComponent {
       this.inputValue.addValidators(Validators.email);
     } else if (this.inputType === 'mobile') {
       this.inputValue.addValidators(Validators.pattern(/^[89]\d{7}$/));
+    } else if (this.inputType === 'auth-code') {
+      this.inputValue.addValidators(Validators.pattern(/^\d{6}$/));
     }
 
     this.inputValue.updateValueAndValidity();
