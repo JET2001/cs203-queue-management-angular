@@ -1,8 +1,13 @@
-@import '/src/variables';
+@import "/src/variables";
 
-.container{
+.invitation-title {
+  margin-top: 10px;
+}
+
+.container {
   display: flex;
   flex-direction: row;
+  align-items: baseline;
 }
 .email {
   width: 20%;
@@ -19,11 +24,19 @@ img {
 
 .status-msg {
   display: inline;
-  
+  text-wrap: nowrap;
+
   .success {
     -webkit-text-fill-color: $success-1;
   }
   .error {
     -webkit-text-fill-color: $error-1;
   }
+}
+
+.success-icon,
+.failure-icon {
+  display: inline;
+  width: 24px;
+  height: 24px;
 }

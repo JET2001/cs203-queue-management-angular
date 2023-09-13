@@ -10,13 +10,13 @@ import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store
 @Component({
   selector: 'app-group-registration',
   templateUrl: './group-registration.component.html',
-  styleUrls: ['./group-registration.component.scss']
+  styleUrls: ['./group-registration.component.scss'],
 })
 export class GroupRegistrationComponent implements OnInit {
   // Fields
   eventID!: number | undefined;
   groupID!: number | undefined;
-  eventTitle !: string | undefined;
+  eventTitle!: string | undefined;
 
   // Invitees
   invitee1: FormControl[] = [
@@ -39,43 +39,42 @@ export class GroupRegistrationComponent implements OnInit {
     private router: Router,
     private getRegInfoService: GetRegistrationGroupService,
     private storeRegGroupService: StoreRegistrationGroupInfoService
-  ){}
+  ) {}
 
   async ngOnInit(): Promise<void> {
     // Case 1: User not verified
-   if(!this.authService.isVerified) {
-    this.router.navigate(['/home']); // TODO: Return to home with an appropriate error message
-    return;
-   }
-
-   this.eventID = this.storeEventInfoService.eventInfo.eventID;
-   this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
-   // Case 2: EventIDs are not properly loaded.
-   if(this.eventID == undefined || this.eventTitle == undefined){
-    this.router.navigate(['/home']); // TODO: Return to home screen with an appropriate error msg
-    return;
-   }
-
-   // Case 3: User already has a group, so the register button should not bring this user to queue.
-   await this.getRegInfoService.getRegGroupOfUser(this.eventID, this.authService.userID).then(
-    (group: RegGroup | undefined) => {
-      if (group != undefined){
-        // User already has a group --> navigate user to /events
-        this.router.navigate(['/events']); // TODO: Show an appropriate error message
-      }
+    if (!this.authService.isVerified) {
+      this.router.navigate(['/home']); // TODO: Return to home with an appropriate error message
+      return;
     }
-   );
 
-   // Case 4: User already has a group, but wants to change group.
-    if(this.storeRegGroupService.modifyGroup){
+    this.eventID = this.storeEventInfoService.eventInfo.eventID;
+    this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
+    // Case 2: EventIDs are not properly loaded.
+    if (this.eventID == undefined || this.eventTitle == undefined) {
+      this.router.navigate(['/home']); // TODO: Return to home screen with an appropriate error msg
+      return;
+    }
+
+    // Case 3: User already has a group, so the register button should not bring this user to queue.
+    await this.getRegInfoService
+      .getRegGroupOfUser(this.eventID, this.authService.userID)
+      .then((group: RegGroup | undefined) => {
+        if (group != undefined) {
+          // User already has a group --> navigate user to /events
+          this.router.navigate(['/events']); // TODO: Show an appropriate error message
+        }
+      });
+
+    // Case 4: User already has a group, but wants to change group.
+    if (this.storeRegGroupService.modifyGroup) {
       this.storeRegGroupService.modifyGroup = false; // reset the flag
       // load all fields into the original positions
-      for (let i = 0; i < this.storeRegGroupService.emailList.length ; ++i){;
+      for (let i = 0; i < this.storeRegGroupService.emailList.length; ++i) {
         this.invitees[i][0].setValue(this.storeRegGroupService.emailList[i]);
         this.invitees[i][1].setValue(this.storeRegGroupService.mobileList[i]);
       }
     }
-
   }
 
   confirm(): void {

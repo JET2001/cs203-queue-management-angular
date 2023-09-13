@@ -37,7 +37,7 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
   async inviteeDetailsValidation(inviteeNum: number): Promise<void>{
     if (this._inputIsEmpty(inviteeNum) || !this._inputIsValid(inviteeNum)) {
       this.inviteeVerified[inviteeNum] = false;
-      this.userIDEvent.emit(undefined);
+      // this.userIDEvent.emit(undefined);
       return;
     }
 

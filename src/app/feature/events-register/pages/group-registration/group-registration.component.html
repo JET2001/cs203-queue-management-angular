@@ -9,14 +9,18 @@
 <p class= 'reminder'>
   Please skip this step if you are attending the event alone.
 </p>
-<app-group-register-invite [inviteeList] = "invitees"></app-group-register-invite>
-
-<app-text-button buttonVariants="black" buttonText="Back to Concert Details"></app-text-button>
-
-<app-text-button
-  buttonVariants="primary"
-  buttonText="Register"
-  (buttonClick)="confirm()"
-  >Register</app-text-button>
+<div class="register-button-container">
+    <app-group-register-invite [inviteeList] = "invitees"></app-group-register-invite>
+    
+    <div class="button-container">
+        <app-text-button buttonVariants="black" buttonText="Back to Concert Details"></app-text-button>
+    
+        <app-text-button
+          buttonVariants="primary"
+          buttonText="Register"
+          (buttonClick)="confirm()"
+          >Register</app-text-button>
+    </div>
+</div>
 </body>
 

@@ -1,5 +1,5 @@
 <div *ngFor="let invitee of invitees; index as idx">
-  <h2>Invitation {{ idx + 1 }}</h2>
+  <h2 class="invitation-title">Invitation {{ idx + 1 }}</h2>
   <div class="container">
     <div class="email">
       <app-input-field
@@ -11,22 +11,34 @@
     </div>
     <div class="mobile">
       <app-input-field
-        [inputType]="'text'"
+        [inputType]="'mobile'"
         [inputValue]="invitee[1]"
         [placeholder]="'mobile'"
-        [isRequired] = "false"
+        [isRequired]="false"
       ></app-input-field>
     </div>
-    <div *ngIf = "verifyUser(idx)">
-      <div  *ngIf= "inviteeVerified[idx] else notVerified">
-        <img src = "assets/icons/success.svg" alt = "User verified"/>
-        <p class = 'status-msg success'>User is verified.</p>
+    <div *ngIf="verifyUser(idx)">
+      <div *ngIf="inviteeVerified[idx]; else notVerified">
+        <p class="status-msg success">
+          <img
+            src="assets/icons/success.svg"
+            alt="User verified"
+            class="success-icon"
+          />
+          User is verified.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #notVerified>
-    <img src = "assets/icons/failure.svg" alt = "User not verified"/>
-    <p class = 'status-msg error'>User might not have an account yet.</p>
+  <p class="status-msg error">
+    <img
+      src="assets/icons/failure.svg"
+      alt="User not verified"
+      class="failure-icon"
+    />
+    User might not have an account yet.
+  </p>
 </ng-template>
