@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { StoreEventInfoService } from '../../services/store-event-info/store-event-info.service';
 import { Users } from 'src/app/mock-db/MockDB';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
@@ -9,14 +9,14 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit{
+  @Output() verifiedUserLoggingIn = new EventEmitter<void>();
   emailID: string | undefined = undefined;
-
   constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.emailID = this.authService.email;
   }
-  
+
   isLoggedIn(): boolean {
     return this.authService.userID != undefined;
   }
@@ -31,5 +31,9 @@ export class HeaderComponent implements OnInit{
 
     this.authService.userID = userInput;
     this.emailID = this.authService.email;
+
+    if(this.authService.isVerified){
+      this.verifiedUserLoggingIn.emit();
+    }
   }
 }

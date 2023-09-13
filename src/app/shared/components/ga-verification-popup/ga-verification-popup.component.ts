@@ -21,6 +21,7 @@ export class GaVerificationPopupComponent {
     else {
       // if (this.isChecked) console.log('checked');
       // console.log(this.authenticationFC.value);
+      this.activeModal.dismiss('Cross click');
     }
   }
 }
