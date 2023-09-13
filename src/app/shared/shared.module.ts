@@ -30,6 +30,7 @@ import { TextButtonComponent } from './components/text-button/text-button.compon
     FormsModule,
     CarouselModule,
     GaVerificationPopupComponent,
+    ReactiveFormsModule
   ],
 })
 export class SharedModule {}

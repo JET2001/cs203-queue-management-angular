@@ -1,0 +1,29 @@
+@import '/src/variables';
+
+.container{
+  display: flex;
+  flex-direction: row;
+}
+.email {
+  width: 20%;
+}
+.mobile {
+  width: 20%;
+}
+
+img {
+  width: 15%;
+  display: inline;
+  margin-right: 5%;
+}
+
+.status-msg {
+  display: inline;
+  
+  .success {
+    -webkit-text-fill-color: $success-1;
+  }
+  .error {
+    -webkit-text-fill-color: $error-1;
+  }
+}
