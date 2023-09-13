@@ -3,6 +3,7 @@ import { GetEventInfoService } from '../../../../shared/services/get-event-info/
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-upcoming-concerts',
@@ -10,11 +11,12 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
   styleUrls: ['./upcoming-concerts.component.scss'],
 })
 export class UpcomingConcertsComponent implements OnInit {
-  @Input() userID : number | undefined = undefined;
+  @Input() userID: number | undefined = undefined;
   events: Event[];
   constructor(
     private getEventInfoService: GetEventInfoService,
     private storeEventInfoService: StoreEventInfoService,
+    private authService: AuthenticationService,
     private router: Router
   ) {}
 
@@ -25,9 +27,9 @@ export class UpcomingConcertsComponent implements OnInit {
   }
 
   handleButtonClick(eventID: number): void {
+    if(!this.authService.isVerified) return; 
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      userID: this.userID
     };
     this.router.navigate(['/events']);
   }
