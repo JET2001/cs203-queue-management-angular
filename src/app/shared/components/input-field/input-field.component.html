@@ -6,10 +6,10 @@
     [placeholder]="placeholder"
     [ngClass]="{
       'input-border-error':
-        inputValue.hasError('required') ||
+        (inputValue.hasError('required') ||
         inputValue.hasError('email') ||
         inputValue.hasError('pattern') ||
-        inputValue.invalid
+        inputValue.invalid) && inputValue.touched
     }"
   />
   <div
@@ -17,7 +17,8 @@
     *ngIf="
       (inputValue.hasError('required') || inputValue.invalid) &&
       !inputValue.hasError('email') &&
-      !inputValue.hasError('pattern')
+      !inputValue.hasError('pattern') &&
+      inputValue.touched
     "
   >
     This field is required.

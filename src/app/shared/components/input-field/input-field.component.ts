@@ -13,16 +13,14 @@ import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
     },
   ],
 })
-export class InputFieldComponent implements OnInit{
+export class InputFieldComponent implements OnInit {
   @Input() inputType: 'mobile' | 'text' | 'email' | 'password' | 'auth-code';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
   @Input() inputValue: FormControl = new FormControl('', []);
 
   ngOnInit(): void {
-    this.inputValue.valueChanges.subscribe(() => {
-      this.validateInput();
-    });
+    this.updateValidators();
   }
 
   onChange: any = () => {};
@@ -30,7 +28,7 @@ export class InputFieldComponent implements OnInit{
 
   writeValue(value: any): void {
     if (value !== undefined) {
-      this.inputValue = value;
+      this.inputValue.setValue(value);
     }
   }
 
@@ -50,7 +48,11 @@ export class InputFieldComponent implements OnInit{
     }
   }
 
-  validateInput() {
+  getInputType() {
+    return this.inputType === 'password' ? 'password' : 'text';
+  }
+
+  updateValidators() {
     if (this.isRequired) {
       this.inputValue.setValidators(Validators.required);
     }
@@ -61,14 +63,6 @@ export class InputFieldComponent implements OnInit{
     } else if (this.inputType === 'auth-code') {
       this.inputValue.addValidators(Validators.pattern(/^\d{6}$/));
     }
-
     this.inputValue.updateValueAndValidity();
-
-    this.onChange(this.inputValue.value);
-    this.onTouch();
-  }
-
-  getInputType() {
-    return this.inputType === 'password' ? 'password' : 'text';
   }
 }
