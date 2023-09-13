@@ -57,7 +57,7 @@ export class InputFieldComponent implements OnInit{
     if (this.inputType === 'email') {
       this.inputValue.addValidators(Validators.email);
     } else if (this.inputType === 'mobile') {
-      this.inputValue.addValidators(Validators.pattern(/^[89]\d{7}$/));
+      this.inputValue.addValidators(Validators.pattern(/^\+65[89]\d{7}$/));
     } else if (this.inputType === 'auth-code') {
       this.inputValue.addValidators(Validators.pattern(/^\d{6}$/));
     }
