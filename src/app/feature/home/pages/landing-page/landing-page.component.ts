@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 
 @Component({

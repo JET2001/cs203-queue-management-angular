@@ -1,3 +1,12 @@
-<div>
-  <h2>header works!</h2>
+<div *ngIf= "!isLoggedIn() as boolean; else loggedin" class = 'login-grp'>
+  <app-text-button
+  [buttonVariants] = "'black'"
+  [buttonText] = "'LOGIN'"
+  (buttonClick)= "loginUser()"
+></app-text-button>
 </div>
+<ng-template #loggedin>
+  <div class = 'login-grp'>
+    <p>{{ emailID }}</p>
+  </div>
+</ng-template>
