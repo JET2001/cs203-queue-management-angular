@@ -1,6 +1,7 @@
+import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -11,13 +12,17 @@ export class LandingPageComponent implements OnInit {
 
   userID !: number | undefined;
   constructor(
-    private storeEventInfoService: StoreEventInfoService,
+    private authService: AuthenticationService,
+    private activeModal: NgbModal
   ){}
 
   ngOnInit(): void {
-    this.userID = this.storeEventInfoService.eventInfo.userID;
+    this.userID = this.authService.userID;
   }
 
+  authenticateUser(): void {
+    this.activeModal.open(GaVerificationPopupComponent, {centered: true});
+  }
 
 
 }

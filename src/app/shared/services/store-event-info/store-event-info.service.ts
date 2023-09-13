@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export interface EventInfoParams {
   eventID?: number; // optional arguments
+  eventTitle?: string;
   userID?: number;
   groupID?: number;
   queueID?: number[];

@@ -12,6 +12,8 @@ import {
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { RegStatus } from '../../constants/reg-status';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 
 @Component({
   selector: 'app-view-event-info',
@@ -29,6 +31,7 @@ export class ViewEventInfoComponent implements OnInit {
   userRegGroupInfo!: RegGroup | undefined;
   confirmationOfMembers: Map<string, boolean> = new Map<string, boolean>();
   otherMemberEmailList: string[] = [];
+  otherMemberMobileList: string[] = [];
   otherMemberConfirmList: number[] = [];
   hasUserConfirmed!: boolean;
 
@@ -48,23 +51,24 @@ export class ViewEventInfoComponent implements OnInit {
     private getEventInfoService: GetEventInfoService,
     private getRegGroupService: GetRegistrationGroupService,
     private getShowInfoService: GetShowInfoService,
-    private getUserInfoService: GetUserInfoService
+    private getUserInfoService: GetUserInfoService,
+    private authService: AuthenticationService,
+    private storeRegGroupService: StoreRegistrationGroupInfoService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
-    this.userID = this.storeEventInfoService.eventInfo.userID;
-    // for debugging
-    // this.eventID = Number(prompt("Enter an eventID (0 to 4)"));
-    // this.userID = Number(prompt("Enter a userID (0 to 4)"));
-    this.eventID = 0;
-    this.userID = 0;
+    this.userID = this.authService.userID;
+
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
+      return;
     }
 
     if (this.userID == undefined) {
       // TODO: Should prompt for login once log in is complete.
+      this.router.navigate(['/home']);
+      return;
     }
 
     await this.getEventInfoService
@@ -108,6 +112,10 @@ export class ViewEventInfoComponent implements OnInit {
               this.otherMemberConfirmList.push(
                 this.userRegGroupInfo!.confirmed[i]
               );
+              this.otherMemberMobileList.push(user.mobileNo);
+
+              this.storeRegGroupService.emailList = this.otherMemberEmailList;
+              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
             });
         } else {
           this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
@@ -115,7 +123,9 @@ export class ViewEventInfoComponent implements OnInit {
       }
     }
   }
-
+  // ============================================
+  // Boolean conditions for displaying items on the DOM
+  // ============================================
   showGroupMembersInfo(): boolean {
     return this.registerStatus != RegStatus.NOT_REGISTERED;
   }
@@ -125,10 +135,39 @@ export class ViewEventInfoComponent implements OnInit {
       this.earliestShowDate != undefined && this.latestShowDate != undefined
     );
   }
-  registerForGroup(): void {
-    this.router.navigate(['/events', 'register', 'group']);
+
+  // =========================================================
+  // Routing
+  // =========================================================
+  handleRegisterButtonClick(): void {
+    if (this.userRegGroupInfo == undefined) {
+      this.router.navigate(['/events', 'register', 'group']);
+    }
   }
 
+  handleNextStepsButtonClick(): void {
+    // Only navigate if the user already has a group, and all members
+    // in the group have confirmed, and that the queueIDs list is null.
+    if (
+      this.userRegGroupInfo != undefined &&
+      this.userRegGroupInfo.hasAllUsersConfirmed &&
+      this.userRegGroupInfo.queueIDs == undefined
+    ) {
+      this.router.navigate(['/events', 'register', 'queue']);
+    }
+  }
+
+  handleModifyGroupButtonClick(): void {
+    // Only navigate if the user already has a group.
+    if (this.userRegGroupInfo != undefined){
+      this.storeRegGroupService.modifyGroup = true;
+
+      this.router.navigate(['/events','register', 'group']);
+    }
+  }
+  // ==========================================================
+  // Utility functions
+  // ==========================================================
   private _calculateEarliestAndLatestShow(): void {
     if (this.showInfo == undefined || this.showInfo.length == 0) {
       this.earliestShowDate = new Date(0);
