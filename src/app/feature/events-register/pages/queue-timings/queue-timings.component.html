@@ -1,0 +1,34 @@
+<form [formGroup]="queueTimingForm">
+
+    <header class="blue-heading">
+        <h1>Concerts</h1>
+    </header>
+
+    <h1>{{ concertName }}</h1>
+    
+    <div>
+      <div>
+        <p>Queue Registration</p>
+      </div>
+      <div>
+        <p>Choose your preferred queue timings.</p>
+      </div>
+    </div>
+    
+    <div *ngFor="let timing of timings.controls; let i = index" [formGroupName]="i">
+      <div>
+        <span style="margin-bottom: 100px;">{{ 'Queue Timing #' + (i + 1) }}</span>
+      </div>
+      <div>
+        <select formControlName="selectedTiming">
+          <option *ngFor="let time of timingOptions" [value]="time">{{ time }}</option>
+        </select>
+      </div>
+    </div>
+    
+    <button (click)="goBack()">Go Back</button>
+    <button (click)="goNext()">Go Next</button>
+
+    <button (click)="togglePopup()">Show Popup</button>
+    <app-popup-test *ngIf="showPopup"></app-popup-test>
+  </form>
