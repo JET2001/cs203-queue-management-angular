@@ -13,6 +13,7 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { RegStatus } from '../../constants/reg-status';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 
 @Component({
   selector: 'app-view-event-info',
@@ -30,6 +31,7 @@ export class ViewEventInfoComponent implements OnInit {
   userRegGroupInfo!: RegGroup | undefined;
   confirmationOfMembers: Map<string, boolean> = new Map<string, boolean>();
   otherMemberEmailList: string[] = [];
+  otherMemberMobileList: string[] = [];
   otherMemberConfirmList: number[] = [];
   hasUserConfirmed!: boolean;
 
@@ -50,7 +52,8 @@ export class ViewEventInfoComponent implements OnInit {
     private getRegGroupService: GetRegistrationGroupService,
     private getShowInfoService: GetShowInfoService,
     private getUserInfoService: GetUserInfoService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private storeRegGroupService: StoreRegistrationGroupInfoService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -109,6 +112,10 @@ export class ViewEventInfoComponent implements OnInit {
               this.otherMemberConfirmList.push(
                 this.userRegGroupInfo!.confirmed[i]
               );
+              this.otherMemberMobileList.push(user.mobileNo);
+
+              this.storeRegGroupService.emailList = this.otherMemberEmailList;
+              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
             });
         } else {
           this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
@@ -147,6 +154,15 @@ export class ViewEventInfoComponent implements OnInit {
       this.userRegGroupInfo.queueIDs == undefined
     ) {
       this.router.navigate(['/events', 'register', 'queue']);
+    }
+  }
+
+  handleModifyGroupButtonClick(): void {
+    // Only navigate if the user already has a group.
+    if (this.userRegGroupInfo != undefined){
+      this.storeRegGroupService.modifyGroup = true;
+
+      this.router.navigate(['/events','register', 'group']);
     }
   }
   // ==========================================================

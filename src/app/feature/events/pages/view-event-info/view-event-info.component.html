@@ -45,7 +45,7 @@
     <div class = 'reg-info-group' *ngIf = "showGroupMembersInfo()">
       <h2>Group Members</h2>
       <app-group-member-list [memberEmailList]="otherMemberEmailList" [confirmList]="otherMemberConfirmList"></app-group-member-list>
-      <app-text-button buttonVariants="warning" buttonText = "Modify Group"></app-text-button>
+      <app-text-button buttonVariants="warning" buttonText = "Modify Group" (buttonClick) = "handleModifyGroupButtonClick()"></app-text-button>
     </div>
 
   </div>

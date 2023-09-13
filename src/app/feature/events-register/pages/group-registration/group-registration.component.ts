@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 import { RegGroup } from 'src/app/models/reg-group';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 
 @Component({
   selector: 'app-group-registration',
@@ -36,7 +37,8 @@ export class GroupRegistrationComponent implements OnInit {
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
     private router: Router,
-    private getRegInfoService: GetRegistrationGroupService
+    private getRegInfoService: GetRegistrationGroupService,
+    private storeRegGroupService: StoreRegistrationGroupInfoService
   ){}
 
   async ngOnInit(): Promise<void> {
@@ -63,6 +65,17 @@ export class GroupRegistrationComponent implements OnInit {
       }
     }
    );
+
+   // Case 4: User already has a group, but wants to change group.
+    if(this.storeRegGroupService.modifyGroup){
+      this.storeRegGroupService.modifyGroup = false; // reset the flag
+      // load all fields into the original positions
+      for (let i = 0; i < this.storeRegGroupService.emailList.length ; ++i){;
+        this.invitees[i][0].setValue(this.storeRegGroupService.emailList[i]);
+        this.invitees[i][1].setValue(this.storeRegGroupService.mobileList[i]);
+      }
+    }
+
   }
 
   confirm(): void {

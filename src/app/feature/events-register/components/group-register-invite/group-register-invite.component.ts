@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Form, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
@@ -8,14 +8,14 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
   templateUrl: './group-register-invite.component.html',
   styleUrls: ['./group-register-invite.component.scss'],
 })
-export class GroupRegisterInviteComponent implements OnInit {
+export class GroupRegisterInviteComponent implements AfterViewInit {
   @Input('inviteeList') invitees: FormControl[][];
   @Output('userID') userIDEvent!: EventEmitter<number | undefined>;
 
   inviteeVerified: boolean[] = [true, true, true];
   constructor(private getUserInfoService: GetUserInfoService) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (!this.invitees) return;
     for (let idx = 0; idx < this.invitees.length; ++idx) {
       // Subscribe to all form value changes
@@ -34,13 +34,14 @@ export class GroupRegisterInviteComponent implements OnInit {
     );
   }
 
-  inviteeDetailsValidation(inviteeNum: number): void {
+  async inviteeDetailsValidation(inviteeNum: number): Promise<void>{
     if (this._inputIsEmpty(inviteeNum) || !this._inputIsValid(inviteeNum)) {
       this.inviteeVerified[inviteeNum] = false;
       this.userIDEvent.emit(undefined);
+      return;
     }
 
-    this.getUserInfoService
+    await this.getUserInfoService
       .getUserID(
         this.invitees[inviteeNum][0].value,
         this.invitees[inviteeNum][1].value
