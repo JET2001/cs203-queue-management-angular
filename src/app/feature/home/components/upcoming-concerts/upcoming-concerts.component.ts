@@ -10,7 +10,7 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
   styleUrls: ['./upcoming-concerts.component.scss'],
 })
 export class UpcomingConcertsComponent implements OnInit {
-  @Input() userID : number | undefined = undefined;
+  @Input() userID: number | undefined = undefined;
   events: Event[];
   constructor(
     private getEventInfoService: GetEventInfoService,
@@ -27,7 +27,6 @@ export class UpcomingConcertsComponent implements OnInit {
   handleButtonClick(eventID: number): void {
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      userID: this.userID
     };
     this.router.navigate(['/events']);
   }

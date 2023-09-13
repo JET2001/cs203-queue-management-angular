@@ -16,7 +16,10 @@ export class AuthenticationService {
     this._userID = userID;
   }
   public get isLoggedIn(): boolean {
-    return this._userID == undefined;
+    return this._userID != undefined;
+  }
+  public get isVerified(): boolean {
+    return this.isLoggedIn && Users[this._userID!].isVerified;
   }
 
   public get email(): string | undefined {

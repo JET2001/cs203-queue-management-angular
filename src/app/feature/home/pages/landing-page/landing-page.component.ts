@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -10,11 +10,11 @@ export class LandingPageComponent implements OnInit {
 
   userID !: number | undefined;
   constructor(
-    private storeEventInfoService: StoreEventInfoService,
+    private authService: AuthenticationService,
   ){}
 
   ngOnInit(): void {
-    this.userID = this.storeEventInfoService.eventInfo.userID;
+    this.userID = this.authService.userID;
   }
 
 

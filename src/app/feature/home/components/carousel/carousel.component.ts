@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-carousel',
@@ -14,10 +15,10 @@ export class CarouselComponent implements OnInit {
   constructor(
     private getEventInfoService: GetEventInfoService,
     private router: Router,
-    private storeEventInfoService: StoreEventInfoService
+    private storeEventInfoService: StoreEventInfoService,
+    private authService: AuthenticationService
   ) {}
 
-  mockUserID: number = 1;
   ngOnInit(): void {
     this.getEventInfoService.loadAllCarousellEvents().then((events) => {
       this.events = events;
@@ -25,19 +26,19 @@ export class CarouselComponent implements OnInit {
   }
 
   handleRegisterButtonClick(eventID: number): void {
+    if(!this.authService.isVerified) return;
     // to be implemented once we have other pages to route to
     // this.router.navigate()
     // window.location.href = link;
     this.storeEventInfoService.eventInfo = {
-      userID: this.mockUserID,
       eventID: eventID,
     };
     this.router.navigate(['/events', 'register', 'group']);
   }
 
   handleLearnMoreButtonClick(eventID: number): void {
+    if (!this.authService.isVerified) return;
     this.storeEventInfoService.eventInfo = {
-      userID: this.mockUserID,
       eventID: eventID,
     };
     this.router.navigate(['/events']);

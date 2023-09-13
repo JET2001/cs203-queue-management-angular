@@ -12,6 +12,7 @@ import {
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { RegStatus } from '../../constants/reg-status';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-view-event-info',
@@ -48,23 +49,23 @@ export class ViewEventInfoComponent implements OnInit {
     private getEventInfoService: GetEventInfoService,
     private getRegGroupService: GetRegistrationGroupService,
     private getShowInfoService: GetShowInfoService,
-    private getUserInfoService: GetUserInfoService
+    private getUserInfoService: GetUserInfoService,
+    private authService: AuthenticationService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
-    this.userID = this.storeEventInfoService.eventInfo.userID;
-    // for debugging
-    // this.eventID = Number(prompt("Enter an eventID (0 to 4)"));
-    // this.userID = Number(prompt("Enter a userID (0 to 4)"));
-    this.eventID = 0;
-    this.userID = 0;
+    this.userID = this.authService.userID;
+
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
+      return;
     }
 
     if (this.userID == undefined) {
       // TODO: Should prompt for login once log in is complete.
+      this.router.navigate(['/home']);
+      return;
     }
 
     await this.getEventInfoService
