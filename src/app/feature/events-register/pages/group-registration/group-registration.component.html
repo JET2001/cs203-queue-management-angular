@@ -13,8 +13,8 @@
     <app-group-register-invite [inviteeList] = "invitees"></app-group-register-invite>
 
     <div class="button-container">
-        <app-text-button buttonVariants="black" buttonText="Back to Concert Details"></app-text-button>
-
+        <app-text-button buttonVariants="black" buttonText="Back to Concert Details" (buttonClick)="backToConcert()"></app-text-button>
+    
         <app-text-button
           buttonVariants="primary"
           buttonText="Register"
