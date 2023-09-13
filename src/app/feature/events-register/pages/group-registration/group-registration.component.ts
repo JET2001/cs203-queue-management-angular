@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { RegGroup } from 'src/app/models/reg-group';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
@@ -38,7 +39,7 @@ export class GroupRegistrationComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
     private getRegInfoService: GetRegistrationGroupService,
-    private storeRegGroupService: StoreRegistrationGroupInfoService
+    private storeRegGroupService: StoreRegistrationGroupInfoService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -79,8 +80,11 @@ export class GroupRegistrationComponent implements OnInit {
 
   confirm(): void {
     // Save to DB
-
     // Route back to login
+    this.router.navigate(['/events']);
+  }
+
+  backToConcert(): void {
     this.router.navigate(['/events']);
   }
 }

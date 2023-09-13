@@ -1,0 +1,30 @@
+<div>
+  <div class="modal-header">
+    <button
+      type="button"
+      aria-label="Close"
+      class="btn-close"
+      (click)="activeModal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-title">
+      <h2>Selection of Queue Timings</h2>
+    </div>
+    <div class="modal-description">
+      <p>
+        We are splitting queue timings by show to balance out the demand.
+        <br /><br />There is 1 queue timing per show. <br /><br />You are allowed to select
+        up to 3 queue timings.<br /><br />
+        Please have <b>at least one member available</b> at the following queue
+        timeslots.
+      </p>
+    </div>
+    <div class="modal-button">
+      <app-text-button
+        buttonVariants="primary"
+        buttonText="I Understand"
+      ></app-text-button>
+    </div>
+  </div>
+</div>
