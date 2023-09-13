@@ -116,7 +116,9 @@ export class ViewEventInfoComponent implements OnInit {
       }
     }
   }
-
+  // ============================================
+  // Boolean conditions for displaying items on the DOM
+  // ============================================
   showGroupMembersInfo(): boolean {
     return this.registerStatus != RegStatus.NOT_REGISTERED;
   }
@@ -126,10 +128,30 @@ export class ViewEventInfoComponent implements OnInit {
       this.earliestShowDate != undefined && this.latestShowDate != undefined
     );
   }
-  registerForGroup(): void {
-    this.router.navigate(['/events', 'register', 'group']);
+
+  // =========================================================
+  // Routing
+  // =========================================================
+  handleRegisterButtonClick(): void {
+    if (this.userRegGroupInfo == undefined) {
+      this.router.navigate(['/events', 'register', 'group']);
+    }
   }
 
+  handleNextStepsButtonClick(): void {
+    // Only navigate if the user already has a group, and all members
+    // in the group have confirmed, and that the queueIDs list is null.
+    if (
+      this.userRegGroupInfo != undefined &&
+      this.userRegGroupInfo.hasAllUsersConfirmed &&
+      this.userRegGroupInfo.queueIDs == undefined
+    ) {
+      this.router.navigate(['/events', 'register', 'queue']);
+    }
+  }
+  // ==========================================================
+  // Utility functions
+  // ==========================================================
   private _calculateEarliestAndLatestShow(): void {
     if (this.showInfo == undefined || this.showInfo.length == 0) {
       this.earliestShowDate = new Date(0);
