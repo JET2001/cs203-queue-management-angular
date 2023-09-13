@@ -27,11 +27,9 @@ export class CarouselComponent implements OnInit {
 
   handleRegisterButtonClick(eventID: number): void {
     if(!this.authService.isVerified) return;
-    // to be implemented once we have other pages to route to
-    // this.router.navigate()
-    // window.location.href = link;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
+      eventTitle: this.events[eventID].name
     };
     this.router.navigate(['/events', 'register', 'group']);
   }
@@ -40,6 +38,7 @@ export class CarouselComponent implements OnInit {
     if (!this.authService.isVerified) return;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
+      eventTitle: this.events[eventID].name
     };
     this.router.navigate(['/events']);
   }
