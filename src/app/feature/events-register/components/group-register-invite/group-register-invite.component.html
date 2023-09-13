@@ -17,5 +17,16 @@
         [isRequired] = "false"
       ></app-input-field>
     </div>
+    <div *ngIf = "verifyUser(idx)">
+      <div  *ngIf= "inviteeVerified[idx] else notVerified">
+        <img src = "assets/icons/success.svg" alt = "User verified"/>
+        <p class = 'status-msg success'>User is verified.</p>
+      </div>
+    </div>
   </div>
 </div>
+
+<ng-template #notVerified>
+    <img src = "assets/icons/failure.svg" alt = "User not verified"/>
+    <p class = 'status-msg error'>User might not have an account yet.</p>
+</ng-template>
