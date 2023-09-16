@@ -1,4 +1,12 @@
-<div class = 'header-container'>
+<div class="header-container">
+  <div class="concerts-grp">
+    <app-text-button
+      [buttonVariants]="'whiteOutline'"
+      [buttonText]="'Concerts'"
+      (buttonClick)="handleConcertsButtonClick()"
+    >
+    </app-text-button>
+  </div>
   <div *ngIf="!isLoggedIn()" class="login-grp">
     <app-text-button
       [buttonVariants]="'black'"
@@ -7,6 +15,7 @@
     ></app-text-button>
   </div>
   <div *ngIf="isLoggedIn()" class="login-grp">
+    <p class="login-title">Logged In as</p>
     <p>{{ emailID }}</p>
   </div>
 </div>
