@@ -65,12 +65,6 @@ export class ViewEventInfoComponent implements OnInit {
       return;
     }
 
-    if (this.userID == undefined) {
-      // TODO: Should prompt for login once log in is complete.
-      this.router.navigate(['/home']);
-      return;
-    }
-
     await this.getEventInfoService
       .loadEvent(this.eventID)
       .then((event: Event) => {
@@ -94,34 +88,7 @@ export class ViewEventInfoComponent implements OnInit {
     // see reg-status.ts file for the statuses.
     this._getRegistrationStatusOfUser();
 
-    if (this.userRegGroupInfo) {
-      const groupUserIDs = this.userRegGroupInfo.userIDs;
-      for (let i = 0; i < groupUserIDs.length; ++i) {
-        if (groupUserIDs[i] != this.userID) {
-          await this.getUserInfoService
-            .loadUserInfo(groupUserIDs[i])
-            .then((user: User | undefined) => {
-              if (user == undefined) {
-                return;
-              }
-              this.confirmationOfMembers.set(
-                user.email,
-                this.userRegGroupInfo!.confirmed[i] == 1
-              );
-              this.otherMemberEmailList.push(user.email);
-              this.otherMemberConfirmList.push(
-                this.userRegGroupInfo!.confirmed[i]
-              );
-              this.otherMemberMobileList.push(user.mobileNo);
-
-              this.storeRegGroupService.emailList = this.otherMemberEmailList;
-              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-            });
-        } else {
-          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-        }
-      }
-    }
+    this._getUserRegGroupMemberInfo();
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
@@ -203,6 +170,37 @@ export class ViewEventInfoComponent implements OnInit {
       this.registerStatus = RegStatus.REGISTERED;
     } else {
       this.registerStatus = RegStatus.PURCHASED;
+    }
+  }
+
+  private async _getUserRegGroupMemberInfo(): Promise<void> {
+    if (this.userRegGroupInfo) {
+      const groupUserIDs = this.userRegGroupInfo.userIDs;
+      for (let i = 0; i < groupUserIDs.length; ++i) {
+        if (groupUserIDs[i] != this.userID) {
+          await this.getUserInfoService
+            .loadUserInfo(groupUserIDs[i])
+            .then((user: User | undefined) => {
+              if (user == undefined) {
+                return;
+              }
+              this.confirmationOfMembers.set(
+                user.email,
+                this.userRegGroupInfo!.confirmed[i] == 1
+              );
+              this.otherMemberEmailList.push(user.email);
+              this.otherMemberConfirmList.push(
+                this.userRegGroupInfo!.confirmed[i]
+              );
+              this.otherMemberMobileList.push(user.mobileNo);
+
+              this.storeRegGroupService.emailList = this.otherMemberEmailList;
+              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
+            });
+        } else {
+          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
+        }
+      }
     }
   }
 

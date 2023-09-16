@@ -35,7 +35,6 @@ export class CarouselComponent implements OnInit {
   }
 
   handleLearnMoreButtonClick(eventID: number): void {
-    if (!this.authService.isVerified) return;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
       eventTitle: this.events[eventID].name
