@@ -1,6 +1,6 @@
 <div class="upcoming-concerts-grid">
     <div *ngFor="let event of events" class="upcoming-concert-cell">
-        <img src="assets/icons/{{ event.image }}" class="upcoming-concert-preview" (click)="handleButtonClick(event.eventID)" alt = "{{event.name}} poster">
+        <img src="assets/posters/{{ event.image }}" class="upcoming-concert-preview" (click)="handleButtonClick(event.eventID)" alt = "{{event.name}} poster">
         <h2>{{ event.name }}</h2>
     </div>
 </div>
