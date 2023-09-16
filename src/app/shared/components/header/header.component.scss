@@ -3,15 +3,14 @@
 .header-container {
   margin-top: 0px;
   height: 95px;
-  display: flex;
   background-color: $primary-blue-1;
 }
 .concerts-grp{
   position: absolute;
-  margin-left: 75%;
+  margin-left: 60%;
   margin-top: 2%;
 }
-.login-grp {
+.login-logout-grp {
   position: absolute;
   margin-left: 85%;
   margin-top: 2%;
@@ -20,8 +19,11 @@
 .login-title {
   font-weight: bold;
 }
-.login-grp p {
+.login-info-grp p {
   margin: 0 auto;
-  max-width: 80%;
-
+}
+.login-info-grp {
+  position: absolute;
+  margin-left: 70%;
+  margin-top: 2%;
 }
