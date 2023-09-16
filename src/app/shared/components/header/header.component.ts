@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Output() verifiedUserLoggingIn = new EventEmitter<void>();
+  @Output() userLoggedOut = new EventEmitter<void>();
   emailID: string | undefined = undefined;
   constructor(
     private authService: AuthenticationService,
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.emailID = this.authService.email;
+    this._shortenEmailID();
   }
 
   isLoggedIn(): boolean {
@@ -35,6 +37,7 @@ export class HeaderComponent implements OnInit {
 
     this.authService.userID = userInput;
     this.emailID = this.authService.email;
+    this._shortenEmailID();
 
     if (this.authService.isVerified) {
       this.verifiedUserLoggingIn.emit();
@@ -43,10 +46,22 @@ export class HeaderComponent implements OnInit {
 
   logoutUser(): void {
     this.authService.userID = undefined;
+    this.userLoggedOut.emit();
   }
 
   handleConcertsButtonClick(): void {
     if (window.location.href.includes('home')) return; // don't route anywhere if we are already on the home page.
     this.router.navigate(['/home']);
+  }
+
+  private _shortenEmailID(): void {
+    if (this.emailID == undefined) return;
+
+    // If the email is longer than 13 characters append an ellipsis to prevent overflow.
+    this.emailID =
+      this.emailID.length >= 13
+        ? this.emailID.substring(0, 13) + '...'
+        : this.emailID;
+    console.log(this.emailID);
   }
 }
