@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
   }
 
   handleConcertsButtonClick(): void {
+    if (window.location.href.includes('home')) return; // don't route anywhere if we are already on the home page.
     this.router.navigate(['/home']);
   }
 }
