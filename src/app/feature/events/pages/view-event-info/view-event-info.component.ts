@@ -29,7 +29,6 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Registration group information
   userRegGroupInfo!: RegGroup | undefined;
-  confirmationOfMembers: Map<string, boolean> = new Map<string, boolean>();
   otherMemberEmailList: string[] = [];
   otherMemberMobileList: string[] = [];
   otherMemberConfirmList: number[] = [];
@@ -41,7 +40,7 @@ export class ViewEventInfoComponent implements OnInit {
   latestShowDate!: Date;
 
   // Variables for registration status
-  registerStatus: RegStatus = RegStatus.NOT_REGISTERED;
+  registerStatus: RegStatus = RegStatus.NOT_LOGGED_IN;
 
   // Utility variables
   hasEventLoaded: boolean = false;
@@ -60,10 +59,11 @@ export class ViewEventInfoComponent implements OnInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.userID = this.authService.userID;
 
-    if (this.eventID == undefined) {
-      this.router.navigate(['/home']);
-      return;
-    }
+    // if (this.eventID == undefined) {
+    //   this.router.navigate(['/home']);
+    //   return;
+    // }
+    this.eventID = 0;
 
     await this.getEventInfoService
       .loadEvent(this.eventID)
@@ -76,7 +76,9 @@ export class ViewEventInfoComponent implements OnInit {
       .loadShowInfo(this.eventID)
       .then((showInfo: ShowInfo[] | undefined) => {
         this.showInfo = showInfo;
-        this._calculateEarliestAndLatestShow();
+        if (this.showInfo != undefined) {
+          this._calculateEarliestAndLatestShow();
+        }
       });
 
     await this.getRegGroupService
@@ -94,7 +96,10 @@ export class ViewEventInfoComponent implements OnInit {
   // Boolean conditions for displaying items on the DOM
   // ============================================
   showGroupMembersInfo(): boolean {
-    return this.registerStatus != RegStatus.NOT_REGISTERED;
+    return (
+      this.authService.isLoggedIn &&
+      this.registerStatus != RegStatus.NOT_REGISTERED
+    );
   }
 
   datesAreValid(): boolean {
@@ -126,10 +131,10 @@ export class ViewEventInfoComponent implements OnInit {
 
   handleModifyGroupButtonClick(): void {
     // Only navigate if the user already has a group.
-    if (this.userRegGroupInfo != undefined){
+    if (this.userRegGroupInfo != undefined) {
       this.storeRegGroupService.modifyGroup = true;
 
-      this.router.navigate(['/events','register', 'group']);
+      this.router.navigate(['/events', 'register', 'group']);
     }
   }
   // ==========================================================
@@ -159,6 +164,11 @@ export class ViewEventInfoComponent implements OnInit {
   }
 
   private _getRegistrationStatusOfUser(): void {
+    if (this.authService.userID == undefined) {
+      this.registerStatus = RegStatus.NOT_LOGGED_IN;
+      return;
+    }
+
     if (this.userRegGroupInfo == undefined) {
       this.registerStatus = RegStatus.NOT_REGISTERED;
     } else if (!this.userRegGroupInfo.hasAllUsersConfirmed) {
@@ -184,10 +194,6 @@ export class ViewEventInfoComponent implements OnInit {
               if (user == undefined) {
                 return;
               }
-              this.confirmationOfMembers.set(
-                user.email,
-                this.userRegGroupInfo!.confirmed[i] == 1
-              );
               this.otherMemberEmailList.push(user.email);
               this.otherMemberConfirmList.push(
                 this.userRegGroupInfo!.confirmed[i]
