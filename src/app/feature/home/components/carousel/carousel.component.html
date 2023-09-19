@@ -2,7 +2,7 @@
     <p-carousel [value]="events" [numVisible]="1" [numScroll]="1" [circular]="true" autoPlayInterval="1000">
         <ng-template let-event pTemplate="item">
                 <div class="carousel-slide">
-                    <img src="assets/icons/{{ event.image }}"  width="400" height="500" />
+                    <img src="assets/posters/{{ event.image }}"  width="400" height="500" />
                     <div class="carousel-concert-details">
                         <div class="carousel-concert-text">
                             <h1>{{ event.name }}</h1>

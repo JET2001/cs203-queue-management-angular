@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, OnInit, forwardRef } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 @Component({
@@ -13,16 +13,14 @@ import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
     },
   ],
 })
-export class InputFieldComponent {
-  @Input() inputType: 'mobile' | 'text' | 'email' | 'password';
+export class InputFieldComponent implements OnInit {
+  @Input() inputType: 'mobile' | 'text' | 'email' | 'password' | 'auth-code';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
-  inputValue: FormControl = new FormControl('', []);
+  @Input() inputValue: FormControl = new FormControl('', []);
 
-  constructor() {
-    this.inputValue.valueChanges.subscribe(() => {
-      this.validateInput();
-    });
+  ngOnInit(): void {
+    this.updateValidators();
   }
 
   onChange: any = () => {};
@@ -30,7 +28,7 @@ export class InputFieldComponent {
 
   writeValue(value: any): void {
     if (value !== undefined) {
-      this.inputValue = value;
+      this.inputValue.setValue(value);
     }
   }
 
@@ -50,23 +48,21 @@ export class InputFieldComponent {
     }
   }
 
-  validateInput() {
+  getInputType() {
+    return this.inputType === 'password' ? 'password' : 'text';
+  }
+
+  updateValidators() {
     if (this.isRequired) {
       this.inputValue.setValidators(Validators.required);
     }
     if (this.inputType === 'email') {
       this.inputValue.addValidators(Validators.email);
     } else if (this.inputType === 'mobile') {
-      this.inputValue.addValidators(Validators.pattern(/^[89]\d{7}$/));
+      this.inputValue.addValidators(Validators.pattern(/^\+65[89]\d{7}$/));
+    } else if (this.inputType === 'auth-code') {
+      this.inputValue.addValidators(Validators.pattern(/^\d{6}$/));
     }
-
     this.inputValue.updateValueAndValidity();
-
-    this.onChange(this.inputValue.value);
-    this.onTouch();
-  }
-
-  getInputType() {
-    return this.inputType === 'password' ? 'password' : 'text';
   }
 }

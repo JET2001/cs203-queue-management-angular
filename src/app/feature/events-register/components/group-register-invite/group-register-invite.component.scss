@@ -1,0 +1,42 @@
+@import "/src/variables";
+
+.invitation-title {
+  margin-top: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+.email {
+  width: 20%;
+}
+.mobile {
+  width: 20%;
+}
+
+img {
+  width: 15%;
+  display: inline;
+  margin-right: 5%;
+}
+
+.status-msg {
+  display: inline;
+  text-wrap: nowrap;
+
+  .success {
+    -webkit-text-fill-color: $success-1;
+  }
+  .error {
+    -webkit-text-fill-color: $error-1;
+  }
+}
+
+.success-icon,
+.failure-icon {
+  display: inline;
+  width: 24px;
+  height: 24px;
+}

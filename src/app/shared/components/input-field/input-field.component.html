@@ -4,15 +4,38 @@
     [type]="getInputType()"
     [formControl]="inputValue"
     [placeholder]="placeholder"
-    [ngClass]="{ 'input-border-error': inputValue.hasError }"
+    [ngClass]="{
+      'input-border-error':
+        (inputValue.hasError('required') ||
+        inputValue.hasError('email') ||
+        inputValue.hasError('pattern') ||
+        inputValue.invalid) && inputValue.touched
+    }"
   />
-  <div class="input-error-message" *ngIf="inputValue.hasError('required')">
+  <div
+    class="input-error-message"
+    *ngIf="
+      (inputValue.hasError('required') || inputValue.invalid) &&
+      !inputValue.hasError('email') &&
+      !inputValue.hasError('pattern') &&
+      inputValue.touched
+    "
+  >
     This field is required.
   </div>
   <div class="input-error-message" *ngIf="inputValue.hasError('email')">
     Invalid email format.
   </div>
-  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'mobile'">
+  <div
+    class="input-error-message"
+    *ngIf="inputValue.hasError('pattern') && inputType === 'mobile'"
+  >
     Invalid mobile number format.
+  </div>
+  <div
+    class="input-error-message"
+    *ngIf="inputValue.hasError('pattern') && inputType === 'auth-code'"
+  >
+    Code should be 6 digits.
   </div>
 </div>

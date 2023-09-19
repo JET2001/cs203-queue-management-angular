@@ -1,12 +1,13 @@
+<app-header></app-header>
 <body>
+  <div class="parent-container">
     <div class="landing-carousel-container">
-            <app-carousel class="landing-carousel"></app-carousel>
+      <app-carousel class="landing-carousel"></app-carousel>
     </div>
-
-    <div>
-        <app-input-field [inputType]="'mobile'" placeholder="Mobile input" [isRequired]="true"></app-input-field>
-        <app-input-field [inputType]="'email'" placeholder="Email input" [isRequired]="true"></app-input-field>
-        <app-input-field [inputType]="'password'" placeholder="Password input" [isRequired]="true"></app-input-field>
-
+    <div class="upcoming-concerts-container">
+      <h1>Upcoming Concerts</h1>
+      <app-upcoming-concerts></app-upcoming-concerts>
     </div>
+  </div>
+  <app-text-button buttonText="Test Queue Timing" buttonVariants="primary" (buttonClick)="testQueueTimingPopup()"></app-text-button>
 </body>

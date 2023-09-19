@@ -1,32 +1,28 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info.service';
+import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss']
+  styleUrls: ['./landing-page.component.scss'],
 })
-export class LandingPageComponent {
+export class LandingPageComponent implements OnInit {
 
+  userID !: number | undefined;
   constructor(
-    private storeEventInfoService: StoreEventInfoService,
-    private router: Router
+    private authService: AuthenticationService,
+    private activeModal: NgbModal
   ){}
 
-  // Temporary methods to demonstrate routing
-  handleEventID1Click(): void {
-    this.storeEventInfoService.eventInfo = {
-      eventID: 1
-    };
-    this.router.navigate(['/events']);
+  ngOnInit(): void {
+    this.userID = this.authService.userID;
   }
 
-  handleEventID2andUserID3Click(): void {
-    this.storeEventInfoService.eventInfo = {
-      eventID: 2,
-      userID: 3
-    };
-    this.router.navigate(['/events']);
+  testQueueTimingPopup(): void {
+    this.activeModal.open(QueueTimingPopupComponent, {centered: true});
   }
+
 }

@@ -11,7 +11,7 @@ import { SeatCategories } from '../models/seat-categories';
 //=======================================================================
 export const events : Event[] = [
   {
-    eventID: 0,
+    eventID: 0, 
     name: 'Taylor Swift The Eras Tour',
     image: 'taylor-swift.png',
     description:
@@ -46,7 +46,7 @@ export const events : Event[] = [
   },
   {
     eventID: 4,
-    name: "TWICE",
+    name: "TWICE: Ready to Be",
     image: 'twice.jpg',
     countries:['Europe','Mexico', 'Australia'],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
