@@ -1,6 +1,48 @@
-.blue-heading {
-    background-color: #2E90FA; /* Blue color */
-    color: white; /* Text color */
-    padding: 10px; /* Adjust padding as needed */
-    text-align: right; /* Center align text */
+@import "/src/styles.scss";
+
+.container {
+  padding: 44px 0px;
+}
+
+.queue-details-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.information-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.queue-details {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.queue-timing-dropdown-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-bottom: 10px;
+}
+
+.queue-timing-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 800px;
+  height: 40px;
+  border-radius: 5px;
+  border-color: $gray-2;
+  text-indent: 10px;
+}
+
+.navigation-buttons {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

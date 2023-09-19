@@ -1,34 +1,42 @@
-<form [formGroup]="queueTimingForm">
-
-    <header class="blue-heading">
-        <h1>Concerts</h1>
-    </header>
-
-    <h1>{{ concertName }}</h1>
-    
-    <div>
+<app-header></app-header>
+<div class="container">
+  <div class="queue-details-container">
+    <div class="queue-details">
+      <h1>{{ eventTitle }}</h1>
       <div>
-        <p>Queue Registration</p>
-      </div>
-      <div>
-        <p>Choose your preferred queue timings.</p>
+        <h2>Queue Registration</h2>
+        <p>Choose your preferred queue timings:</p>
       </div>
     </div>
-    
-    <div *ngFor="let timing of timings.controls; let i = index" [formGroupName]="i">
-      <div>
-        <span style="margin-bottom: 100px;">{{ 'Queue Timing #' + (i + 1) }}</span>
-      </div>
-      <div>
-        <select formControlName="selectedTiming">
-          <option *ngFor="let time of timingOptions" [value]="time">{{ time }}</option>
-        </select>
-      </div>
-    </div>
-    
-    <button (click)="goBack()">Go Back</button>
-    <button (click)="goNext()">Go Next</button>
+    <img class="information-icon" src="../../../../../assets/icons/information.svg" (click)="handleInformationClick()">
+  </div>
 
-    <button (click)="togglePopup()">Show Popup</button>
-    <app-popup-test *ngIf="showPopup"></app-popup-test>
+  <form [formGroup]="queueTimingForm">
+    <div
+      *ngFor="let show of shows; let i = index"
+      class="queue-timing-dropdown-container"
+    >
+      Queue Timing #{{ i + 1 }}
+      <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + i">
+        <option *ngFor="let option of queueTimings" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
   </form>
+  <div class="navigation-buttons">
+    <div class="back-button">
+      <app-text-button
+        buttonVariants="black"
+        buttonText="Back to Concert Details"
+        (buttonClick)="handleBackToConcert()"
+      ></app-text-button>
+    </div>
+    <div class="next-button">
+      <app-text-button
+        buttonVariants="primary"
+        buttonText="Next"
+      ></app-text-button>
+    </div>
+  </div>
+</div>

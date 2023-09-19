@@ -140,13 +140,13 @@ export const RegGroups: RegGroup[] = [
 // =================================================
 // Groups joins queue.
 // =================================================
-export interface Group_Register_Queue {
+export interface GroupRegisterQueue {
   groupID: number;
   queueID: number;
   queuePos: number;
 }
 
-export const GroupJoinsQueueTable: Group_Register_Queue[] = [
+export const GroupJoinsQueueTable: GroupRegisterQueue[] = [
   {
     groupID: 1,
     queueID: 0,

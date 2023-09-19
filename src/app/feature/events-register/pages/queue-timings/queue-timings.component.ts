@@ -1,60 +1,122 @@
-import { Component } from '@angular/core';
+import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import {
-  FormControl,
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray
-} from '@angular/forms';
+  GetShowInfoService,
+  ShowInfo,
+} from './../../../../shared/services/get-show-info/get-show-info.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-queue-timings',
   templateUrl: './queue-timings.component.html',
   styleUrls: ['./queue-timings.component.scss'],
 })
-export class QueueTimingsComponent {
+export class QueueTimingsComponent implements OnInit {
+  eventID!: number | undefined;
+  eventTitle: string | undefined;
+  showInfo: ShowInfo[] | undefined;
   queueTimingForm: FormGroup;
+  queueTimings: String[];
+  shows: String[];
 
-  queueTimings = [1, 2, 3];
-  timingOptions = ['4 July 2023, 22:00 SGT | SHOW TIME: 2 March 2024, Singapore 397718, 18:00 SGT ',
-                    '5 July 2023, 22:00 SGT | SHOW TIME: 3 March 2024, Singapore 397718, 18:00 SGT',
-                    '7 July 2023, 22:00 SGT | SHOW TIME: 7 March 2024, Singapore 397718, 18:00 SGT'];
-  concertName: string = 'Taylor Swift The Eras Tour';
+  constructor(
+    private getShowInfoService: GetShowInfoService,
+    private storeEventInfoService: StoreEventInfoService,
+    private router: Router,
+    private fb: FormBuilder,
+    private activeModal: NgbModal
+  ) {
+    this.queueTimingForm = this.fb.group({});
+  }
 
-  constructor(private fb: FormBuilder) {}
+  async ngOnInit() {
+    this.eventID = this.storeEventInfoService.eventInfo.eventID;
+    this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
-  ngOnInit() {
-    // Initialize the reactive form
-    this.queueTimingForm = this.fb.group({
-      timings: this.fb.array([]),
-    });
+    if (this.eventID == undefined) {
+      this.router.navigate(['/home']);
+      return;
+    }
 
-    // Create form controls for queue timings dynamically
-    this.queueTimings.forEach(() => {
-      const timingControl = this.fb.group({
-        selectedTiming: ['', Validators.required], // Add required validator
+    await this.getShowInfoService
+      .loadShowInfo(this.eventID)
+      .then((showInfo: ShowInfo[] | undefined) => {
+        this.showInfo = showInfo;
       });
-      this.timings.push(timingControl);
-    });
+
+    if (this.showInfo) {
+      var count = 0;
+      this.queueTimings = new Array(this.showInfo.length);
+      this.shows = new Array(this.showInfo.length);
+      for (let show of this.showInfo) {
+        const queueStartTime = this.formatQueueDate(show.queueStartTime);
+        const showTime = this.formatShowDate(show.showDateTime);
+        this.queueTimings[count] = queueStartTime + ' | SHOW TIME: ' + showTime;
+        const control = this.fb.control('', Validators.required);
+        this.queueTimingForm.addControl(`queueTiming${count}`, control);
+        count++;
+      }
+    }
   }
 
-  get timings() {
-    return this.queueTimingForm.get('timings') as FormArray;
+  handleBackToConcert(): void {
+    this.router.navigate(['/events']);
   }
 
-  goBack() {
-    console.log('Going back');
+  handleInformationClick(): void {
+    this.activeModal.open(QueueTimingPopupComponent, { centered: true });
   }
 
-  goNext() {
-    console.log('Going next');
+  formatQueueDate(date: Date): string {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+
+    return `${day} ${month} ${year}, ${hours}:${minutes} SGT`;
   }
 
-  // testing for popup
-  showPopup: boolean = false;
+  formatShowDate(date: Date): string {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
 
-  togglePopup() {
-    this.showPopup = !this.showPopup;
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+
+    return `${day} ${month} ${year}, Singapore 397718, ${hours}:${minutes} SGT`;
   }
-  
 }
