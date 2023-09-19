@@ -1,12 +1,27 @@
-<div class = 'header-container'>
-  <div *ngIf="!isLoggedIn()" class="login-grp">
+<div class="header-container">
+  <div class="concerts-grp">
     <app-text-button
+      [buttonVariants]="'whiteOutline'"
+      [buttonText]="'Concerts'"
+      (buttonClick)="handleConcertsButtonClick()"
+    >
+    </app-text-button>
+  </div>
+  <div class="login-logout-grp">
+    <app-text-button *ngIf="!isLoggedIn()"
       [buttonVariants]="'black'"
       [buttonText]="'LOGIN'"
       (buttonClick)="loginUser()"
     ></app-text-button>
+    <app-text-button *ngIf="isLoggedIn()"
+      [buttonVariants]="'black'"
+      [buttonText]="'LOGOUT'"
+      (buttonClick)="logoutUser()"
+    >
+    </app-text-button>
   </div>
-  <div *ngIf="isLoggedIn()" class="login-grp">
+  <div *ngIf="isLoggedIn()" class="login-info-grp">
+    <p class="login-title">Logged In as</p>
     <p>{{ emailID }}</p>
   </div>
 </div>
