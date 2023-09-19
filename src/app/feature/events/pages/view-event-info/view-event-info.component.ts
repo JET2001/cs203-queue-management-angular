@@ -29,7 +29,6 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Registration group information
   userRegGroupInfo!: RegGroup | undefined;
-  confirmationOfMembers: Map<string, boolean> = new Map<string, boolean>();
   otherMemberEmailList: string[] = [];
   otherMemberMobileList: string[] = [];
   otherMemberConfirmList: number[] = [];
@@ -41,7 +40,7 @@ export class ViewEventInfoComponent implements OnInit {
   latestShowDate!: Date;
 
   // Variables for registration status
-  registerStatus: RegStatus = RegStatus.NOT_REGISTERED;
+  registerStatus: RegStatus = RegStatus.NOT_LOGGED_IN;
 
   // Utility variables
   hasEventLoaded: boolean = false;
@@ -58,15 +57,8 @@ export class ViewEventInfoComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
-    this.userID = this.authService.userID;
 
     if (this.eventID == undefined) {
-      this.router.navigate(['/home']);
-      return;
-    }
-
-    if (this.userID == undefined) {
-      // TODO: Should prompt for login once log in is complete.
       this.router.navigate(['/home']);
       return;
     }
@@ -82,52 +74,29 @@ export class ViewEventInfoComponent implements OnInit {
       .loadShowInfo(this.eventID)
       .then((showInfo: ShowInfo[] | undefined) => {
         this.showInfo = showInfo;
-        this._calculateEarliestAndLatestShow();
+        if (this.showInfo != undefined) {
+          this._calculateEarliestAndLatestShow();
+        }
       });
 
-    await this.getRegGroupService
-      .getRegGroupOfUser(this.eventID, this.userID)
-      .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+    await this._updateUserEventInfo();
+  }
 
-    // Registration status of the user affects what button the user sees
-    // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
-    // see reg-status.ts file for the statuses.
-    this._getRegistrationStatusOfUser();
-
-    if (this.userRegGroupInfo) {
-      const groupUserIDs = this.userRegGroupInfo.userIDs;
-      for (let i = 0; i < groupUserIDs.length; ++i) {
-        if (groupUserIDs[i] != this.userID) {
-          await this.getUserInfoService
-            .loadUserInfo(groupUserIDs[i])
-            .then((user: User | undefined) => {
-              if (user == undefined) {
-                return;
-              }
-              this.confirmationOfMembers.set(
-                user.email,
-                this.userRegGroupInfo!.confirmed[i] == 1
-              );
-              this.otherMemberEmailList.push(user.email);
-              this.otherMemberConfirmList.push(
-                this.userRegGroupInfo!.confirmed[i]
-              );
-              this.otherMemberMobileList.push(user.mobileNo);
-
-              this.storeRegGroupService.emailList = this.otherMemberEmailList;
-              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-            });
-        } else {
-          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-        }
-      }
-    }
+  // ===========================================
+  // Handle case where user logs in and logs out from the View Events page
+  // ===========================================
+  async handleUserLoginLogoutChange(): Promise<void> {
+    await this._updateUserEventInfo();
+    console.log("Completed!");
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
   // ============================================
   showGroupMembersInfo(): boolean {
-    return this.registerStatus != RegStatus.NOT_REGISTERED;
+    return (
+      this.authService.isLoggedIn &&
+      this.registerStatus != RegStatus.NOT_REGISTERED
+    );
   }
 
   datesAreValid(): boolean {
@@ -159,15 +128,33 @@ export class ViewEventInfoComponent implements OnInit {
 
   handleModifyGroupButtonClick(): void {
     // Only navigate if the user already has a group.
-    if (this.userRegGroupInfo != undefined){
+    if (this.userRegGroupInfo != undefined) {
       this.storeRegGroupService.modifyGroup = true;
 
-      this.router.navigate(['/events','register', 'group']);
+      this.router.navigate(['/events', 'register', 'group']);
     }
   }
   // ==========================================================
   // Utility functions
   // ==========================================================
+  private async _updateUserEventInfo(): Promise<void> {
+    this.userID = this.authService.userID; // update userID
+    this._resetFields();
+
+    await this.getRegGroupService
+      .getRegGroupOfUser(this.eventID!, this.userID)
+      .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+    console.log("this.userRegGroupInfo = ", this.userRegGroupInfo);
+
+    // Registration status of the user affects what button the user sees
+    // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
+    // see reg-status.ts file for the statuses.
+    this._getRegistrationStatusOfUser();
+
+    await this._getUserRegGroupMemberInfo();
+    console.log("Email List = " + this.otherMemberEmailList);
+  }
+
   private _calculateEarliestAndLatestShow(): void {
     if (this.showInfo == undefined || this.showInfo.length == 0) {
       this.earliestShowDate = new Date(0);
@@ -192,6 +179,11 @@ export class ViewEventInfoComponent implements OnInit {
   }
 
   private _getRegistrationStatusOfUser(): void {
+    if (this.authService.userID == undefined) {
+      this.registerStatus = RegStatus.NOT_LOGGED_IN;
+      return;
+    }
+
     if (this.userRegGroupInfo == undefined) {
       this.registerStatus = RegStatus.NOT_REGISTERED;
     } else if (!this.userRegGroupInfo.hasAllUsersConfirmed) {
@@ -206,11 +198,46 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
+  private async _getUserRegGroupMemberInfo(): Promise<void> {
+    if (this.userRegGroupInfo) {
+      const groupUserIDs = this.userRegGroupInfo.userIDs;
+      for (let i = 0; i < groupUserIDs.length; ++i) {
+        if (groupUserIDs[i] != this.userID) {
+          await this.getUserInfoService
+            .loadUserInfo(groupUserIDs[i])
+            .then((user: User | undefined) => {
+              if (user == undefined) {
+                return;
+              }
+              this.otherMemberEmailList.push(user.email);
+              this.otherMemberConfirmList.push(
+                this.userRegGroupInfo!.confirmed[i]
+              );
+              this.otherMemberMobileList.push(user.mobileNo);
+
+              this.storeRegGroupService.emailList = this.otherMemberEmailList;
+              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
+            });
+        } else {
+          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
+        }
+      }
+    }
+  }
+
   private _isEarlier(timeA: Date, timeB: Date): boolean {
     return timeA.getTime() - timeB.getTime() < 0;
   }
 
   private _isLater(timeA: Date, timeB: Date): boolean {
     return timeB.getTime() - timeA.getTime() < 0;
+  }
+
+  private _resetFields(): void {
+    this.userRegGroupInfo = undefined;
+    this.otherMemberEmailList = [];
+    this.otherMemberMobileList = [];
+    this.otherMemberConfirmList = [];
+    this.hasUserConfirmed = false;
   }
 }

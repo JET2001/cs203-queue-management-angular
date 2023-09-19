@@ -21,10 +21,6 @@ export class LandingPageComponent implements OnInit {
     this.userID = this.authService.userID;
   }
 
-  authenticateUser(): void {
-    this.activeModal.open(GaVerificationPopupComponent, {centered: true});
-  }
-
   testQueueTimingPopup(): void {
     this.activeModal.open(QueueTimingPopupComponent, {centered: true});
   }
