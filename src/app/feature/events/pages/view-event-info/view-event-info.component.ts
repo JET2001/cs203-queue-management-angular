@@ -57,7 +57,6 @@ export class ViewEventInfoComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
-
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
       return;

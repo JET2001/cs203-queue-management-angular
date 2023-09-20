@@ -6,18 +6,23 @@ import { RouterModule } from '@angular/router';
 import { eventRoutes } from './events.routing';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { GroupMemberListComponent } from './components/group-member-list/group-member-list.component';
-
+import { ViewShowsComponent } from './components/view-shows/view-shows.component';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
   declarations: [
     ViewEventInfoComponent,
     GroupMemberListComponent,
+    ViewShowsComponent,
   ],
   imports: [
     SharedModule,
     CommonModule,
-    RouterModule.forChild(eventRoutes)
-  ]
+    RouterModule.forChild(eventRoutes),
+    TableModule,
+    InputTextModule
+  ],
 })
-export class EventsModule { }
+export class EventsModule {}

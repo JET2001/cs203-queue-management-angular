@@ -1,53 +1,33 @@
-body {
-  margin-left: 89px;
-  margin-top: 44px;
-  margin-right: 89px;
-  margin-bottom: 44px;
+.container-body {
+  padding-left: 89px;
+  padding-top: 44px;
+  padding-right: 89px;
+  padding-bottom: 44px;
 }
 
 .parent {
   display: flex;
   flex-direction: row;
-  width: 100vw;
-}
-.container-top {
-  height: 5vh;
-  margin-bottom: 2vh;
-}
-
-.event-group-outer {
-  height: 50vh;
-}
-
-.event-title {
-  width: 80vw;
-}
-
-.reg-status-group {
-  width: 10vw;
+  justify-content: space-between;
 }
 
 .poster {
-  width: 30vw;
-  height: 50vh;
   img {
     height: auto;
     max-width: 95%;
   }
 }
 
-app-text-button {
-  display: block;
-  margin-bottom: 2vh;
-  width: 100%;
-}
-
-.event-info-group {
-  width: 30vw;
-  height: 50vh;
-}
-
 .reg-info-group {
-  width: 30vw;
-  height: 50vh;
+  margin-top: 20px;
+}
+
+.concert-details-button {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.view-shows-table {
+  margin-top: 20px;
 }

@@ -2,7 +2,7 @@
   (verifiedUserLoggingIn)="handleUserLoginLogoutChange()"
   (userLoggedOut)="handleUserLoginLogoutChange()"
 ></app-header>
-<body>
+<div class="container-body">
   <div class="container-top">
     <div class="parent">
       <div class="event-title">
@@ -63,7 +63,7 @@
     <div class="parent event-group-container">
       <div *ngIf="hasEventLoaded" class="poster">
         <img
-          src="/assets/icons/{{ eventInfo.image }}"
+          src="../../../../../assets/posters/{{ eventInfo.image }}"
           alt="{{ eventInfo.name }} poster"
         />
       </div>
@@ -76,14 +76,16 @@
             {{ latestShowDate.toDateString() }}
           </p>
         </div>
-        <app-text-button
-          buttonVariants="secondary"
-          buttonText="View Seat Map"
-        ></app-text-button>
-        <app-text-button
-          buttonVariants="secondary"
-          buttonText="Conditions of Entry"
-        ></app-text-button>
+        <div class="concert-details-button">
+          <app-text-button
+            buttonVariants="secondary"
+            buttonText="View Seat Map"
+          ></app-text-button>
+          <app-text-button
+            buttonVariants="secondary"
+            buttonText="Conditions of Entry"
+          ></app-text-button>
+        </div>
       </div>
 
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
@@ -100,4 +102,8 @@
       </div>
     </div>
   </div>
-</body>
+  <div class="view-shows-table">
+    <h2>Shows</h2>
+    <app-view-shows></app-view-shows>
+  </div>
+</div>
