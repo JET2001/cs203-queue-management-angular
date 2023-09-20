@@ -4,16 +4,16 @@
   [globalFilterFields]="[
     'eventDateAndTime',
     'venue',
-    'queueStartTime'
   ]"
 >
   <ng-template pTemplate="caption">
     <div class="flex">
         <input
+         class = "search-shows-bar"
           pInputText
           type="text"
           (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-          placeholder="Search"
+          placeholder="Search an event date or location"
         />
     </div>
   </ng-template>
