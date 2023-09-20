@@ -29,7 +29,8 @@ export class CarouselComponent implements OnInit {
     if(!this.authService.isVerified) return;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      eventTitle: this.events[eventID].name
+      eventTitle: this.events[eventID].name,
+      maxQueueable: this.events[eventID].maxQueueable
     };
     this.router.navigate(['/events', 'register', 'group']);
   }
@@ -37,7 +38,8 @@ export class CarouselComponent implements OnInit {
   handleLearnMoreButtonClick(eventID: number): void {
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      eventTitle: this.events[eventID].name
+      eventTitle: this.events[eventID].name,
+      maxQueueable: this.events[eventID].maxQueueable
     };
     this.router.navigate(['/events']);
   }

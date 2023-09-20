@@ -6,6 +6,7 @@ export interface EventInfoParams {
   userID?: number;
   groupID?: number;
   queueID?: number[];
+  maxQueueable?: number;
 }
 
 @Injectable({

@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router";
 import { GroupRegistrationComponent } from "./pages/group-registration/group-registration.component";
-import { QueueRegistrationComponent } from "./pages/queue-registration/queue-registration.component";
 import { RegistrationPreviewComponent } from "./pages/registration-preview/registration-preview.component";
+import { QueueTimingsComponent } from "./pages/queue-timings/queue-timings.component";
 
 export const eventRegisterRoutes : Routes = [
   {
@@ -10,10 +10,10 @@ export const eventRegisterRoutes : Routes = [
   },
   {
     path: 'queue',
-    component: QueueRegistrationComponent
+    component: QueueTimingsComponent
   },
   {
     path: 'preview',
     component: RegistrationPreviewComponent
-  }
+  },
 ]

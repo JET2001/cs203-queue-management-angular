@@ -1,0 +1,42 @@
+<app-header></app-header>
+<div class="container">
+  <div class="queue-details-container">
+    <div class="queue-details">
+      <h1>{{ eventTitle }}</h1>
+      <div>
+        <h2>Queue Registration</h2>
+        <p>Choose your preferred queue timings:</p>
+      </div>
+    </div>
+    <img class="information-icon" src="../../../../../assets/icons/information.svg" (click)="handleInformationClick()" alt = "Information Icon">
+  </div>
+
+  <form [formGroup]="queueTimingForm">
+    <div
+      *ngFor="let optionNo of queueOptions"
+      class="queue-timing-dropdown-container"
+    >
+      Queue Timing #{{ optionNo }}
+      <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + optionNo">
+        <option *ngFor="let option of queueTimings" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
+  </form>
+  <div class="navigation-buttons">
+    <div class="back-button">
+      <app-text-button
+        buttonVariants="black"
+        buttonText="Back to Concert Details"
+        (buttonClick)="handleBackToConcert()"
+      ></app-text-button>
+    </div>
+    <div class="next-button">
+      <app-text-button
+        buttonVariants="primary"
+        buttonText="Next"
+      ></app-text-button>
+    </div>
+  </div>
+</div>
