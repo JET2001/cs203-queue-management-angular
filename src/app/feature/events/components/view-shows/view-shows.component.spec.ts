@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewShowsComponent } from './view-shows.component';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
 
 describe('ViewShowsComponent', () => {
   let component: ViewShowsComponent;
@@ -8,7 +10,8 @@ describe('ViewShowsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ViewShowsComponent]
+      declarations: [ViewShowsComponent],
+      imports: [TableModule, InputTextModule],
     });
     fixture = TestBed.createComponent(ViewShowsComponent);
     component = fixture.componentInstance;
