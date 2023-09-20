@@ -4,7 +4,7 @@ import {
   GetShowInfoService,
   ShowInfo,
 } from './../../../../shared/services/get-show-info/get-show-info.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './queue-timings.component.html',
   styleUrls: ['./queue-timings.component.scss'],
 })
-export class QueueTimingsComponent implements OnInit {
+export class QueueTimingsComponent implements OnInit, AfterContentInit {
   eventID!: number | undefined;
   eventTitle: string | undefined;
   showInfo: ShowInfo[] | undefined;
@@ -64,6 +64,10 @@ export class QueueTimingsComponent implements OnInit {
 
     // Load number of queue options
     this._loadQueueOptions();
+  }
+
+  ngAfterContentInit(): void {
+    this.handleInformationClick();
   }
 
   handleBackToConcert(): void {
@@ -125,7 +129,15 @@ export class QueueTimingsComponent implements OnInit {
   }
 
   private _loadQueueOptions(): void {
-    for (let i: number = 1; i <= Math.min(this.showInfo?.length!, this.storeEventInfoService.eventInfo.maxQueueable!); ++i){
+    for (
+      let i: number = 1;
+      i <=
+      Math.min(
+        this.showInfo?.length!,
+        this.storeEventInfoService.eventInfo.maxQueueable!
+      );
+      ++i
+    ) {
       this.queueOptions.push(i);
     }
   }
