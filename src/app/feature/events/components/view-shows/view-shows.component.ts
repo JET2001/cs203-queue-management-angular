@@ -44,7 +44,5 @@ export class ViewShowsComponent implements OnInit {
           });
         }
       });
-
-    console.log(this.showInfo);
   }
 }
