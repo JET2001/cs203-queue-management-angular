@@ -5,7 +5,7 @@ import {
   ShowInfo,
 } from './../../../../shared/services/get-show-info/get-show-info.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -48,7 +48,7 @@ export class QueueTimingsComponent implements OnInit {
       });
 
     if (this.showInfo) {
-      var count = 0;
+      let count: number = 0;
       this.queueTimings = new Array(this.showInfo.length);
       this.shows = new Array(this.showInfo.length);
       for (let show of this.showInfo) {
