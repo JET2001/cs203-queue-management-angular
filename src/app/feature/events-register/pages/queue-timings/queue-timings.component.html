@@ -13,11 +13,11 @@
 
   <form [formGroup]="queueTimingForm">
     <div
-      *ngFor="let show of shows; let i = index"
+      *ngFor="let optionNo of queueOptions"
       class="queue-timing-dropdown-container"
     >
-      Queue Timing #{{ i + 1 }}
-      <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + i">
+      Queue Timing #{{ optionNo }}
+      <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + optionNo">
         <option *ngFor="let option of queueTimings" [value]="option">
           {{ option }}
         </option>

@@ -21,6 +21,7 @@ export class QueueTimingsComponent implements OnInit {
   queueTimingForm: FormGroup;
   queueTimings: String[];
   shows: String[];
+  queueOptions: number[] = [];
 
   constructor(
     private getShowInfoService: GetShowInfoService,
@@ -60,6 +61,9 @@ export class QueueTimingsComponent implements OnInit {
         count++;
       }
     }
+
+    // Load number of queue options
+    this._loadQueueOptions();
   }
 
   handleBackToConcert(): void {
@@ -118,5 +122,11 @@ export class QueueTimingsComponent implements OnInit {
     const minutes = ('0' + date.getMinutes()).slice(-2);
 
     return `${day} ${month} ${year}, Singapore 397718, ${hours}:${minutes} SGT`;
+  }
+
+  private _loadQueueOptions(): void {
+    for (let i: number = 1; i <= Math.min(this.showInfo?.length!, this.storeEventInfoService.eventInfo.maxQueueable!); ++i){
+      this.queueOptions.push(i);
+    }
   }
 }

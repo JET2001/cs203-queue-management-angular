@@ -11,13 +11,14 @@ import { SeatCategories } from '../models/seat-categories';
 //=======================================================================
 export const events : Event[] = [
   {
-    eventID: 0, 
+    eventID: 0,
     name: 'Taylor Swift The Eras Tour',
     image: 'taylor-swift.png',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     isHighlighted: true,
     countries: ["Mexico", "Argentina","Brazil", "Japan", "Australia", "Singapore", "France", "Sweden", "Portugal", "Spain"],
+    maxQueueable: 2
   },
   {
     eventID: 1,
@@ -27,6 +28,7 @@ export const events : Event[] = [
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     countries:["Tokyo", "Kaohsiung City", "Jakarta", "Perth", "Kuala Lumpur", "Manila", "Singapore", "Bangkok"],
     isHighlighted: true,
+    maxQueueable: 2
   },
   {
     eventID: 2,
@@ -35,6 +37,7 @@ export const events : Event[] = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     countries: ["Middle East", "Europe", "America"],
     isHighlighted: false,
+    maxQueueable: 3
   },
   {
     eventID: 3,
@@ -43,6 +46,7 @@ export const events : Event[] = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     countries: ['Taipei', 'Thailand', 'Singapore', 'Manila', 'Hong Kong', 'Paris'],
     isHighlighted: false,
+    maxQueueable: 2
   },
   {
     eventID: 4,
@@ -50,8 +54,8 @@ export const events : Event[] = [
     image: 'twice.jpg',
     countries:['Europe','Mexico', 'Australia'],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    isHighlighted: true
-
+    isHighlighted: true,
+    maxQueueable: 1
   }
 ];
 

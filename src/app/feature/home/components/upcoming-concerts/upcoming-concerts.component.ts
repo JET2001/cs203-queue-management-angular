@@ -29,6 +29,7 @@ export class UpcomingConcertsComponent implements OnInit {
   handleButtonClick(eventID: number): void {
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
+      maxQueueable: this.events[eventID].maxQueueable
     };
     this.router.navigate(['/events']);
   }

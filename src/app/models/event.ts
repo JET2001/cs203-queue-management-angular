@@ -8,5 +8,5 @@ export interface Event {
   learnMoreLink?: string;
   countries: string[];
   isHighlighted: boolean;
-  maxPreference?: number;
+  maxQueueable?: number;
 }
