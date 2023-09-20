@@ -4,6 +4,6 @@ import { ViewEventInfoComponent } from "./pages/view-event-info/view-event-info.
 export const eventRoutes: Routes = [
   {
     path: '',
-    component: ViewEventInfoComponent
+    component: ViewEventInfoComponent,
   }
 ];

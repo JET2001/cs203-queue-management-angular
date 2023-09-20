@@ -12,11 +12,11 @@ import { UpcomingConcertsComponent } from './components/upcoming-concerts/upcomi
   declarations: [
     LandingPageComponent,
     CarouselComponent,
-    UpcomingConcertsComponent
+    UpcomingConcertsComponent,
   ],
   imports: [
     SharedModule,
-    RouterModule.forChild(homeRoutes)
+    RouterModule.forChild(homeRoutes),
   ]
 })
 export class HomeModule { }
