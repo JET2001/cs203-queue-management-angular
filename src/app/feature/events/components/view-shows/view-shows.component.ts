@@ -18,7 +18,6 @@ export class ViewShowsComponent implements OnInit {
   @ViewChild('dt') dt: Table | undefined;
   columns: any[] = [
     { field: 'eventDateAndTime', header: 'Event Date & Time' },
-    { field: 'eventName', header: 'Event Name' },
     { field: 'venue', header: 'Venue' },
     { field: 'queueStartTime', header: 'Queue Start Time' },
   ];
@@ -39,7 +38,6 @@ export class ViewShowsComponent implements OnInit {
           showInfo.forEach((info: ShowInfo) => {
             this.showInfo.push({
               eventDateAndTime: info.showDateTime,
-              eventName: info.eventID,
               venue: info.locationName,
               queueStartTime: info.queueStartTime,
             });

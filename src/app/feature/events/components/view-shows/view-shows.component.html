@@ -3,7 +3,6 @@
   [value]="showInfo"
   [globalFilterFields]="[
     'eventDateAndTime',
-    'eventName',
     'venue',
     'queueStartTime'
   ]"
@@ -24,7 +23,6 @@
   <ng-template pTemplate="body" let-show>
     <tr>
       <td>{{ show.eventDateAndTime }}</td>
-      <td>{{ show.eventName }}</td>
       <td>{{ show.venue }}</td>
       <td>{{ show.queueStartTime }}</td>
     </tr>
