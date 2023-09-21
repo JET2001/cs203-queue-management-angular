@@ -34,6 +34,16 @@ export class GroupRegistrationComponent implements OnInit {
   ];
   invitees: FormControl[][] = [this.invitee1, this.invitee2, this.invitee3];
 
+  inputIsValid(inviteeNum: number): boolean {
+    if (this.invitees[inviteeNum][0].value !== '' && this.invitees[inviteeNum][1].value === '') {
+      return false;
+    }
+    return (
+      this.invitees[inviteeNum][0].valid && this.invitees[inviteeNum][1].valid
+    );
+  }
+
+
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,

@@ -19,6 +19,7 @@
           buttonVariants="primary"
           buttonText="Register"
           (buttonClick)="confirm()"
+          [isDisabled] = "!this.inputIsValid(0) || !this.inputIsValid(1) || !this.inputIsValid(2)"
           >Register</app-text-button>
     </div>
 </div>
