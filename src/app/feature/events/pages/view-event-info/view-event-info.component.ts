@@ -12,7 +12,7 @@ import {
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { RegStatus } from '../../constants/reg-status';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 
 @Component({
@@ -86,7 +86,7 @@ export class ViewEventInfoComponent implements OnInit {
   // ===========================================
   async handleUserLoginLogoutChange(): Promise<void> {
     await this._updateUserEventInfo();
-    console.log("Completed!");
+    console.log('Completed!');
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
@@ -143,7 +143,7 @@ export class ViewEventInfoComponent implements OnInit {
     await this.getRegGroupService
       .getRegGroupOfUser(this.eventID!, this.userID)
       .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
-    console.log("this.userRegGroupInfo = ", this.userRegGroupInfo);
+    console.log('this.userRegGroupInfo = ', this.userRegGroupInfo);
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
@@ -151,7 +151,7 @@ export class ViewEventInfoComponent implements OnInit {
     this._getRegistrationStatusOfUser();
 
     await this._getUserRegGroupMemberInfo();
-    console.log("Email List = " + this.otherMemberEmailList);
+    console.log('Email List = ' + this.otherMemberEmailList);
   }
 
   private _calculateEarliestAndLatestShow(): void {

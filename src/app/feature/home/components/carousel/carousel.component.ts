@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login-popup.component';
 import { MessageService } from 'primeng/api';
@@ -14,14 +14,14 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./carousel.component.scss'],
 })
 export class CarouselComponent implements OnInit {
-  @Output() hasError = new EventEmitter<void>(); 
+  @Output() hasError = new EventEmitter<void>();
   events: Event[];
   constructor(
     private getEventInfoService: GetEventInfoService,
     private router: Router,
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
-    private activeModal: NgbModal,
+    private activeModal: NgbModal
   ) {}
 
   ngOnInit(): void {
