@@ -22,6 +22,10 @@
     font-weight: $sub-text-1-font-weight;
 }
 
+.auth-code-input {
+    width: 200px;
+}
+
 .input-border-error {
     border-style: solid;
     border-color: $error-2;
