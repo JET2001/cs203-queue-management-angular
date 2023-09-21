@@ -8,8 +8,8 @@ div{
   font-weight: $button-text-font-weight;
   font-size: $button-text-font-size;
   -webkit-text-fill-color: $white;
-  padding: 10px 20px;
-  min-height: 60px;
+  padding: 10px 24px;
+  min-width: 200px;
   cursor: pointer;
 }
 

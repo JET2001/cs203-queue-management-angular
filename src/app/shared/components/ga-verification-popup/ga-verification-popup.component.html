@@ -18,21 +18,23 @@
       </div>
     </div>
     <div class="auth-input-fields">
-      <div class="code-input-field">
-        <app-input-field
-          placeholder="Enter code"
-          inputType="auth-code"
-          [inputValue]="authenticationFC"
-        ></app-input-field>
-      </div>
-      <div class="code-input-field">
-        <input type="checkbox" id="trust" [(ngModel)]="isChecked" /><label
-          for="trust"
-          class="checkbox-text"
-        >
-          &nbsp;Trust this device for 30 days</label
-        >
-      </div>
+      <form [formGroup]="gaFG">
+        <div class="code-input-field">
+          <app-input-field
+            placeholder="Enter code"
+            inputType="auth-code"
+            [inputValue]="authenticationFC"
+          ></app-input-field>
+        </div>
+        <div class="code-input-field">
+          <input type="checkbox" id="trust" formControlName="checkbox"/><label
+            for="trust"
+            class="checkbox-text"
+          >
+            &nbsp;Trust this device for 30 days</label
+          >
+        </div>
+      </form>
       <div class="code-input-field">
         <app-text-button
           buttonVariants="primary"
