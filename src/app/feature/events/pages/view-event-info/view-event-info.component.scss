@@ -11,11 +11,10 @@
   justify-content: space-between;
 }
 
-.poster {
-  img {
-    height: auto;
-    max-width: 95%;
-  }
+.event-poster {
+  width: 500px;
+  height: 600px;
+  object-fit: cover;
 }
 
 .reg-info-group {
