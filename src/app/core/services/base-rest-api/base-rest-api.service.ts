@@ -19,7 +19,7 @@ export abstract class BaseRestApiService {
   constructor(private http: HttpClient) {}
 
   // Post request
-  protected async post(path: string, data: any): Promise<any> {
+  public async post(path: string, data: any): Promise<any> {
     return Promise.resolve(
       this.http.post(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
         tap({
@@ -30,7 +30,7 @@ export abstract class BaseRestApiService {
   }
 
   // Get Request
-  protected async get(path: string): Promise<any> {
+  public async get(path: string): Promise<any> {
     return Promise.resolve(
       this.http.get(`${baseURL}/${path}`, this.httpHeaders).pipe(
         tap({
@@ -40,24 +40,23 @@ export abstract class BaseRestApiService {
     );
   }
 
-
   // Put Request
-  protected async put(path: string, data: any): Promise<any>{
+  public async put(path: string, data: any): Promise<any> {
     return Promise.resolve(
       this.http.put(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
         tap({
           error: (error: HttpErrorResponse) => this.handleError(error),
         })
       )
-    )
+    );
   }
 
   // Delete Request
-  protected async delete(path: string, data: any): Promise<any>{
+  public async delete(path: string, data: any): Promise<any> {
     return Promise.resolve(
       this.http.delete(`${baseURL}/${path}`, this.httpHeaders).pipe(
         tap({
-          error: (error: HttpErrorResponse) => this.handleError(error)
+          error: (error: HttpErrorResponse) => this.handleError(error),
         })
       )
     );
