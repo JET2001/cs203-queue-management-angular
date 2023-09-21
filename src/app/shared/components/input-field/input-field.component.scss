@@ -7,10 +7,11 @@
 
 .custom-input {
     height: 40px;
-    width: 200px;
+    width: 300px;
     border-radius: 5px;
     border-style: $gray-2;
     border-style: solid;
+    border-width: 1px;
     padding: 8px;
     ::placeholder {
         -webkit-text-fill-color: $gray-3;

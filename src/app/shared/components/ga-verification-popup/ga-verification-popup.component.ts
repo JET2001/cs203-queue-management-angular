@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,10 +8,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./ga-verification-popup.component.scss'],
 })
 export class GaVerificationPopupComponent {
+  gaFG: FormGroup;
   authenticationFC: FormControl = new FormControl('', []);
+  checkboxFC: FormControl = new FormControl(false);
   isChecked: boolean = false;
 
-  constructor(public activeModal: NgbActiveModal) {
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
+    this.gaFG = fb.group({
+      authentication: this.authenticationFC,
+      checkbox: this.checkboxFC
+    })
   }
 
   handleAuthenticateClick(): void {

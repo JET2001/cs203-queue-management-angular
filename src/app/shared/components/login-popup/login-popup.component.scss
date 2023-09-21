@@ -1,0 +1,53 @@
+@import "/src/styles.scss";
+
+.title {
+  text-align: center;
+}
+
+.input-fields-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.input-fields {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.log-in-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
+.checkbox-text {
+  font-size: $sub-text-1-font-size;
+  font-weight: $sub-text-1-font-weight;
+  -webkit-text-fill-color: $gray-4;
+}
+
+.login-text {
+  text-align: center;
+  font-size: $sub-text-3-font-size;
+  font-weight: $sub-text-3-font-weight;
+  -webkit-text-fill-color: $gray-4;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.checkbox {
+    display: flex;
+    justify-content: center;
+}
+
+.join-us {
+  margin-bottom: 20px;
+}
