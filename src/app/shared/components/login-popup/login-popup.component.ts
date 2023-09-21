@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-login-popup',
@@ -14,7 +15,11 @@ export class LoginPopupComponent implements OnInit {
   passwordFC: FormControl = new FormControl('', []);
   checkboxFC: FormControl = new FormControl(false);
 
-  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(
+    public activeModal: NgbActiveModal,
+    private fb: FormBuilder,
+    private authService: AuthenticationService
+  ) {
     this.loginFG = this.fb.group({
       email: this.emailFC,
       mobile: this.mobileFC,
@@ -23,10 +28,16 @@ export class LoginPopupComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  handleLogin(): void {
-    console.log(this.loginFG.value)
+  async handleLogin(): Promise<void> {
+    await this.authService.authenticateUser().then(
+      (success: boolean) => {
+        if(success) {
+          console.log(this.loginFG.value);
+          this.activeModal.close();
+        }
+      }
+    );
   }
 }

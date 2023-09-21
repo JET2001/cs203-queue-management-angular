@@ -18,7 +18,6 @@ export class AuthenticationService {
 
   public set userID(userID: number | undefined) {
     this._userID = userID;
-    this.activeModal.open(GaVerificationPopupComponent, {centered: true});
   }
   public get isLoggedIn(): boolean {
     return this._userID != undefined;
@@ -30,5 +29,10 @@ export class AuthenticationService {
   public get email(): string | undefined {
     if (this._userID == undefined) return undefined;
     return Users[this._userID].email;
+  }
+
+  public authenticateUser(): Promise<boolean> {
+    this.activeModal.open(GaVerificationPopupComponent, {centered: true});
+    return Promise.resolve(true);
   }
 }

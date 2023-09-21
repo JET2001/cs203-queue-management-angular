@@ -11,8 +11,8 @@ describe('GaVerificationPopupComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [GaVerificationPopupComponent],
-      imports:[SharedModule],
-      providers: [NgbActiveModal]
+      imports: [SharedModule],
+      providers: [NgbActiveModal],
     });
     fixture = TestBed.createComponent(GaVerificationPopupComponent);
     component = fixture.componentInstance;
