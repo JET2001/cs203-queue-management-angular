@@ -7,9 +7,11 @@
     [ngClass]="{
       'input-border-error':
         (inputValue.hasError('required') ||
-        inputValue.hasError('email') ||
-        inputValue.hasError('pattern') ||
-        inputValue.invalid) && inputValue.touched
+          inputValue.hasError('email') ||
+          inputValue.hasError('pattern') ||
+          inputValue.invalid) &&
+        inputValue.touched,
+      'auth-code-input': inputType == 'auth-code'
     }"
   />
   <div
