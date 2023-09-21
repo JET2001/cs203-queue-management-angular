@@ -7,6 +7,7 @@ import { RegGroup } from 'src/app/models/reg-group';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
+import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 
 @Component({
   selector: 'app-group-registration',
@@ -35,14 +36,58 @@ export class GroupRegistrationComponent implements OnInit {
   invitees: FormControl[][] = [this.invitee1, this.invitee2, this.invitee3];
 
   inputIsValid(inviteeNum: number): boolean {
-    if (this.invitees[inviteeNum][0].value !== '' && this.invitees[inviteeNum][1].value === '') {
+    // Case 1: if both fields are empty, there can be no invitation. return true
+    if (
+      this.invitees[inviteeNum][0].value === '' &&
+      this.invitees[inviteeNum][1].value === ''
+    ) {
+      return true;
+    }
+
+    // Case 2: if one field is empty, input is incomplete. return false
+    if (
+      (this.invitees[inviteeNum][0].value !== '' &&
+        this.invitees[inviteeNum][1].value === '') ||
+      (this.invitees[inviteeNum][0].value === '' &&
+        this.invitees[inviteeNum][1].value !== '')
+    ) {
       return false;
     }
-    return (
-      this.invitees[inviteeNum][0].valid && this.invitees[inviteeNum][1].valid
-    );
-  }
 
+    // Case 3: if both fields are filled, check for validation using GetUserInfoService. if undefined is returned, return false
+    if (
+      this.invitees[inviteeNum][0].value !== '' &&
+      this.invitees[inviteeNum][1].value !== ''
+    ) {
+      console.log('Starting promise resolution...');
+      this.getUserInfoService.getUserID(this.invitees[inviteeNum][0].value, this.invitees[inviteeNum][1].value)
+        .then((retrievedId) => {
+          console.log('Promise resolved with:', retrievedId);
+          if (retrievedId !== undefined) {
+            console.log(`User ID: ${retrievedId}`);
+          } else {
+            console.log('User not found.');
+          }
+        })
+        .catch((error) => {
+          console.error('An error occurred:', error);
+        });
+      console.log('Promise request sent...');
+      }
+
+    // previous code that doesn't work cuz getUserID returns a promise object, not a value
+    // const retrievedId = this.getUserInfoService.getUserID(this.invitees[inviteeNum][0].value, this.invitees[inviteeNum][1].value);
+    // console.log(retrievedId);
+    // if (retrievedId !== undefined) {
+    //   return true;
+    // }
+
+    // previous code without getUserID (just validates entries)
+    // return (
+    //   this.invitees[inviteeNum][0].valid && this.invitees[inviteeNum][1].valid
+    // );
+    return false;
+  }
 
   constructor(
     private storeEventInfoService: StoreEventInfoService,
@@ -50,6 +95,7 @@ export class GroupRegistrationComponent implements OnInit {
     private router: Router,
     private getRegInfoService: GetRegistrationGroupService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
+    private getUserInfoService: GetUserInfoService
   ) {}
 
   async ngOnInit(): Promise<void> {
