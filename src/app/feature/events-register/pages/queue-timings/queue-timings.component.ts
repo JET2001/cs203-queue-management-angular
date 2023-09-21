@@ -8,6 +8,7 @@ import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
 
 @Component({
   selector: 'app-queue-timings',
@@ -20,12 +21,14 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   showInfo: ShowInfo[] | undefined;
   queueTimingForm: FormGroup;
   queueTimings: String[];
+  queueIDs: number[];
   shows: String[];
   queueOptions: number[] = [];
 
   constructor(
     private getShowInfoService: GetShowInfoService,
     private storeEventInfoService: StoreEventInfoService,
+    private storeQueueTimingService: StoreQueueTimingService,
     private router: Router,
     private fb: FormBuilder,
     private activeModal: NgbModal
@@ -51,13 +54,25 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     if (this.showInfo) {
       let count: number = 0;
       this.queueTimings = new Array(this.showInfo.length);
+      this.queueIDs = new Array(this.showInfo.length);
       this.shows = new Array(this.showInfo.length);
+      for (
+        let i = 0;
+        i <
+        Math.min(
+          this.showInfo?.length!,
+          this.storeEventInfoService.eventInfo.maxQueueable!
+        );
+        i++
+      ) {
+        const control = this.fb.control('', Validators.required);
+        this.queueTimingForm.addControl(`queueTiming${i}`, control);
+      }
       for (let show of this.showInfo) {
         const queueStartTime = this.formatQueueDate(show.queueStartTime);
         const showTime = this.formatShowDate(show.showDateTime);
         this.queueTimings[count] = queueStartTime + ' | SHOW TIME: ' + showTime;
-        const control = this.fb.control('', Validators.required);
-        this.queueTimingForm.addControl(`queueTiming${count}`, control);
+        this.queueIDs[count] = show.queueID;
         count++;
       }
     }
@@ -76,6 +91,35 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
 
   handleInformationClick(): void {
     this.activeModal.open(QueueTimingPopupComponent, { centered: true });
+  }
+
+  handleNext(): void {
+    if (this.showInfo) {
+      var selectedQueueTimings: string[] = new Array(
+        Math.min(
+          this.showInfo?.length!,
+          this.storeEventInfoService.eventInfo.maxQueueable!
+        )
+      );
+      var selectedQueueIDs: number[] = new Array(selectedQueueTimings.length);
+      for (let i = 0; i < this.showInfo?.length; i++) {
+        const controlName = `queueTiming${i}`;
+        const controlValue = this.queueTimingForm.get(controlName)?.value;
+        if (controlValue) selectedQueueTimings[i] = controlValue;
+      }
+      for (let i = 0; i < selectedQueueTimings.length; i++) {
+        selectedQueueIDs[i] =
+          this.queueIDs[this.queueTimings.indexOf(selectedQueueTimings[i])];
+      }
+      this.storeQueueTimingService.queueTimingPreferences = {
+        eventID: this.eventID,
+        userID: this.storeEventInfoService.eventInfo.userID,
+        selectedQueueIDs: selectedQueueIDs,
+        selectedQueueTimings: selectedQueueTimings,
+        groupID: this.storeEventInfoService.eventInfo.eventID,
+      };
+      this.router.navigate(['/events', 'register', 'preview']);
+    }
   }
 
   formatQueueDate(date: Date): string {
@@ -130,13 +174,13 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
 
   private _loadQueueOptions(): void {
     for (
-      let i: number = 1;
-      i <=
+      let i: number = 0;
+      i <
       Math.min(
         this.showInfo?.length!,
         this.storeEventInfoService.eventInfo.maxQueueable!
       );
-      ++i
+      i++
     ) {
       this.queueOptions.push(i);
     }

@@ -1,1 +1,33 @@
-<p>registration-preview works!</p>
+<app-header></app-header>
+<div class="container">
+  <div class="queue-details-container">
+      <div class="queue-details">
+        <h1>{{ eventTitle }}</h1>
+        <div>
+          <h2>Queue Registration</h2>
+          <p>Please confirm your queue timings and seat category selection.</p>
+        </div>
+      </div>
+      <img class="information-icon" src="../../../../../assets/icons/information.svg" (click)="handleInformationClick()" alt = "Information Icon">
+  </div>
+  <div *ngFor="let queueTiming of queueTimings; index as idx">
+    <p>Queue Timing #{{ idx + 1 }}</p>
+    <p>{{ queueTiming }}</p>
+  </div>
+  <div class="navigation-buttons">
+    <div class="back-button">
+      <app-text-button
+        buttonVariants="black"
+        buttonText="Back to Queue Selection"
+        (buttonClick)="handleBackToQueueSelection()"
+      ></app-text-button>
+    </div>
+    <div class="next-button">
+      <app-text-button
+        buttonVariants="primary"
+        buttonText="Next"
+        (buttonClick)="handleNext()"
+      ></app-text-button>
+    </div>
+  </div>
+</div>
