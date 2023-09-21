@@ -26,21 +26,28 @@ export class CarouselComponent implements OnInit {
   }
 
   handleRegisterButtonClick(eventID: number): void {
-    if(!this.authService.isVerified) return;
+    if (!this.authService.isVerified) return;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
       eventTitle: this.events[eventID].name,
-      maxQueueable: this.events[eventID].maxQueueable
+      maxQueueable: this.events[eventID].maxQueueable,
     };
     this.router.navigate(['/events', 'register', 'group']);
   }
 
   handleLearnMoreButtonClick(eventID: number): void {
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-      eventTitle: this.events[eventID].name,
-      maxQueueable: this.events[eventID].maxQueueable
-    };
+    var currentEvent: Event;
+    for (let event of this.events) {
+      if (event.eventID == eventID) {
+        currentEvent = event;
+        this.storeEventInfoService.eventInfo = {
+          eventID: eventID,
+          eventTitle: currentEvent.name,
+          maxQueueable: currentEvent.maxQueueable,
+        };
+      }
+    }
+
     this.router.navigate(['/events']);
   }
 }
