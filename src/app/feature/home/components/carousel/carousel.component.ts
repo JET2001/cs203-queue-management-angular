@@ -4,6 +4,8 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login-popup.component';
 
 @Component({
   selector: 'app-carousel',
@@ -16,7 +18,8 @@ export class CarouselComponent implements OnInit {
     private getEventInfoService: GetEventInfoService,
     private router: Router,
     private storeEventInfoService: StoreEventInfoService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private activeModal: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +29,10 @@ export class CarouselComponent implements OnInit {
   }
 
   handleRegisterButtonClick(eventID: number): void {
-    if (!this.authService.isVerified) return;
+    if (!this.authService.isVerified) {
+      this.activeModal.open(LoginPopupComponent, { centered: true });
+      return;
+    }
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
       eventTitle: this.events[eventID].name,
