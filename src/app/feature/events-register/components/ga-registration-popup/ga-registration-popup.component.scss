@@ -1,0 +1,20 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    row-gap: 10px;
+}
+
+.authentication-code {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 5px;
+}
+
+.modal-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
