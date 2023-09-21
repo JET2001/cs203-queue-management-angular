@@ -13,18 +13,18 @@ import { MessageService } from 'primeng/api';
 export class LandingPageComponent implements OnInit {
   userID!: number | undefined;
   constructor(
-    private authService: AuthenticationService,
-    private messageService: MessageService
+    private authService: AuthenticationService
+    // private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.userID = this.authService.userID;
   }
 
-  openErrorMessage(): void {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'You can only register for an event when you are logged in',
-    });
-  }
+  // openErrorMessage(): void {
+  //   this.messageService.add({
+  //     severity: 'error',
+  //     summary: 'You can only register for an event when you are logged in'
+  //   });
+  // }
 }
