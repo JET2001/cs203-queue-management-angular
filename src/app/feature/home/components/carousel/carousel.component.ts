@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
@@ -6,6 +6,7 @@ import { GetEventInfoService } from '../../../../shared/services/get-event-info/
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login-popup.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-carousel',
@@ -13,13 +14,14 @@ import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login
   styleUrls: ['./carousel.component.scss'],
 })
 export class CarouselComponent implements OnInit {
+  @Output() hasError = new EventEmitter<void>(); 
   events: Event[];
   constructor(
     private getEventInfoService: GetEventInfoService,
     private router: Router,
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
-    private activeModal: NgbModal
+    private activeModal: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +33,7 @@ export class CarouselComponent implements OnInit {
   handleRegisterButtonClick(eventID: number): void {
     if (!this.authService.isVerified) {
       this.activeModal.open(LoginPopupComponent, { centered: true });
+      this.hasError.emit();
       return;
     }
     this.storeEventInfoService.eventInfo = {
