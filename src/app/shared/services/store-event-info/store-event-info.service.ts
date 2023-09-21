@@ -13,7 +13,7 @@ export interface EventInfoParams {
   providedIn: 'root',
 })
 export class StoreEventInfoService {
-  _eventInfo: EventInfoParams = {};
+  private _eventInfo: EventInfoParams = {};
 
   public get eventInfo(): EventInfoParams {
     return this._eventInfo;

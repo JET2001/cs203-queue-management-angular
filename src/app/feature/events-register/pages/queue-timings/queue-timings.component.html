@@ -16,7 +16,7 @@
       *ngFor="let optionNo of queueOptions"
       class="queue-timing-dropdown-container"
     >
-      Queue Timing #{{ optionNo }}
+      Queue Timing #{{ optionNo + 1 }}
       <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + optionNo">
         <option *ngFor="let option of queueTimings" [value]="option">
           {{ option }}
@@ -36,6 +36,7 @@
       <app-text-button
         buttonVariants="primary"
         buttonText="Next"
+        (buttonClick)="handleNext()"
       ></app-text-button>
     </div>
   </div>

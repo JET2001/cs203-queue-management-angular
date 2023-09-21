@@ -1,1 +1,30 @@
-@import '/src/styles.scss';
+@import "/src/styles.scss";
+
+.container {
+  padding: 44px 0px;
+}
+
+.queue-details-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.queue-details {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.information-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.navigation-buttons {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
