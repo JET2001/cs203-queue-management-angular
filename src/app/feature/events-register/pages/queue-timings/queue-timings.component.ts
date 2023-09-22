@@ -107,6 +107,8 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
         const controlValue = this.queueTimingForm.get(controlName)?.value;
         if (controlValue) selectedQueueTimings[i] = controlValue;
       }
+      // if user did not select any first choice queue timing, do not let them move forward
+      if(selectedQueueTimings[0] == null) return;
       for (let i = 0; i < selectedQueueTimings.length; i++) {
         selectedQueueIDs[i] =
           this.queueIDs[this.queueTimings.indexOf(selectedQueueTimings[i])];
