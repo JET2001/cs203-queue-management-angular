@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
