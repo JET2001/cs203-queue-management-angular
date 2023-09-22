@@ -8,7 +8,12 @@
         <p>Choose your preferred queue timings:</p>
       </div>
     </div>
-    <img class="information-icon" src="../../../../../assets/icons/information.svg" (click)="handleInformationClick()" alt = "Information Icon">
+    <img
+      class="information-icon"
+      src="../../../../../assets/icons/information.svg"
+      (click)="handleInformationClick()"
+      alt="Information Icon"
+    />
   </div>
 
   <form [formGroup]="queueTimingForm">
@@ -17,11 +22,11 @@
       class="queue-timing-dropdown-container"
     >
       Queue Timing #{{ optionNo + 1 }}
-      <select class="queue-timing-dropdown" [formControlName]="'queueTiming' + optionNo">
-        <option *ngFor="let option of queueTimings" [value]="option">
-          {{ option }}
-        </option>
-      </select>
+      <p-dropdown
+        [options]="queueTimings"
+        [formControlName]="'queueTiming' + optionNo"
+        placeholder="Select a queue timing"
+      ></p-dropdown>
     </div>
   </form>
   <div class="navigation-buttons">
