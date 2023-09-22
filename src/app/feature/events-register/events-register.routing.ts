@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { GroupRegistrationComponent } from "./pages/group-registration/group-registration.component";
 import { RegistrationPreviewComponent } from "./pages/registration-preview/registration-preview.component";
 import { QueueTimingsComponent } from "./pages/queue-timings/queue-timings.component";
-import { groupRegisterGuard } from "./events-register.guards";
+import { groupRegisterGuard, queueRegisterGuard } from "./events-register.guards";
 
 export const eventRegisterRoutes : Routes = [
   {
@@ -12,7 +12,8 @@ export const eventRegisterRoutes : Routes = [
   },
   {
     path: 'queue',
-    component: QueueTimingsComponent
+    component: QueueTimingsComponent,
+    canActivate:[queueRegisterGuard()]
   },
   {
     path: 'preview',

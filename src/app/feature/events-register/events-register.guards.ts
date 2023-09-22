@@ -55,11 +55,32 @@ export function groupRegisterGuard(): CanActivateFn {
 }
 
 /**
- * Guard against the queue register page
+ * Guard for queue registration
+ * @returns CanActivateFn (boolean)
  */
-// export function queueRegisterGuard(): CanActivateFn {
+export function queueRegisterGuard(): CanActivateFn {
+  return async () => {
+    const getRegGroupService: GetRegistrationGroupService = inject(GetRegistrationGroupService);
+    const storeEventInfoService: StoreEventInfoService = inject(StoreEventInfoService);
+    const authService: AuthenticationService = inject(AuthenticationService);
 
-// }
+    const eventID = storeEventInfoService.eventInfo.eventID;
+    const userID = authService.userID;
+
+    let regGroup : RegGroup | undefined = undefined;
+    // if user does not have a registration group, reject
+    await getRegGroupService.getRegGroupOfUser(eventID!, userID).then(
+      (regGroup_ : RegGroup | undefined) => {
+        regGroup = regGroup_;
+      }
+    );
+    if (regGroup == undefined) return denyAccess();
+
+    // TODO : User must not have any pre-existing queues. TBC: Wait until after APIs has been integrated.
+
+    return grantAccess();
+  }
+}
 
 function denyAccess(): boolean{
   const location: Location = inject(Location);

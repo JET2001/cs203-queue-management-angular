@@ -37,13 +37,9 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   }
 
   async ngOnInit() {
+    // EventID and users have been verified at this point.
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
-
-    if (this.eventID == undefined) {
-      this.router.navigate(['/home']);
-      return;
-    }
 
     await this.getShowInfoService
       .loadShowInfo(this.eventID)
