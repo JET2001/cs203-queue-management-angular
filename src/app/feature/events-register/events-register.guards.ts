@@ -1,3 +1,4 @@
+import { StoreQueueTimingService } from './../../shared/services/store-queue-timing/store-queue-timing.service';
 import { Injectable, inject } from '@angular/core';
 import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
@@ -78,6 +79,15 @@ export function queueRegisterGuard(): CanActivateFn {
 
     // TODO : User must not have any pre-existing queues. TBC: Wait until after APIs has been integrated.
 
+    return grantAccess();
+  }
+}
+
+export function registrationPreviewGuard(): CanActivateFn {
+  return async () => {
+    const storeQueueTimingsService: StoreQueueTimingService = inject(StoreQueueTimingService);
+    if (storeQueueTimingsService.queueTimingPreferences.selectedQueueIDs?.length == 0) denyAccess();
+    
     return grantAccess();
   }
 }
