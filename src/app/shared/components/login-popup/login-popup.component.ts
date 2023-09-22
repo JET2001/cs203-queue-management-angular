@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-login-popup',
@@ -31,13 +31,11 @@ export class LoginPopupComponent implements OnInit {
   ngOnInit(): void {}
 
   async handleLogin(): Promise<void> {
-    await this.authService.authenticateUser().then(
-      (success: boolean) => {
-        if(success) {
-          console.log(this.loginFG.value);
-          this.activeModal.close();
-        }
+    await this.authService.authenticateUser().then((success: boolean) => {
+      if (success) {
+        console.log(this.loginFG.value);
+        this.activeModal.close();
       }
-    );
+    });
   }
 }
