@@ -65,6 +65,5 @@ export class HeaderComponent implements OnInit {
       this.emailID.length >= 13
         ? this.emailID.substring(0, 13) + '...'
         : this.emailID;
-    console.log(this.emailID);
   }
 }

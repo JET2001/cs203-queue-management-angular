@@ -19,58 +19,38 @@ export abstract class BaseRestApiService {
   constructor(private http: HttpClient) {}
 
   // Post request
-  public async post(path: string, data: any): Promise<any> {
-    return Promise.resolve(
-      this.http.post(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
-        tap({
-          error: (error: HttpErrorResponse) => this.handleError(error),
-        })
-      )
+  protected post(path: string, data: any): Observable<any> {
+    return this.http.post(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
+      tap({
+        error: (error: HttpErrorResponse) => this.handleError(error),
+      })
     );
   }
 
   // Get Request
-  public get(path: string): Observable<any> {
-    const apiURL = `${baseURL}/${path}`;
-    return this.http.get(apiURL, this.httpHeaders);
-    // const promise = new Promise<void>((resolve, reject) => {
-    //   const apiURL = `${baseURL}/${path}`;
-    //   this.http.get(apiURL, this.httpHeaders).subscribe({
-    //     next: (res: any) => {
-    //       return res;
-    //     },
-    //     error: (err: any ) => this.handleError(err as HttpErrorResponse),
-    //     complete: () => console.log("completed!")
-    //   })
-    // })
-    // return promise;
-    // return Promise.resolve(
-    //   this.http.get(`${baseURL}/${path}`, this.httpHeaders).subscribe({
-    //     next: (response: any) => {
-    //     }
-    //   })
-    // );
+  protected get(path: string): Observable<any> {
+    return this.http.get(`${baseURL}/${path}`, this.httpHeaders).pipe(
+      tap({
+        error: (error: HttpErrorResponse) => this.handleError(error),
+      })
+    );
   }
 
   // Put Request
-  public async put(path: string, data: any): Promise<any> {
-    return Promise.resolve(
-      this.http.put(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
-        tap({
-          error: (error: HttpErrorResponse) => this.handleError(error),
-        })
-      )
+  protected put(path: string, data: any): Observable<any> {
+    return this.http.put(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
+      tap({
+        error: (error: HttpErrorResponse) => this.handleError(error),
+      })
     );
   }
 
   // Delete Request
-  public async delete(path: string, data: any): Promise<any> {
-    return Promise.resolve(
-      this.http.delete(`${baseURL}/${path}`, this.httpHeaders).pipe(
-        tap({
-          error: (error: HttpErrorResponse) => this.handleError(error),
-        })
-      )
+  protected delete(path: string, data: any): Observable<any> {
+    return this.http.delete(`${baseURL}/${path}`, this.httpHeaders).pipe(
+      tap({
+        error: (error: HttpErrorResponse) => this.handleError(error),
+      })
     );
   }
 

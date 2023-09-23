@@ -1,5 +1,4 @@
 import {
-  AfterContentInit,
   Component,
   EventEmitter,
   OnInit,
@@ -23,6 +22,7 @@ export class CarouselComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
   events: Event[] = [];
   isCarousellReady : boolean = false;
+  id2CarousellEvent: Map<string, Event> = new Map<string, Event>();
 
   constructor(
     private getEventInfoService: GetEventInfoService,
@@ -36,9 +36,6 @@ export class CarouselComponent implements OnInit {
     this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
       this._loadCarousellEvents(data);
     });
-    // for (let event of eventsIterator) {
-    //   this.events.push(event);
-    // }
   }
 
   handleRegisterButtonClick(eventID: string): void {
@@ -57,12 +54,19 @@ export class CarouselComponent implements OnInit {
     this.router.navigate(['/events', 'register', 'group']);
   }
 
+  handleLearnMoreButtonClick(eventID: string): void {
+    this.storeEventInfoService.eventInfo = {
+      eventID: eventID
+    };
+
+    this.router.navigate(['/events']);
+  }
+
 
   private _loadCarousellEvents(data: any): void {
     this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
       // Get highlighted events from data
       for (let obj of data) {
-        console.log(obj);
         let event: Event = {
           eventID: obj.id,
           name: obj.name,
@@ -73,8 +77,6 @@ export class CarouselComponent implements OnInit {
           isHighlighted: obj.highlighted,
         };
 
-        console.log(event, event.isHighlighted);
-
         if (event.isHighlighted) {
           this.events.push(event);
         }
@@ -84,21 +86,4 @@ export class CarouselComponent implements OnInit {
       }
     });
   }
-
-
-  handleLearnMoreButtonClick(eventID: string): void {
-    // var currentEvent: Event;
-    // for (let event of this.events) {
-    //   if (event.eventID == eventID) {
-    //     currentEvent = event;
-    //     this.storeEventInfoService.eventInfo = {
-    //       eventID: eventID,
-    //       eventTitle: currentEvent.name,
-    //       maxQueueable: currentEvent.maxQueueable,
-    //     };
-    //   }
-  }
-
-  //   this.router.navigate(['/events']);
-  // }
 }
