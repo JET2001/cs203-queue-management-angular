@@ -281,7 +281,7 @@ export const shows : Show[] = [
     eventID: 4,
     showID: 0,
     locationID: 0,
-    showDateTime: new Date("31/08/2024 20:30:00")
+    showDateTime: new Date("08/31/2024 20:30:00")
   },
 ]
 

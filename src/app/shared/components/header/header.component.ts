@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { StoreEventInfoService } from '../../services/store-event-info/store-event-info.service';
-import { Users } from 'src/app/mock-db/MockDB';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginPopupComponent } from '../login-popup/login-popup.component';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,8 @@ export class HeaderComponent implements OnInit {
   emailID: string | undefined = undefined;
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private activeModal: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +29,8 @@ export class HeaderComponent implements OnInit {
   }
 
   loginUser(): void {
+    this.activeModal.open(LoginPopupComponent, { centered: true });
+
     let userInputStr: string | null = prompt(
       'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
     );

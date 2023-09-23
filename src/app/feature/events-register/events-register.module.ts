@@ -9,8 +9,8 @@ import { RegistrationPreviewComponent } from './pages/registration-preview/regis
 import { QueueTimingPopupComponent } from './components/registration-confirmation-popup/queue-timing-popup';
 import { ReactiveFormsModule } from '@angular/forms';
 import { QueueTimingsComponent } from './pages/queue-timings/queue-timings.component';
-
-
+import { GaRegistrationPopupComponent } from './components/ga-registration-popup/ga-registration-popup.component';
+import { Dropdown, DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -18,13 +18,15 @@ import { QueueTimingsComponent } from './pages/queue-timings/queue-timings.compo
     RegistrationPreviewComponent,
     GroupRegisterInviteComponent,
     QueueTimingPopupComponent,
-    QueueTimingsComponent
+    QueueTimingsComponent,
+    GaRegistrationPopupComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(eventRegisterRoutes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropdownModule
   ]
 })
 export class EventsRegisterModule { }

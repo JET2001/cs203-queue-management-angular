@@ -7,6 +7,7 @@ import { GaVerificationPopupComponent } from './components/ga-verification-popup
 import { HeaderComponent } from './components/header/header.component';
 import { InputFieldComponent } from './components/input-field/input-field.component';
 import { TextButtonComponent } from './components/text-button/text-button.component';
+import { LoginPopupComponent } from './components/login-popup/login-popup.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { TextButtonComponent } from './components/text-button/text-button.compon
     InputFieldComponent,
     HeaderComponent,
     GaVerificationPopupComponent,
+    LoginPopupComponent
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { TextButtonComponent } from './components/text-button/text-button.compon
     FormsModule,
     CarouselModule,
     GaVerificationPopupComponent,
+    LoginPopupComponent,
     ReactiveFormsModule
   ],
 })

@@ -1,19 +1,33 @@
 <div>
-    <p-carousel [value]="events" [numVisible]="1" [numScroll]="1" [circular]="true" autoPlayInterval="1000">
-        <ng-template let-event pTemplate="item">
-                <div class="carousel-slide">
-                    <img src="assets/posters/{{ event.image }}"  width="400" height="500" />
-                    <div class="carousel-concert-details">
-                        <div class="carousel-concert-text">
-                            <h1>{{ event.name }}</h1>
-                            <p>{{ event.summary }}</p>
-                        </div>
-                        <div class="carousel-buttons">
-                            <app-text-button [buttonVariants]="'black'" [buttonText]="'Register'" (buttonClick)="handleRegisterButtonClick(event.eventID)"></app-text-button>
-                            <app-text-button [buttonVariants]="'whiteOutline'" [buttonText]="'Learn More'" (buttonClick)="handleLearnMoreButtonClick(event.eventID)"></app-text-button>
-                        </div>
-                    </div>
-                </div>
-        </ng-template>
-    </p-carousel>
+  <p-carousel
+    [value]="events"
+    [numVisible]="1"
+    [numScroll]="1"
+    [circular]="true"
+    autoPlayInterval="1000"
+  >
+    <ng-template let-event pTemplate="item">
+      <div class="carousel-slide">
+        <img src="assets/posters/{{ event.image }}" width="400" height="500" />
+        <div class="carousel-concert-details">
+          <div class="carousel-concert-text">
+            <h1>{{ event.name }}</h1>
+            <p>{{ event.summary }}</p>
+          </div>
+          <div class="carousel-buttons">
+            <app-text-button
+              [buttonVariants]="'black'"
+              [buttonText]="'Register'"
+              (buttonClick)="handleRegisterButtonClick(event.eventID)"
+            ></app-text-button>
+            <app-text-button
+              [buttonVariants]="'whiteOutline'"
+              [buttonText]="'Learn More'"
+              (buttonClick)="handleLearnMoreButtonClick(event.eventID)"
+            ></app-text-button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
 </div>

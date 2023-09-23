@@ -9,11 +9,11 @@
   flex-direction: row;
   align-items: baseline;
 }
-.email {
-  width: 20%;
-}
-.mobile {
-  width: 20%;
+
+.input-fields {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
 }
 
 img {

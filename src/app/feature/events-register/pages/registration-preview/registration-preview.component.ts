@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
 import { QueueTimingPopupComponent } from '../../components/registration-confirmation-popup/queue-timing-popup';
+import { GaRegistrationPopupComponent } from '../../components/ga-registration-popup/ga-registration-popup.component';
 
 @Component({
   selector: 'app-registration-preview',
@@ -25,11 +26,6 @@ export class RegistrationPreviewComponent implements OnInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
-    if (this.eventID == undefined) {
-      this.router.navigate(['/home']);
-      return;
-    }
-
     this.queueTimings =
       this.storeQueueTimingService.queueTimingPreferences.selectedQueueTimings;
   }
@@ -43,6 +39,6 @@ export class RegistrationPreviewComponent implements OnInit {
   }
 
   handleNext(): void {
-
+    this.activeModal.open(GaRegistrationPopupComponent, { centered: true });
   }
 }

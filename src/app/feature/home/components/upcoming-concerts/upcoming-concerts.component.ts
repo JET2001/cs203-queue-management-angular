@@ -3,7 +3,6 @@ import { GetEventInfoService } from '../../../../shared/services/get-event-info/
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
 @Component({
   selector: 'app-upcoming-concerts',
@@ -16,7 +15,6 @@ export class UpcomingConcertsComponent implements OnInit {
   constructor(
     private getEventInfoService: GetEventInfoService,
     private storeEventInfoService: StoreEventInfoService,
-    private authService: AuthenticationService,
     private router: Router
   ) {}
 
@@ -29,7 +27,8 @@ export class UpcomingConcertsComponent implements OnInit {
   handleButtonClick(eventID: number): void {
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      maxQueueable: this.events[eventID].maxQueueable
+      eventTitle: this.events[eventID].name,
+      maxQueueable: this.events[eventID].maxQueueable,
     };
     this.router.navigate(['/events']);
   }
