@@ -10,7 +10,7 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
   styleUrls: ['./upcoming-concerts.component.scss'],
 })
 export class UpcomingConcertsComponent implements OnInit {
-  @Input() userID: number | undefined = undefined;
+  @Input() userID: string | undefined = undefined;
   events: Event[];
   constructor(
     private getEventInfoService: GetEventInfoService,
@@ -19,17 +19,22 @@ export class UpcomingConcertsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getEventInfoService.loadAllEvents().then((events) => {
-      this.events = events;
-    });
+    const eventsIterator = this.getEventInfoService.loadAllEvents().values();
+
+    for (let event of eventsIterator) {
+      this.events.push(event);
+    }
   }
 
-  handleButtonClick(eventID: number): void {
+  handleButtonClick(eventID: string): void {
+    const eventSelected = this.getEventInfoService.getEventInfo(eventID);
+    if (eventSelected == undefined) return;
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
-      eventTitle: this.events[eventID].name,
-      maxQueueable: this.events[eventID].maxQueueable,
+      eventTitle: eventSelected.name,
+      maxQueueable: eventSelected.maxQueueable,
     };
-    this.router.navigate(['/events']);
+
+    this.router.navigate(['/events', 'register', 'group']);
   }
 }

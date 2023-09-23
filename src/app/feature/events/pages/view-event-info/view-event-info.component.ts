@@ -21,8 +21,8 @@ import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store
   styleUrls: ['./view-event-info.component.scss'],
 })
 export class ViewEventInfoComponent implements OnInit {
-  eventID!: number | undefined;
-  userID!: number | undefined;
+  eventID!: string | undefined;
+  userID!: string | undefined;
 
   // Event information
   eventInfo!: Event;
@@ -62,12 +62,16 @@ export class ViewEventInfoComponent implements OnInit {
       return;
     }
 
-    await this.getEventInfoService
-      .loadEvent(this.eventID)
-      .then((event: Event) => {
-        this.eventInfo = event;
-        this.hasEventLoaded = true;
-      });
+    if (this.eventID != undefined) {
+      const temp = this.getEventInfoService.getEventInfo(this.eventID);
+      if (temp == undefined) {
+        this.router.navigate(['/home']);
+        return;
+      }
+      this.eventInfo = temp;
+
+      this.hasEventLoaded = true;
+    }
 
     await this.getShowInfoService
       .loadShowInfo(this.eventID)

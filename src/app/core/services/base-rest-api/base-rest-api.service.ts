@@ -5,7 +5,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { baseURL } from '../../constants/api-paths';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -30,14 +30,26 @@ export abstract class BaseRestApiService {
   }
 
   // Get Request
-  public async get(path: string): Promise<any> {
-    return Promise.resolve(
-      this.http.get(`${baseURL}/${path}`, this.httpHeaders).pipe(
-        tap({
-          error: (error: HttpErrorResponse) => this.handleError(error),
-        })
-      )
-    );
+  public get(path: string): Observable<any> {
+    const apiURL = `${baseURL}/${path}`;
+    return this.http.get(apiURL, this.httpHeaders);
+    // const promise = new Promise<void>((resolve, reject) => {
+    //   const apiURL = `${baseURL}/${path}`;
+    //   this.http.get(apiURL, this.httpHeaders).subscribe({
+    //     next: (res: any) => {
+    //       return res;
+    //     },
+    //     error: (err: any ) => this.handleError(err as HttpErrorResponse),
+    //     complete: () => console.log("completed!")
+    //   })
+    // })
+    // return promise;
+    // return Promise.resolve(
+    //   this.http.get(`${baseURL}/${path}`, this.httpHeaders).subscribe({
+    //     next: (response: any) => {
+    //     }
+    //   })
+    // );
   }
 
   // Put Request
