@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { eventRegisterGuard } from './feature/events-register/events-register.guards';
 
 export const appRoutes: Routes = [
   // routing to home page
@@ -17,6 +18,7 @@ export const appRoutes: Routes = [
   // event-register routing
   {
     path: 'events/register',
+    canActivateChild:[eventRegisterGuard()],
     loadChildren: () => import('./feature/events-register/events-register.module').then(m => m.EventsRegisterModule)
   },
   // Route all other paths to home page.

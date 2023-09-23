@@ -26,11 +26,6 @@ export class RegistrationPreviewComponent implements OnInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
-    if (this.eventID == undefined) {
-      this.router.navigate(['/home']);
-      return;
-    }
-
     this.queueTimings =
       this.storeQueueTimingService.queueTimingPreferences.selectedQueueTimings;
   }
