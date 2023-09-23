@@ -1,6 +1,6 @@
 import { Event } from 'src/app/models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 
@@ -19,11 +19,11 @@ export class UpcomingConcertsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const eventsIterator = this.getEventInfoService.loadAllEvents().values();
-
-    for (let event of eventsIterator) {
-      this.events.push(event);
-    }
+      this.getEventInfoService.loadAllEvents().subscribe(
+        (data: any) => {
+          this.events = data;
+        },
+      )
   }
 
   handleButtonClick(eventID: string): void {

@@ -13,16 +13,10 @@ import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-
 })
 export class LandingPageComponent implements OnInit {
   userID!: string | undefined;
-  constructor(
-    private authService: AuthenticationService,
-    private getEventInfoService: GetEventInfoService
-  ) // private messageService: MessageService
-  {}
+  constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.userID = this.authService.userID;
-    this.getEventInfoService.loadAllEvents();
-
   }
 
   // openErrorMessage(): void {

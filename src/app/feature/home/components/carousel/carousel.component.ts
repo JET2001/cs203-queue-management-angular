@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
@@ -16,6 +22,7 @@ import { MessageService } from 'primeng/api';
 export class CarouselComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
   events: Event[] = [];
+  isCarousellReady : boolean = false;
 
   constructor(
     private getEventInfoService: GetEventInfoService,
@@ -25,14 +32,13 @@ export class CarouselComponent implements OnInit {
     private activeModal: NgbModal
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    const eventsIterator = this.getEventInfoService.loadAllCarousellEvents().values();
-
-    for (let event of eventsIterator) {
-      this.events.push(event);
-    }
-
-    console.log("Carousell = " + this.events);
+  ngOnInit(): void {
+    this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
+      this._loadCarousellEvents(data);
+    });
+    // for (let event of eventsIterator) {
+    //   this.events.push(event);
+    // }
   }
 
   handleRegisterButtonClick(eventID: string): void {
@@ -50,6 +56,35 @@ export class CarouselComponent implements OnInit {
     };
     this.router.navigate(['/events', 'register', 'group']);
   }
+
+
+  private _loadCarousellEvents(data: any): void {
+    this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
+      // Get highlighted events from data
+      for (let obj of data) {
+        console.log(obj);
+        let event: Event = {
+          eventID: obj.id,
+          name: obj.name,
+          countries: [],
+          maxQueueable: obj.maxQueueable,
+          description: obj.description,
+          image: obj.posterImagePath,
+          isHighlighted: obj.highlighted,
+        };
+
+        console.log(event, event.isHighlighted);
+
+        if (event.isHighlighted) {
+          this.events.push(event);
+        }
+
+
+        this.isCarousellReady = true;
+      }
+    });
+  }
+
 
   handleLearnMoreButtonClick(eventID: string): void {
     // var currentEvent: Event;

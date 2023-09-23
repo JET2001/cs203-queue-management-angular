@@ -3,6 +3,7 @@ import { events } from 'src/app/mock-db/MockDB';
 import { Event } from '../../../models/event';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,18 +13,13 @@ export class GetEventInfoService extends BaseRestApiService {
   private _events: Map<string, Event> = new Map<string, Event>();
   private _carousellEvents: Map<string, Event> = new Map<string, Event>();
 
-  loadAllCarousellEvents(): Map<string, Event> {
-    if (this._carousellEvents.size == 0){ // load events data only if it does not exist
-      this._getAllEventData();
-    }
-    return this._carousellEvents;
+  loadAllCarousellEvents(): Observable<any> {
+
+    return this.get("events/");
   }
 
-  loadAllEvents(): Map<string, Event> {
-    if (this._events.size == 0) {
-      this._getAllEventData();
-    }
-    return this._events;
+  loadAllEvents(): Observable<any> {
+    return this.get("events/");
   }
 
   getEventInfo(eventID: string): Event | undefined {
