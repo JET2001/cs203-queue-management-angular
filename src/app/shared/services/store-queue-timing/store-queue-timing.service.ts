@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
 export interface QueueTimingInfoParams {
-  eventID?: number;
-  userID?: number;
-  selectedQueueIDs?: number[];
-  selectedQueueTimings?: string[]; 
-  groupID?: number;
+  eventID?: string;
+  userID?: string;
+  selectedQueueIDs?: string[];
+  selectedQueueTimings?: string[];
+  groupID?: string;
 }
 
 @Injectable({

@@ -16,13 +16,13 @@ import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-tim
   styleUrls: ['./queue-timings.component.scss'],
 })
 export class QueueTimingsComponent implements OnInit, AfterContentInit {
-  eventID!: number | undefined;
+  eventID!: string | undefined;
   eventTitle: string | undefined;
   showInfo: ShowInfo[] | undefined;
   queueTimingForm: FormGroup;
-  queueTimings: String[];
-  queueIDs: number[];
-  shows: String[];
+  queueTimings: string[];
+  queueIDs: string[];
+  shows: string[];
   queueOptions: number[] = [];
 
   constructor(
@@ -101,7 +101,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
           this.storeEventInfoService.eventInfo.maxQueueable!
         )
       );
-      var selectedQueueIDs: number[] = new Array(selectedQueueTimings.length);
+      var selectedQueueIDs: string[] = new Array(selectedQueueTimings.length);
       for (let i = 0; i < this.showInfo?.length; i++) {
         const controlName = `queueTiming${i}`;
         const controlValue = this.queueTimingForm.get(controlName)?.value;

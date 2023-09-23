@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class LandingPageComponent implements OnInit {
-  userID!: number | undefined;
+  userID!: string | undefined;
   constructor(
     private authService: AuthenticationService
   ) // private messageService: MessageService
