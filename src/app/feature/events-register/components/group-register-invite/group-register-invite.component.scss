@@ -25,6 +25,7 @@ img {
 .status-msg {
   display: inline;
   text-wrap: nowrap;
+  margin-left: 10px;
 
   .success {
     -webkit-text-fill-color: $success-1;
