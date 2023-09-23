@@ -9,21 +9,16 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class GetEventInfoService extends BaseRestApiService {
-
   loadAllCarousellEvents(): Observable<any> {
-    return this.get("events/");
+    return this.get('events/');
   }
 
   loadAllEvents(): Observable<any> {
-    return this.get("events/");
+    return this.get('events/');
   }
 
   getEventInfo(eventID: string): Event | undefined {
     return undefined;
-  }
-
-  private _getEventData(eventID: string): Event | undefined {
-    return this._events.get(eventID);
   }
 
   private _buildEventSummary(event: Event): void {
