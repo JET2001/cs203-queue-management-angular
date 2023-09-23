@@ -8,6 +8,7 @@
           [inputValue]="invitee[0]"
           [placeholder]="'Email'"
           [isRequired]="false"
+          (keydown)="onTextChange()"
         ></app-input-field>
       </div>
       <div class="mobile">
@@ -16,6 +17,7 @@
           [inputValue]="invitee[1]"
           [placeholder]="'Mobile'"
           [isRequired]="false"
+          (input)="onTextChange()"
         ></app-input-field>
       </div>
     </div>

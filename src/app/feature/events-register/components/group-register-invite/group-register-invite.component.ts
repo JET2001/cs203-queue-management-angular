@@ -13,6 +13,8 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
   @Output('userID') userIDEvent!: EventEmitter<number | undefined>;
 
   inviteeVerified: boolean[] = [true, true, true];
+  @Output() keyStrokeDetected = new EventEmitter<boolean>();
+
   constructor(private getUserInfoService: GetUserInfoService) {}
 
   ngAfterViewInit(): void {
@@ -63,5 +65,9 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
       this.invitees[inviteeNum][0].value == '' ||
       this.invitees[inviteeNum][1].value == ''
     );
+  }
+
+  onTextChange() {
+    this.keyStrokeDetected.emit(true);
   }
 }
