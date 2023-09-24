@@ -19,22 +19,63 @@ export class UpcomingConcertsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.getEventInfoService.loadAllEvents().subscribe(
-        (data: any) => {
-          this.events = data;
-        },
-      )
+    this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
+      // clean the data
+      this.events = new Array();
+      for (let eventData of data) {
+        let event: Event = {
+          eventID: eventData.id,
+          name: eventData.name,
+          countries: [],
+          maxQueueable: eventData.maxQueueable,
+          description: eventData.description,
+          image: eventData.posterImagePath,
+          isHighlighted: eventData.highlighted,
+        };
+        this.events.push(event);
+      }
+
+    });
   }
 
   handleButtonClick(eventID: string): void {
-    const eventSelected = this.getEventInfoService.getEventInfo(eventID);
-    if (eventSelected == undefined) return;
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-      eventTitle: eventSelected.name,
-      maxQueueable: eventSelected.maxQueueable,
-    };
+    // const eventSelected = this.getEventInfoService.getEventInfo(eventID);
+    // if (eventSelected == undefined) return;
+    // this.storeEventInfoService.eventInfo = {
+    //   eventID: eventID,
+    //   eventTitle: eventSelected.name,
+    //   maxQueueable: eventSelected.maxQueueable,
+    // };
+    this.getEventInfoService.getEventInfo(eventID).subscribe((data: any) => {
+      let event: Event = {
+        eventID: data.id,
+        name: data.name,
+        countries: [],
+        maxQueueable: data.maxQueueable,
+        description: data.description,
+        image: data.posterImagePath,
+        isHighlighted: data.highlighted,
+      };
+      this.storeEventInfoService.eventInfo = {
+        eventID: event.eventID,
+        eventTitle: event.name,
+        maxQueueable: event.maxQueueable,
+      };
+    });
 
     this.router.navigate(['/events', 'register', 'group']);
+  }
+
+  private _buildEventSummary(event: Event): void {
+    let summaryStringBuilder = 'Coming to ';
+
+    // Build event summary
+    for (let i = 0; i < event.countries.length - 1; ++i) {
+      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ', ';
+    }
+
+    summaryStringBuilder +=
+      'and ' + event.countries[event.countries.length - 1];
+    event.summary = summaryStringBuilder + '!';
   }
 }

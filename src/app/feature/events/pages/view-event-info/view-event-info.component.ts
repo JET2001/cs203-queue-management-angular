@@ -63,24 +63,35 @@ export class ViewEventInfoComponent implements OnInit {
     }
 
     if (this.eventID != undefined) {
-      const temp = this.getEventInfoService.getEventInfo(this.eventID);
-      if (temp == undefined) {
-        this.router.navigate(['/home']);
-        return;
-      }
-      this.eventInfo = temp;
+      // const temp = this.getEventInfoService.getEventInfo(this.eventID);
+      this.getEventInfoService.getEventInfo(this.eventID).subscribe((data: any) => {
+        this.eventInfo = {
+          eventID: data.id,
+          name: data.name,
+          countries: [],
+          maxQueueable: data.maxQueueable,
+          description: data.description,
+          image: data.posterImagePath,
+          isHighlighted: data.highlighted,
+        }
+      })
+      // if (temp == undefined) {
+      //   this.router.navigate(['/home']);
+      //   return;
+      // }
+      // this.eventInfo = temp;
 
       this.hasEventLoaded = true;
     }
 
-    await this.getShowInfoService
-      .loadShowInfo(this.eventID)
-      .then((showInfo: ShowInfo[] | undefined) => {
-        this.showInfo = showInfo;
-        if (this.showInfo != undefined) {
-          this._calculateEarliestAndLatestShow();
-        }
-      });
+    // await this.getShowInfoService
+    //   .loadShowInfo(this.eventID)
+    //   .then((showInfo: ShowInfo[] | undefined) => {
+    //     this.showInfo = showInfo;
+    //     if (this.showInfo != undefined) {
+    //       this._calculateEarliestAndLatestShow();
+    //     }
+    //   });
 
     await this._updateUserEventInfo();
   }
@@ -143,9 +154,13 @@ export class ViewEventInfoComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
 
-    await this.getRegGroupService
-      .getRegGroupOfUser(this.eventID!, this.userID)
-      .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+    // await this.getRegGroupService
+    //   .getRegGroupOfUser(this.eventID!, this.userID)
+    //   .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+
+    this.getRegGroupService.getRegGroupOfUser(this.eventID!, this.userID).subscribe((regGroup: any) => {
+      this.userRegGroupInfo = regGroup;
+    })
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.

@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit {
       (emailID: string | undefined) => {
         this.emailID = emailID;
         console.log(this.emailID);
-        this._shortenEmailID();
       }
     )
   }
@@ -51,11 +50,26 @@ export class HeaderComponent implements OnInit {
   //   if (!userInputStr) return;
   //   let userInput: string | undefined = userInputStr;
   //   if (userInput == undefined) return;
+  // loginUser(): void {
+
+  //   let userInputStr: string | null = prompt(
+  //     'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
+  //   );
+  //   if (!userInputStr) return;
+  //   let userInput: string | undefined = userInputStr;
+  //   if (userInput == undefined) return;
 
   //   this.authService.userID = userInput;
   //   this.emailID = this.authService.email;
   //   this._shortenEmailID();
+  //   this.authService.userID = userInput;
+  //   this.emailID = this.authService.email;
+  //   this._shortenEmailID();
 
+  //   if (this.authService.isVerified) {
+  //     this.verifiedUserLoggingIn.emit();
+  //   }
+  // }
   //   if (this.authService.isVerified) {
   //     this.verifiedUserLoggingIn.emit();
   //   }
@@ -71,13 +85,4 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  private _shortenEmailID(): void {
-    if (this.emailID == undefined) return;
-
-    // If the email is longer than 13 characters append an ellipsis to prevent overflow.
-    this.emailID =
-      this.emailID.length >= 13
-        ? this.emailID.substring(0, 13) + '...'
-        : this.emailID;
-  }
 }
