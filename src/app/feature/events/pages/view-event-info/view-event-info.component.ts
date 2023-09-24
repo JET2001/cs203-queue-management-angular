@@ -65,7 +65,15 @@ export class ViewEventInfoComponent implements OnInit {
     if (this.eventID != undefined) {
       // const temp = this.getEventInfoService.getEventInfo(this.eventID);
       this.getEventInfoService.getEventInfo(this.eventID).subscribe((data: any) => {
-        this.eventInfo = data;
+        this.eventInfo = {
+          eventID: data.id,
+          name: data.name,
+          countries: [],
+          maxQueueable: data.maxQueueable,
+          description: data.description,
+          image: data.posterImagePath,
+          isHighlighted: data.highlighted,
+        }
       })
       // if (temp == undefined) {
       //   this.router.navigate(['/home']);
