@@ -17,8 +17,8 @@ import { ReplaySubject } from 'rxjs';
 })
 export class GroupRegistrationComponent implements OnInit {
   // Fields
-  eventID!: number | undefined;
-  groupID!: number | undefined;
+  eventID!: string | undefined;
+  groupID!: string | undefined;
   eventTitle!: string | undefined;
   verified: boolean;
   keyStrokeDetected: boolean = false;

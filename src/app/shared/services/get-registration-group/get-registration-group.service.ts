@@ -9,8 +9,8 @@ export class GetRegistrationGroupService {
   constructor() {}
 
   getRegGroupOfUser(
-    eventID: number,
-    userID: number | undefined
+    eventID: string,
+    userID: string | undefined
   ): Promise<RegGroup | undefined> {
     if (eventID == undefined || userID == undefined)
       return Promise.resolve(undefined);
@@ -18,8 +18,8 @@ export class GetRegistrationGroupService {
   }
 
   private _getRegGroupOfUser(
-    eventID: number,
-    userID: number
+    eventID: string,
+    userID: string
   ): RegGroup | undefined {
     for (let group of RegGroups) {
       if (group.eventID != eventID) continue;

@@ -1,7 +1,7 @@
 export interface Queue {
-  queueID: number;
-  eventID: number;
-  showID: number;
+  queueID: string;
+  eventID: string;
+  showID: string;
   queueStartTime: Date;
   queueEndTime: Date;
 }

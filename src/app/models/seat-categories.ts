@@ -1,6 +1,6 @@
 export interface SeatCategories{
-  eventID: number;
-  showID: number;
+  eventID: string;
+  showID: string;
   categoryID: number;
   name: string;
   price: string;

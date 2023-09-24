@@ -13,13 +13,13 @@ export class GetShowInfoService {
   constructor() {}
 
   // Load all shows for this event, load queue timings, location, and seat category.
-  loadShowInfo(eventID: number | undefined): Promise<ShowInfo[] | undefined> {
+  loadShowInfo(eventID: string | undefined): Promise<ShowInfo[] | undefined> {
     if (eventID == undefined) return Promise.resolve(undefined);
 
     return Promise.resolve(this._getAllShowInfo(eventID));
   }
 
-  private _getAllShowInfo(eventID: number): ShowInfo[] {
+  private _getAllShowInfo(eventID: string): ShowInfo[] {
     let showInfo: ShowInfo[] = [];
     for (let show of shows) {
       if (show.eventID == eventID) {
@@ -27,7 +27,7 @@ export class GetShowInfoService {
           show.locationID
         );
         if (location == undefined) {
-          location = { locationID: 1000, locationName: 'NOT_SET' };
+          location = { locationID: "NOT_SET", locationName: 'NOT_SET' };
         }
         let queue: Queue | undefined = this._getQueueTimesForShow(
           show.eventID,
@@ -38,7 +38,7 @@ export class GetShowInfoService {
           queue = {
             eventID: show.eventID,
             showID: show.showID,
-            queueID: -1,
+            queueID: "queue_1",
             queueStartTime: new Date(0),
             queueEndTime: new Date(0),
           };
@@ -60,7 +60,7 @@ export class GetShowInfoService {
     return showInfo;
   }
 
-  private _getLocationOfShow(locationID: number): Location | undefined {
+  private _getLocationOfShow(locationID: string): Location | undefined {
     for (let location of locations) {
       if (locationID == location.locationID) return location;
     }
@@ -68,8 +68,8 @@ export class GetShowInfoService {
   }
 
   private _getQueueTimesForShow(
-    eventID: number,
-    showID: number
+    eventID: string,
+    showID: string
   ): Queue | undefined {
     for (let queue of queues) {
       if (eventID == queue.eventID && showID == queue.showID) {

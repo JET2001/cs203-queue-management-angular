@@ -1,6 +1,6 @@
 export interface Show {
-  showID: number;
-  eventID: number;
-  locationID: number;
+  showID: string;
+  eventID: string;
+  locationID: string;
   showDateTime: Date;
 }
