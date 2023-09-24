@@ -1,9 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
@@ -21,7 +16,7 @@ import { MessageService } from 'primeng/api';
 export class CarouselComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
   events: Event[] = [];
-  isCarousellReady : boolean = false;
+  isCarousellReady: boolean = false;
   id2CarousellEvent: Map<string, Event> = new Map<string, Event>();
 
   constructor(
@@ -44,24 +39,26 @@ export class CarouselComponent implements OnInit {
       this.hasError.emit();
       return;
     }
-    const eventSelected = this.getEventInfoService.getEventInfo(eventID);
-    if (eventSelected == undefined) return;
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-      eventTitle: eventSelected.name,
-      maxQueueable: eventSelected.maxQueueable,
-    };
+    this.getEventInfoService.getEventInfo(eventID).subscribe((event: any) => {
+      const eventSelected = event;
+      this.storeEventInfoService.eventInfo = {
+        eventID: eventID,
+        eventTitle: eventSelected.name,
+        maxQueueable: eventSelected.maxQueueable,
+      };
+    });
+
     this.router.navigate(['/events', 'register', 'group']);
   }
 
   handleLearnMoreButtonClick(eventID: string): void {
+    console.log(eventID);
     this.storeEventInfoService.eventInfo = {
-      eventID: eventID
+      eventID: eventID,
     };
 
     this.router.navigate(['/events']);
   }
-
 
   private _loadCarousellEvents(data: any): void {
     this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
@@ -80,7 +77,6 @@ export class CarouselComponent implements OnInit {
         if (event.isHighlighted) {
           this.events.push(event);
         }
-
 
         this.isCarousellReady = true;
       }

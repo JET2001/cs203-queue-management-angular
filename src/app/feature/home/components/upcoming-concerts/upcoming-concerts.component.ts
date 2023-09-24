@@ -19,22 +19,42 @@ export class UpcomingConcertsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.getEventInfoService.loadAllEvents().subscribe(
-        (data: any) => {
-          this.events = data;
-        },
-      )
+    this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
+      this.events = data;
+    });
   }
 
   handleButtonClick(eventID: string): void {
-    const eventSelected = this.getEventInfoService.getEventInfo(eventID);
-    if (eventSelected == undefined) return;
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-      eventTitle: eventSelected.name,
-      maxQueueable: eventSelected.maxQueueable,
-    };
+    // const eventSelected = this.getEventInfoService.getEventInfo(eventID);
+    // if (eventSelected == undefined) return;
+    // this.storeEventInfoService.eventInfo = {
+    //   eventID: eventID,
+    //   eventTitle: eventSelected.name,
+    //   maxQueueable: eventSelected.maxQueueable,
+    // };
+    this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
+      this._loadEventInfo(data, eventID);
+    });
 
     this.router.navigate(['/events', 'register', 'group']);
+  }
+
+  private _loadEventInfo(data: any, eventID: string): void {
+    this.getEventInfoService.getEventInfo(eventID).subscribe((data: any) => {
+      let event: Event = {
+        eventID: data.id,
+        name: data.name,
+        countries: [],
+        maxQueueable: data.maxQueueable,
+        description: data.description,
+        image: data.posterImagePath,
+        isHighlighted: data.highlighted,
+      };
+      this.storeEventInfoService.eventInfo = {
+        eventID: event.eventID,
+        eventTitle: event.name,
+        maxQueueable: event.maxQueueable,
+      };
+    });
   }
 }

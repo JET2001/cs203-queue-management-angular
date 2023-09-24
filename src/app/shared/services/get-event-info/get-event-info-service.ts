@@ -17,8 +17,8 @@ export class GetEventInfoService extends BaseRestApiService {
     return this.get('events/');
   }
 
-  getEventInfo(eventID: string): Event | undefined {
-    return undefined;
+  getEventInfo(eventID: string): Observable<any> {
+    return this.get('events/' + eventID);
   }
 
   private _buildEventSummary(event: Event): void {

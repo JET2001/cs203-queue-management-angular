@@ -63,24 +63,27 @@ export class ViewEventInfoComponent implements OnInit {
     }
 
     if (this.eventID != undefined) {
-      const temp = this.getEventInfoService.getEventInfo(this.eventID);
-      if (temp == undefined) {
-        this.router.navigate(['/home']);
-        return;
-      }
-      this.eventInfo = temp;
+      // const temp = this.getEventInfoService.getEventInfo(this.eventID);
+      this.getEventInfoService.getEventInfo(this.eventID).subscribe((data: any) => {
+        this.eventInfo = data;
+      })
+      // if (temp == undefined) {
+      //   this.router.navigate(['/home']);
+      //   return;
+      // }
+      // this.eventInfo = temp;
 
       this.hasEventLoaded = true;
     }
 
-    await this.getShowInfoService
-      .loadShowInfo(this.eventID)
-      .then((showInfo: ShowInfo[] | undefined) => {
-        this.showInfo = showInfo;
-        if (this.showInfo != undefined) {
-          this._calculateEarliestAndLatestShow();
-        }
-      });
+    // await this.getShowInfoService
+    //   .loadShowInfo(this.eventID)
+    //   .then((showInfo: ShowInfo[] | undefined) => {
+    //     this.showInfo = showInfo;
+    //     if (this.showInfo != undefined) {
+    //       this._calculateEarliestAndLatestShow();
+    //     }
+    //   });
 
     await this._updateUserEventInfo();
   }
