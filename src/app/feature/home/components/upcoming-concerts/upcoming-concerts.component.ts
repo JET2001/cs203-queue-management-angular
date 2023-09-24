@@ -20,7 +20,21 @@ export class UpcomingConcertsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
-      this.events = data;
+      // clean the data
+      this.events = new Array();
+      for (let eventData of data) {
+        let event: Event = {
+          eventID: eventData.id,
+          name: eventData.name,
+          countries: [],
+          maxQueueable: eventData.maxQueueable,
+          description: eventData.description,
+          image: eventData.posterImagePath,
+          isHighlighted: eventData.highlighted,
+        };
+        this.events.push(event);
+      }
+
     });
   }
 
@@ -32,14 +46,6 @@ export class UpcomingConcertsComponent implements OnInit {
     //   eventTitle: eventSelected.name,
     //   maxQueueable: eventSelected.maxQueueable,
     // };
-    this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
-      this._loadEventInfo(data, eventID);
-    });
-
-    this.router.navigate(['/events', 'register', 'group']);
-  }
-
-  private _loadEventInfo(data: any, eventID: string): void {
     this.getEventInfoService.getEventInfo(eventID).subscribe((data: any) => {
       let event: Event = {
         eventID: data.id,
@@ -56,5 +62,20 @@ export class UpcomingConcertsComponent implements OnInit {
         maxQueueable: event.maxQueueable,
       };
     });
+
+    this.router.navigate(['/events', 'register', 'group']);
+  }
+
+  private _buildEventSummary(event: Event): void {
+    let summaryStringBuilder = 'Coming to ';
+
+    // Build event summary
+    for (let i = 0; i < event.countries.length - 1; ++i) {
+      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ', ';
+    }
+
+    summaryStringBuilder +=
+      'and ' + event.countries[event.countries.length - 1];
+    event.summary = summaryStringBuilder + '!';
   }
 }

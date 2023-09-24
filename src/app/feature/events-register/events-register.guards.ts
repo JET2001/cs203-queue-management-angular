@@ -52,9 +52,12 @@ export function groupRegisterGuard(): CanActivateFn {
     const userID = authService.userID;
 
     let userRegGroup: RegGroup | undefined;
-    await getRegGroupInfoService
-      .getRegGroupOfUser(eventID!, userID)
-      .then((regGroup: RegGroup | undefined) => (userRegGroup = regGroup));
+    getRegGroupInfoService.getRegGroupOfUser(eventID!, userID).subscribe((regGroup: any) => {
+      userRegGroup = regGroup;
+    })
+    // await getRegGroupInfoService
+    //   .getRegGroupOfUser(eventID!, userID)
+    //   .then((regGroup: RegGroup | undefined) => (userRegGroup = regGroup));
     // If user tries to modify group but does not have an actual group, reject
     if (storeRegGroupService.modifyGroup && userRegGroup == undefined)
       return denyAccess();
@@ -85,11 +88,14 @@ export function queueRegisterGuard(): CanActivateFn {
 
     let regGroup: RegGroup | undefined = undefined;
     // if user does not have a registration group, reject
-    await getRegGroupService
-      .getRegGroupOfUser(eventID!, userID)
-      .then((regGroup_: RegGroup | undefined) => {
-        regGroup = regGroup_;
-      });
+    // await getRegGroupService
+    //   .getRegGroupOfUser(eventID!, userID)
+    //   .then((regGroup_: RegGroup | undefined) => {
+    //     regGroup = regGroup_;
+    //   });
+    getRegGroupService.getRegGroupOfUser(eventID!, userID).subscribe((regGroup_: any) => {
+      regGroup = regGroup_;
+    })
     if (regGroup == undefined) return denyAccess();
 
     // TODO : User must not have any pre-existing queues. TBC: Wait until after APIs has been integrated.

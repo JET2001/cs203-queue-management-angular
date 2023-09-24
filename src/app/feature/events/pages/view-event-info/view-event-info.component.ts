@@ -146,9 +146,13 @@ export class ViewEventInfoComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
 
-    await this.getRegGroupService
-      .getRegGroupOfUser(this.eventID!, this.userID)
-      .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+    // await this.getRegGroupService
+    //   .getRegGroupOfUser(this.eventID!, this.userID)
+    //   .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
+
+    this.getRegGroupService.getRegGroupOfUser(this.eventID!, this.userID).subscribe((regGroup: any) => {
+      this.userRegGroupInfo = regGroup;
+    })
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
