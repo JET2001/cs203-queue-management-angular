@@ -3,6 +3,7 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,9 @@ export class HeaderComponent implements OnInit {
   @Output() verifiedUserLoggingIn = new EventEmitter<void>();
   @Output() userLoggedOut = new EventEmitter<void>();
   emailID: string | undefined = undefined;
+
+  emailSubject$ !: BehaviorSubject<string | undefined>;
+
   constructor(
     private authService: AuthenticationService,
     private router: Router,
@@ -20,12 +24,18 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.emailID = this.authService.email;
-    this._shortenEmailID();
+
+    this.emailSubject$ = this.authService.emailSubject;
+    this.emailSubject$.subscribe(
+      (emailID: string | undefined) => {
+        this.emailID = this.authService.email;
+        this._shortenEmailID();
+      }
+    )
   }
 
   isLoggedIn(): boolean {
-    return this.authService.userID != undefined;
+    return this.authService.email != undefined;
   }
   handleLoginButtonClick(): void {
     this.activeModal.open(LoginPopupComponent, { centered: true });

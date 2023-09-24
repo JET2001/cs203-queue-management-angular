@@ -5,7 +5,7 @@ import { Users } from 'src/app/mock-db/MockDB';
 import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
 import { BaseRestApiService } from '../base-rest-api/base-rest-api.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { baseURL } from '../../constants/api-paths';
 
 @Injectable({
@@ -13,6 +13,10 @@ import { baseURL } from '../../constants/api-paths';
 })
 export class AuthenticationService extends BaseRestApiService {
   private _userID: string | undefined = undefined;
+  private _email: string | undefined = undefined;
+
+  public emailSubject$ : BehaviorSubject<string | undefined> = new BehaviorSubject(this._email);
+
   constructor(
     private activeModal: NgbModal,
     private localStorageService: LocalStorageService,
@@ -21,6 +25,10 @@ export class AuthenticationService extends BaseRestApiService {
     super(http);
   }
 
+  public get emailSubject() : BehaviorSubject<string | undefined> {
+    return this.emailSubject$;
+  }
+  // userIDSubject : BehaviorSubject<string | undefined> = new B
   public get userID(): string | undefined {
     return this._userID;
   }
@@ -74,11 +82,11 @@ export class AuthenticationService extends BaseRestApiService {
   }
 
   public get email(): string | undefined {
-    if (this._userID == undefined) return undefined;
-    for (let user of Users) {
-      if (user.userID == this._userID) return user.email;
-    }
-    return undefined;
+    return this._email;
+  }
+
+  public set email(email: string | undefined) {
+    this._email = email;
   }
 
   public authenticateUser(): Promise<boolean> {

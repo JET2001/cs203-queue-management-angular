@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
@@ -38,29 +38,37 @@ export class LoginPopupComponent implements OnInit {
 
     // Process mobile number.
     let mobile = this.processMobile();
+    let email = this.emailFC.value;
     this.authService
       .login(this.emailFC.value, mobile, this.passwordFC.value)
-      .subscribe((data: string | boolean) => {
-        // User gets a JWT token
-        // console.log(data);
-        if (typeof data == typeof "") {
-          this.authService.saveAuthToken(JSON.parse(JSON.stringify(data)));
-          this.loginFG.reset();
-          // Dismiss this active modal
-          this.activeModal.dismiss();
+      .subscribe(
+        (data: string | boolean) => {
+          // User gets a JWT token
+          // console.log(data);
+          if (typeof data == typeof '') {
+            this.authService.saveAuthToken(JSON.parse(JSON.stringify(data)));
 
-          // Authenticate user
-          this.authService.authenticateUser().then((data: boolean) => {});
-          return;
-        } else {
-          this.showInvalidLoginMessage = true;
-          this.loginFG.reset();
+            this.loginFG.reset();
+            // Dismiss this active modal
+            this.activeModal.dismiss();
+
+            // Authenticate user
+            this.authService.authenticateUser().then((data: boolean) => {
+              // Log in user
+              this.authService.email = email;
+            });
+
+            return;
+          } else {
+            this.showInvalidLoginMessage = true;
+            this.loginFG.reset();
+          }
+        },
+        (error: Error) => {
+          console.log(error.message);
+          // if (error.message)
         }
-      },
-      (error: Error) => {
-        console.log(error.message);
-        // if (error.message)
-      });
+      );
   }
 
   private _fieldsAllValid(): boolean {
