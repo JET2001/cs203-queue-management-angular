@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit {
       (emailID: string | undefined) => {
         this.emailID = emailID;
         console.log(this.emailID);
-        this._shortenEmailID();
       }
     )
   }
@@ -71,13 +70,4 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  private _shortenEmailID(): void {
-    if (this.emailID == undefined) return;
-
-    // If the email is longer than 13 characters append an ellipsis to prevent overflow.
-    this.emailID =
-      this.emailID.length >= 13
-        ? this.emailID.substring(0, 13) + '...'
-        : this.emailID;
-  }
 }
