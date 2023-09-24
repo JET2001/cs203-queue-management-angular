@@ -15,6 +15,9 @@ export class LoginPopupComponent implements OnInit {
   passwordFC: FormControl = new FormControl('', []);
   checkboxFC: FormControl = new FormControl(false);
 
+  // Error message fields
+  showInvalidLoginMessage: boolean = false;
+
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
@@ -30,12 +33,61 @@ export class LoginPopupComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async handleLogin(): Promise<void> {
-    await this.authService.authenticateUser().then((success: boolean) => {
-      if (success) {
-        console.log(this.loginFG.value);
-        this.activeModal.close();
+  loginUser(): void {
+    if (!this._fieldsAllValid()) return;
+
+    // Process mobile number.
+    let mobile = this.processMobile();
+    this.authService
+      .login(this.emailFC.value, mobile, this.passwordFC.value)
+      .subscribe((data: string | boolean) => {
+        // User gets a JWT token
+        // console.log(data);
+        if (typeof data == typeof "") {
+          this.authService.saveAuthToken(JSON.parse(JSON.stringify(data)));
+          this.loginFG.reset();
+          // Dismiss this active modal
+          this.activeModal.dismiss();
+
+          // Authenticate user
+          this.authService.authenticateUser().then((data: boolean) => {});
+          return;
+        } else {
+          this.showInvalidLoginMessage = true;
+          this.loginFG.reset();
+        }
+      },
+      (error: Error) => {
+        console.log(error.message);
+        // if (error.message)
+      });
+  }
+
+  private _fieldsAllValid(): boolean {
+    for (let value of [
+      this.emailFC.value,
+      this.mobileFC.value,
+      this.passwordFC.value,
+    ]) {
+      if (value == null || value == undefined || value == '') {
+        this.showInvalidLoginMessage = true;
+        return false;
       }
-    });
+    }
+    this.showInvalidLoginMessage = false;
+    return true;
+  }
+
+  // Hide error message when fields are modified
+  private _fieldsAreModified(): void {
+    for (let fc of [this.emailFC, this.mobileFC, this.passwordFC]) {
+      if (fc.dirty) this.showInvalidLoginMessage = false;
+    }
+  }
+
+  private processMobile(): string {
+    let mobile: string = this.mobileFC.value;
+    mobile = mobile.replace('+', '0');
+    return mobile;
   }
 }

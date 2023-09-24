@@ -27,25 +27,28 @@ export class HeaderComponent implements OnInit {
   isLoggedIn(): boolean {
     return this.authService.userID != undefined;
   }
-
-  loginUser(): void {
+  handleLoginButtonClick(): void {
     this.activeModal.open(LoginPopupComponent, { centered: true });
-
-    let userInputStr: string | null = prompt(
-      'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
-    );
-    if (!userInputStr) return;
-    let userInput: string | undefined = userInputStr;
-    if (userInput == undefined) return;
-
-    this.authService.userID = userInput;
-    this.emailID = this.authService.email;
-    this._shortenEmailID();
-
-    if (this.authService.isVerified) {
-      this.verifiedUserLoggingIn.emit();
-    }
   }
+
+
+  // loginUser(): void {
+
+  //   let userInputStr: string | null = prompt(
+  //     'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
+  //   );
+  //   if (!userInputStr) return;
+  //   let userInput: string | undefined = userInputStr;
+  //   if (userInput == undefined) return;
+
+  //   this.authService.userID = userInput;
+  //   this.emailID = this.authService.email;
+  //   this._shortenEmailID();
+
+  //   if (this.authService.isVerified) {
+  //     this.verifiedUserLoggingIn.emit();
+  //   }
+  // }
 
   logoutUser(): void {
     this.authService.userID = undefined;

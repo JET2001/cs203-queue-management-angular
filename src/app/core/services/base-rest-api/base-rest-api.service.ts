@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -11,12 +11,16 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export abstract class BaseRestApiService {
+
+  // Field inject HttpClient to prevent dependency conflicts
+  constructor(protected http: HttpClient) {};
+
   protected httpHeaders = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     }),
   };
-  constructor(private http: HttpClient) {}
+  // constructor() {}
 
   // Post request
   protected post(path: string, data: any): Observable<any> {

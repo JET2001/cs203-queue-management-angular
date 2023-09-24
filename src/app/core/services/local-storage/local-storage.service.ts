@@ -7,7 +7,8 @@ export class LocalStorageService {
 
   constructor() { }
 
-  public set userToken(userToken: string) {
+  public set userToken(userToken: string | null) {
+    if (userToken == null) return;
     localStorage.setItem("userToken", userToken);
   }
 
