@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, Input, OnInit, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { Form, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
@@ -10,7 +17,7 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
 })
 export class GroupRegisterInviteComponent implements AfterViewInit {
   @Input('inviteeList') invitees: FormControl[][];
-  @Output('userID') userIDEvent!: EventEmitter<number | undefined>;
+  @Output('userID') userIDEvent!: EventEmitter<string | undefined>;
 
   inviteeVerified: boolean[] = [true, true, true];
   @Output() keyStrokeDetected = new EventEmitter<boolean>();
@@ -36,7 +43,7 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
     );
   }
 
-  async inviteeDetailsValidation(inviteeNum: number): Promise<void>{
+  async inviteeDetailsValidation(inviteeNum: number): Promise<void> {
     if (this._inputIsEmpty(inviteeNum) || !this._inputIsValid(inviteeNum)) {
       this.inviteeVerified[inviteeNum] = false;
       // this.userIDEvent.emit(undefined);
@@ -48,7 +55,7 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
         this.invitees[inviteeNum][0].value,
         this.invitees[inviteeNum][1].value
       )
-      .then((userID: number | undefined) => {
+      .then((userID: string | undefined) => {
         this.inviteeVerified[inviteeNum] = userID != undefined;
         this.userIDEvent.emit(userID);
       });

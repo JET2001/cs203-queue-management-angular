@@ -1,5 +1,5 @@
 <div>
-  <p-carousel
+  <p-carousel *ngIf="isCarousellReady"
     [value]="events"
     [numVisible]="1"
     [numScroll]="1"
@@ -8,7 +8,7 @@
   >
     <ng-template let-event pTemplate="item">
       <div class="carousel-slide">
-        <img src="assets/posters/{{ event.image }}" width="400" height="500" />
+        <img src="assets/posters/{{ event.image }}" width="400" height="500" alt = "{{ event.name }} poster"/>
         <div class="carousel-concert-details">
           <div class="carousel-concert-text">
             <h1>{{ event.name }}</h1>

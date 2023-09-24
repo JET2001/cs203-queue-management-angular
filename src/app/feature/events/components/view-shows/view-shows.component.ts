@@ -12,7 +12,7 @@ import { Table } from 'primeng/table';
   styleUrls: ['./view-shows.component.scss'],
 })
 export class ViewShowsComponent implements OnInit {
-  eventID: number | undefined;
+  eventID: string | undefined;
   showInfo: any[];
   loading: boolean = true;
   @ViewChild('dt') dt: Table | undefined;

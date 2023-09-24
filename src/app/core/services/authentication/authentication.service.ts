@@ -7,33 +7,40 @@ import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verif
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private _userID: number | undefined = undefined;
+  private _userID: string | undefined = undefined;
   private _authToken: string | undefined = undefined;
 
-  constructor(private activeModal: NgbModal){
-  }
+  constructor(private activeModal: NgbModal) {}
 
-  public get userID(): number | undefined {
+  public get userID(): string | undefined {
     return this._userID;
   }
 
-  public set userID(userID: number | undefined) {
+  public set userID(userID: string | undefined) {
     this._userID = userID;
   }
   public get isLoggedIn(): boolean {
     return this._userID != undefined;
   }
   public get isVerified(): boolean {
-    return this.isLoggedIn && Users[this._userID!].isVerified;
+    if (!this.isLoggedIn) return false;
+
+    for (let user of Users){
+      if (user.userID == this._userID) return (user.isVerified);
+    }
+    return false;
   }
 
   public get email(): string | undefined {
     if (this._userID == undefined) return undefined;
-    return Users[this._userID].email;
+    for (let user of Users){
+      if (user.userID == this._userID) return user.email;
+    }
+    return undefined;
   }
 
   public authenticateUser(): Promise<boolean> {
-    this.activeModal.open(GaVerificationPopupComponent, {centered: true});
+    this.activeModal.open(GaVerificationPopupComponent, { centered: true });
     return Promise.resolve(true);
   }
 

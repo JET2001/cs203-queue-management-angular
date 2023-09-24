@@ -1,9 +1,9 @@
 export interface RegGroup {
-  groupID: number;
-  eventID: number;
-  userIDs: number[];
+  groupID: string;
+  eventID: string;
+  userIDs: string[];
   hasAllUsersConfirmed: boolean;
-  queueIDs?: number[];
+  queueIDs?: string[];
   purchaseID?: number;
   confirmed: number[];
 }
