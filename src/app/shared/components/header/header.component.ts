@@ -3,7 +3,7 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   @Output() userLoggedOut = new EventEmitter<void>();
   emailID: string | undefined = undefined;
 
-  emailSubject$ !: BehaviorSubject<string | undefined>;
+  email$ !: Observable<string | undefined>;
 
   constructor(
     private authService: AuthenticationService,
@@ -25,10 +25,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.emailSubject$ = this.authService.emailSubject;
-    this.emailSubject$.subscribe(
+    this.email$ = this.authService.email$;
+    this.email$.subscribe(
       (emailID: string | undefined) => {
-        this.emailID = this.authService.email;
+        this.emailID = emailID;
+        console.log(this.emailID);
         this._shortenEmailID();
       }
     )

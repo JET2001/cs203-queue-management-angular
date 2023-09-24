@@ -15,7 +15,8 @@ export class AuthenticationService extends BaseRestApiService {
   private _userID: string | undefined = undefined;
   private _email: string | undefined = undefined;
 
-  public emailSubject$ : BehaviorSubject<string | undefined> = new BehaviorSubject(this._email);
+  private _emailSubject : BehaviorSubject<string | undefined> = new BehaviorSubject(this._email);
+  public email$: Observable<string | undefined> = this._emailSubject.asObservable();
 
   constructor(
     private activeModal: NgbModal,
@@ -26,7 +27,7 @@ export class AuthenticationService extends BaseRestApiService {
   }
 
   public get emailSubject() : BehaviorSubject<string | undefined> {
-    return this.emailSubject$;
+    return this._emailSubject;
   }
   // userIDSubject : BehaviorSubject<string | undefined> = new B
   public get userID(): string | undefined {
@@ -87,6 +88,7 @@ export class AuthenticationService extends BaseRestApiService {
 
   public set email(email: string | undefined) {
     this._email = email;
+    this._emailSubject.next(this._email);
   }
 
   public authenticateUser(): Promise<boolean> {
