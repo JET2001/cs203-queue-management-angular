@@ -35,7 +35,6 @@ export class AuthenticationService extends BaseRestApiService {
   }
 
   public set userID(userID: string | undefined) {
-  public set userID(userID: string | undefined) {
     this._userID = userID;
   }
   public get isLoggedIn(): boolean {
