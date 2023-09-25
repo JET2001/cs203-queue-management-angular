@@ -186,11 +186,9 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   }
 
   onOptionSelected(): void {
-    console.log(this.queueOptions.length);
     for (let i = 0; i < this.queueOptions.length; i++) {
       const controlName = `queueTiming${i}`;
       const controlValue = this.queueTimingForm.get(controlName)?.value;
-      console.log(controlValue);
       if (!controlValue) {
         this.isNextDisabled = true;
         return;
