@@ -15,7 +15,10 @@ import { MessageService } from 'primeng/api';
 })
 export class CarouselComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
-  events: Event[];
+  events: Event[] = [];
+  isCarousellReady: boolean = false;
+  id2CarousellEvent: Map<string, Event> = new Map<string, Event>();
+
   constructor(
     private getEventInfoService: GetEventInfoService,
     private router: Router,
@@ -25,38 +28,58 @@ export class CarouselComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getEventInfoService.loadAllCarousellEvents().then((events) => {
-      this.events = events;
+    this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
+      this._loadCarousellEvents(data);
     });
   }
 
-  handleRegisterButtonClick(eventID: number): void {
+  handleRegisterButtonClick(eventID: string): void {
     if (!this.authService.isVerified) {
       this.activeModal.open(LoginPopupComponent, { centered: true });
       this.hasError.emit();
       return;
     }
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-      eventTitle: this.events[eventID].name,
-      maxQueueable: this.events[eventID].maxQueueable,
-    };
+    this.getEventInfoService.getEventInfo(eventID).subscribe((event: any) => {
+      const eventSelected = event;
+      this.storeEventInfoService.eventInfo = {
+        eventID: eventID,
+        eventTitle: eventSelected.name,
+        maxQueueable: eventSelected.maxQueueable,
+      };
+    });
+
     this.router.navigate(['/events', 'register', 'group']);
   }
 
-  handleLearnMoreButtonClick(eventID: number): void {
-    var currentEvent: Event;
-    for (let event of this.events) {
-      if (event.eventID == eventID) {
-        currentEvent = event;
-        this.storeEventInfoService.eventInfo = {
-          eventID: eventID,
-          eventTitle: currentEvent.name,
-          maxQueueable: currentEvent.maxQueueable,
-        };
-      }
-    }
+  handleLearnMoreButtonClick(eventID: string): void {
+    console.log(eventID);
+    this.storeEventInfoService.eventInfo = {
+      eventID: eventID,
+    };
 
     this.router.navigate(['/events']);
+  }
+
+  private _loadCarousellEvents(data: any): void {
+    this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
+      // Get highlighted events from data
+      for (let obj of data) {
+        let event: Event = {
+          eventID: obj.id,
+          name: obj.name,
+          countries: [],
+          maxQueueable: obj.maxQueueable,
+          description: obj.description,
+          image: obj.posterImagePath,
+          isHighlighted: obj.highlighted,
+        };
+
+        if (event.isHighlighted) {
+          this.events.push(event);
+        }
+
+        this.isCarousellReady = true;
+      }
+    });
   }
 }

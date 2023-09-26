@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { MessageService } from 'primeng/api';
+import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
 
 @Component({
   selector: 'app-landing-page',
@@ -11,11 +12,8 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class LandingPageComponent implements OnInit {
-  userID!: number | undefined;
-  constructor(
-    private authService: AuthenticationService
-  ) // private messageService: MessageService
-  {}
+  userID!: string | undefined;
+  constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.userID = this.authService.userID;

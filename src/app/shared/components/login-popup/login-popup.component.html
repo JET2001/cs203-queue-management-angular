@@ -43,11 +43,14 @@
         </div> -->
       <!-- </div> -->
     </form>
+    <div *ngIf = "showInvalidLoginMessage">
+      <p class = 'error'>Invalid email, mobile or password</p>
+    </div>
     <div class="log-in-button">
       <app-text-button
         buttonText="Log in"
         buttonVariants="primary"
-        (buttonClick)="handleLogin()"
+        (buttonClick)="loginUser()"
       ></app-text-button>
     </div>
     <!-- <div class="login-text join-us">Not a member? Join us</div> -->

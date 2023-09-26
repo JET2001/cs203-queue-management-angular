@@ -12,7 +12,7 @@ import { GaRegistrationPopupComponent } from '../../components/ga-registration-p
   styleUrls: ['./registration-preview.component.scss'],
 })
 export class RegistrationPreviewComponent implements OnInit {
-  eventID: number | undefined;
+  eventID: string | undefined;
   eventTitle: string | undefined;
   queueTimings: string[] | undefined;
   constructor(

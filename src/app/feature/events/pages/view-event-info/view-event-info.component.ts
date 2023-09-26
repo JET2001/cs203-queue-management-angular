@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Event } from 'src/app/models/event';
 import { RegGroup } from 'src/app/models/reg-group';
@@ -11,18 +11,20 @@ import {
 } from 'src/app/shared/services/get-show-info/get-show-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { RegStatus } from '../../constants/reg-status';
+import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
+import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-view-event-info',
   templateUrl: './view-event-info.component.html',
   styleUrls: ['./view-event-info.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ViewEventInfoComponent implements OnInit {
-  eventID!: number | undefined;
-  userID!: number | undefined;
+  eventID!: string | undefined;
+  userID!: string | undefined;
 
   // Event information
   eventInfo!: Event;
@@ -42,6 +44,10 @@ export class ViewEventInfoComponent implements OnInit {
   // Variables for registration status
   registerStatus: RegStatus = RegStatus.NOT_LOGGED_IN;
 
+  // Stepper steps
+  steps: MenuItem[];
+  activeIndex: number = 0;
+
   // Utility variables
   hasEventLoaded: boolean = false;
   constructor(
@@ -52,7 +58,8 @@ export class ViewEventInfoComponent implements OnInit {
     private getShowInfoService: GetShowInfoService,
     private getUserInfoService: GetUserInfoService,
     private authService: AuthenticationService,
-    private storeRegGroupService: StoreRegistrationGroupInfoService
+    private storeRegGroupService: StoreRegistrationGroupInfoService,
+    private messageService: MessageService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -62,21 +69,68 @@ export class ViewEventInfoComponent implements OnInit {
       return;
     }
 
-    await this.getEventInfoService
-      .loadEvent(this.eventID)
-      .then((event: Event) => {
-        this.eventInfo = event;
-        this.hasEventLoaded = true;
-      });
+    this.steps = [
+      {
+        label: 'Register Group',
+        command: (event: any) =>
+          this.messageService.add({
+            severity: 'info',
+            summary: 'First Step',
+            detail: event.item.label,
+          }),
+      },
+      {
+        label: 'Group Members Confirmation',
+        command: (event: any) =>
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Second Step',
+            detail: event.item.label,
+          }),
+      },
+      {
+        label: 'Queue Registration',
+        command: (event: any) =>
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Third Step',
+            detail: event.item.label,
+          }),
+      },
+      {
+        label: 'Tickets Purchased',
+        command: (event: any) =>
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Fourth step',
+            detail: event.item.label,
+          }),
+      },
+    ];
 
-    await this.getShowInfoService
-      .loadShowInfo(this.eventID)
-      .then((showInfo: ShowInfo[] | undefined) => {
-        this.showInfo = showInfo;
-        if (this.showInfo != undefined) {
-          this._calculateEarliestAndLatestShow();
-        }
+    
+
+    // const temp = this.getEventInfoService.getEventInfo(this.eventID);
+    this.getEventInfoService
+      .getEventInfo(this.eventID)
+      .subscribe((data: any) => {
+        this.eventInfo = {
+          eventID: data.id,
+          name: data.name,
+          countries: [],
+          maxQueueable: data.maxQueueable,
+          description: data.description,
+          image: data.posterImagePath,
+          isHighlighted: data.highlighted,
+        };
       });
+    // if (temp == undefined) {
+    //   this.router.navigate(['/home']);
+    //   return;
+    // }
+    // this.eventInfo = temp;
+
+    this.hasEventLoaded = true;
 
     await this._updateUserEventInfo();
   }
@@ -86,7 +140,6 @@ export class ViewEventInfoComponent implements OnInit {
   // ===========================================
   async handleUserLoginLogoutChange(): Promise<void> {
     await this._updateUserEventInfo();
-    console.log('Completed!');
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
@@ -140,18 +193,40 @@ export class ViewEventInfoComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
 
-    await this.getRegGroupService
+    this.getRegGroupService
       .getRegGroupOfUser(this.eventID!, this.userID)
-      .then((group: RegGroup | undefined) => (this.userRegGroupInfo = group));
-    console.log('this.userRegGroupInfo = ', this.userRegGroupInfo);
+      .subscribe((regGroup: any) => {
+        this.userRegGroupInfo = regGroup;
+      });
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
     // see reg-status.ts file for the statuses.
     this._getRegistrationStatusOfUser();
 
+    this.activeIndex = this._mapRegStatusToRegStepper();
     await this._getUserRegGroupMemberInfo();
-    console.log('Email List = ' + this.otherMemberEmailList);
+  }
+
+  private _mapRegStatusToRegStepper(): number {
+    switch (this.registerStatus) {
+      case RegStatus.NOT_LOGGED_IN:
+      case RegStatus.NOT_REGISTERED:
+        return RegStepper.NOT_LOGGED_IN;
+      
+      case RegStatus.PENDING_CONFIRMATION:
+      case RegStatus.GROUP_CONFIRMED:
+        return RegStepper.PENDING_CONFIRMATION;
+      
+      case RegStatus.REGISTERED:
+        return RegStepper.REGISTERED;
+      
+      case RegStatus.PURCHASED:
+        return RegStepper.PURCHASED;
+      
+      default:
+        throw new Error('Invalid registration status');
+    }
   }
 
   private _calculateEarliestAndLatestShow(): void {

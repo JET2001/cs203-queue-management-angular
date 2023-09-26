@@ -1,43 +1,24 @@
 import { Injectable } from '@angular/core';
 import { events } from 'src/app/mock-db/MockDB';
 import { Event } from '../../../models/event';
+import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
-export class GetEventInfoService {
-  loadAllCarousellEvents(): Promise<Event[]> {
-    return Promise.resolve(this._getCarousellEventData());
+export class GetEventInfoService extends BaseRestApiService {
+  loadAllCarousellEvents(): Observable<any> {
+    return this.get('events/');
   }
 
-  loadAllEvents(): Promise<Event[]>{
-    return Promise.resolve(this._getAllEventData())
+  loadAllEvents(): Observable<any> {
+    return this.get('events/');
   }
 
-  loadEvent(eventID: number): Promise<Event> {
-    return Promise.resolve(this._getEventData(eventID));
-  }
-
-  private _getCarousellEventData(): Event[] {
-    let carousellEvents: Event[] = [];
-    for (let event of events) {
-      if (event.isHighlighted) {
-        this._buildEventSummary(event);
-        carousellEvents.push(event);
-      }
-    }
-    return carousellEvents;
-  }
-
-  private _getAllEventData(): Event[] {
-    let carousellEvents: Event[] = [];
-    for (let event of events) {
-        carousellEvents.push(event);
-    }
-    return carousellEvents;
-  }
-
-  private _getEventData(eventID: number): Event {
-    return events[eventID];
+  getEventInfo(eventID: string): Observable<any> {
+    return this.get('events/' + eventID);
   }
 
   private _buildEventSummary(event: Event): void {

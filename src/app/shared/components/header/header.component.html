@@ -11,7 +11,7 @@
     <app-text-button *ngIf="!isLoggedIn()"
       [buttonVariants]="'black'"
       [buttonText]="'LOGIN'"
-      (buttonClick)="loginUser()"
+      (buttonClick)="handleLoginButtonClick()"
     ></app-text-button>
     <app-text-button *ngIf="isLoggedIn()"
       [buttonVariants]="'black'"

@@ -4,6 +4,9 @@
 ></app-header>
 <div class="container-body">
   <div class="container-top">
+    <div class="stepper-container">
+      <p-steps [model]="steps" [activeIndex]="activeIndex"></p-steps>
+    </div>
     <div class="parent">
       <div class="event-title">
         <h1 *ngIf="hasEventLoaded">{{ eventInfo.name }}</h1>
@@ -48,6 +51,12 @@
             buttonVariants="primary"
             [isDisabled]="true"
             buttonText="PURCHASED"
+          ></app-text-button>
+        </div>
+        <div *ngSwitchCase="'6'">
+          <app-text-button
+            buttonVariants="successful"
+            buttonText="ACCEPT INVITATION"
           ></app-text-button>
         </div>
         <div *ngSwitchDefault>
