@@ -108,7 +108,7 @@ export class ViewEventInfoComponent implements OnInit {
       },
     ];
 
-    
+
 
     // const temp = this.getEventInfoService.getEventInfo(this.eventID);
     this.getEventInfoService
@@ -205,7 +205,7 @@ export class ViewEventInfoComponent implements OnInit {
     this._getRegistrationStatusOfUser();
 
     this.activeIndex = this._mapRegStatusToRegStepper();
-    await this._getUserRegGroupMemberInfo();
+    // await this._getUserRegGroupMemberInfo();
   }
 
   private _mapRegStatusToRegStepper(): number {
@@ -213,17 +213,17 @@ export class ViewEventInfoComponent implements OnInit {
       case RegStatus.NOT_LOGGED_IN:
       case RegStatus.NOT_REGISTERED:
         return RegStepper.NOT_LOGGED_IN;
-      
+
       case RegStatus.PENDING_CONFIRMATION:
       case RegStatus.GROUP_CONFIRMED:
         return RegStepper.PENDING_CONFIRMATION;
-      
+
       case RegStatus.REGISTERED:
         return RegStepper.REGISTERED;
-      
+
       case RegStatus.PURCHASED:
         return RegStepper.PURCHASED;
-      
+
       default:
         throw new Error('Invalid registration status');
     }
@@ -272,32 +272,32 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
-  private async _getUserRegGroupMemberInfo(): Promise<void> {
-    if (this.userRegGroupInfo) {
-      const groupUserIDs = this.userRegGroupInfo.userIDs;
-      for (let i = 0; i < groupUserIDs.length; ++i) {
-        if (groupUserIDs[i] != this.userID) {
-          await this.getUserInfoService
-            .loadUserInfo(groupUserIDs[i])
-            .then((user: User | undefined) => {
-              if (user == undefined) {
-                return;
-              }
-              this.otherMemberEmailList.push(user.email);
-              this.otherMemberConfirmList.push(
-                this.userRegGroupInfo!.confirmed[i]
-              );
-              this.otherMemberMobileList.push(user.mobileNo);
+  // private async _getUserRegGroupMemberInfo(): Promise<void> {
+  //   if (this.userRegGroupInfo) {
+  //     const groupUserIDs = this.userRegGroupInfo.userIDs;
+  //     for (let i = 0; i < groupUserIDs.length; ++i) {
+  //       if (groupUserIDs[i] != this.userID) {
+  //         await this.getUserInfoService
+  //           .loadUserInfo(groupUserIDs[i])
+  //           .then((user: User | undefined) => {
+  //             if (user == undefined) {
+  //               return;
+  //             }
+  //             this.otherMemberEmailList.push(user.email);
+  //             this.otherMemberConfirmList.push(
+  //               this.userRegGroupInfo!.confirmed[i]
+  //             );
+  //             this.otherMemberMobileList.push(user.mobileNo);
 
-              this.storeRegGroupService.emailList = this.otherMemberEmailList;
-              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-            });
-        } else {
-          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-        }
-      }
-    }
-  }
+  //             this.storeRegGroupService.emailList = this.otherMemberEmailList;
+  //             this.storeRegGroupService.mobileList = this.otherMemberMobileList;
+  //           });
+  //       } else {
+  //         this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
+  //       }
+  //     }
+  //   }
+  // }
 
   private _isEarlier(timeA: Date, timeB: Date): boolean {
     return timeA.getTime() - timeB.getTime() < 0;

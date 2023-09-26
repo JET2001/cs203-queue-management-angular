@@ -3,6 +3,8 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
+  HttpParamsOptions,
 } from '@angular/common/http';
 import { baseURL } from '../../constants/api-paths';
 import { Observable, tap } from 'rxjs';
@@ -54,6 +56,20 @@ export abstract class BaseRestApiService {
     return this.http.delete(`${baseURL}/${path}`, this.httpHeaders).pipe(
       tap({
         error: (error: HttpErrorResponse) => this.handleError(error),
+      })
+    );
+  }
+
+  // Get Request with Parameters.
+  protected getWithParams(path: string, params: HttpParams): Observable<any>{
+    // let headers = new HttpHeaders();
+    // headers = headers.append('Content-Type', 'application/json');
+    // console.log(headers);
+    const options = {params: params, headers: this.httpHeaders.headers};
+
+    return this.http.get(`${baseURL}/${path}`, options).pipe(
+      tap({
+        error:(error: HttpErrorResponse) => this.handleError(error)
       })
     );
   }

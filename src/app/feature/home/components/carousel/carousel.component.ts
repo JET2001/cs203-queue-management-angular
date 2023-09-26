@@ -46,9 +46,8 @@ export class CarouselComponent implements OnInit {
         eventTitle: eventSelected.name,
         maxQueueable: eventSelected.maxQueueable,
       };
+      this.router.navigate(['/events', 'register', 'group']);
     });
-
-    this.router.navigate(['/events', 'register', 'group']);
   }
 
   handleLearnMoreButtonClick(eventID: string): void {
