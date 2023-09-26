@@ -9,6 +9,8 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { ReplaySubject } from 'rxjs';
+import { User } from 'src/app/models/user';
+import {  RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 
 @Component({
   selector: 'app-group-registration',
@@ -66,8 +68,38 @@ export class GroupRegistrationComponent implements OnInit {
 
   confirm(): void {
     // Save to DB
-    // Route back to login
-    this.router.navigate(['/events']);
+    const emailList: string[] = [];
+    const mobileList: string[] = [];
+    for(let invitee of this.invitees){ //invitee is of type formcontrol
+      emailList.push(invitee[0].value);
+      mobileList.push(invitee[1].value);
+    }
+    // Load the user's ID
+    const user: User = this.authService.user!; // definitely won't be null, because of the authguard.
+    emailList.push(user.email);
+    mobileList.push(user.mobileNo);
+
+    const eventID : string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
+
+    this.storeRegGroupService.saveGroup(emailList, mobileList, user.email, eventID).subscribe(
+      (data: any) => {
+        const userRegGroup : RegGroupDTOResp = {
+          regGroupID: data.id,
+          eventId: data.eventId,
+          groupLeaderUserId: data.groupLeaderId,
+          groupLeaderEmail: data.groupLeaderEmail,
+          groupSize: data.groupSize,
+          userGroup: data.userGroup
+        };
+        this.storeRegGroupService.regGroup = userRegGroup;
+
+        this.router.navigate(['/events']);
+      },
+      (error: Error) => {
+        console.log(error.message);
+        this.router.navigate(['/events']);
+      }
+    );
   }
 
   backToConcert(): void {

@@ -14,11 +14,6 @@ export class GetUserInfoService extends BaseRestApiService {
   }
 
   loadUserInfo(email: string): Observable<any> {
-    // console.log("mobile = " + mobile + "email = " + email);
-    // let httpParams: HttpParams = new HttpParams();
-    // httpParams = httpParams.append("email", email);httpParams = httpParams.append("mobile", mobile);
-
-    // console.log("params= " + httpParams);
     return this.get('users/'+ email);
   }
 
