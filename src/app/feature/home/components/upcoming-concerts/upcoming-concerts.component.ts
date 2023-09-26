@@ -34,7 +34,6 @@ export class UpcomingConcertsComponent implements OnInit {
         };
         this.events.push(event);
       }
-
     });
   }
 
@@ -61,9 +60,8 @@ export class UpcomingConcertsComponent implements OnInit {
         eventTitle: event.name,
         maxQueueable: event.maxQueueable,
       };
+      this.router.navigate(['/events']);
     });
-
-    this.router.navigate(['/events', 'register', 'group']);
   }
 
   private _buildEventSummary(event: Event): void {
