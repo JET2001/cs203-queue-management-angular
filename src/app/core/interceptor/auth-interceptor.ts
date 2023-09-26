@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Check if this is an API call, if it is not, do not intercept
-    if (!(req.url.includes(`${baseURL}`))){
+    if (true){
       console.log("Not intercepted!");
       return next.handle(req);
     }

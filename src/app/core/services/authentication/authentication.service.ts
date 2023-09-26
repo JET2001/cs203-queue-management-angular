@@ -70,7 +70,7 @@ export class AuthenticationService extends BaseRestApiService {
     mobile: string,
     password: string
   ): Observable<any> {
-    return this.post('users/auth/login', {
+    return this.post('auth/login', {
       // TODO: This is supposed to be in the HTTPHeader, but i forgot about it when i was developing the login API, this should be changed in subsequent versions.
       email: email,
       mobile: mobile,
