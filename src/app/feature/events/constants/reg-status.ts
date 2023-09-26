@@ -8,3 +8,12 @@ export enum RegStatus {
 }
 
 export const MAX_REGISTRATION = 3;
+
+export enum RegStepper {
+  NOT_LOGGED_IN = 0,
+  NOT_REGISTERED = 0,
+  PENDING_CONFIRMATION = 1,
+  GROUP_CONFIRMED = 1,
+  REGISTERED = 2,
+  PURCHASED = 3,
+}

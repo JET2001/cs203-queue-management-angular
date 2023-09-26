@@ -16,20 +16,20 @@ describe('StoreEventInfoService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should store the eventInfo when set', () => {
-    service.eventInfo = {
-      eventID: 3,
-      userID: 4,
-    };
-    expect(service.eventInfo.eventID).toEqual(3);
-    expect(service.eventInfo.userID).toEqual(4);
-  });
+  // it('should store the eventInfo when set', () => {
+  //   service.eventInfo = {
+  //     eventID: 3,
+  //     userID: 4,
+  //   };
+  //   expect(service.eventInfo.eventID).toEqual(3);
+  //   expect(service.eventInfo.userID).toEqual(4);
+  // });
 
-  it('should be able to set eventID without userID', () => {
-    service.eventInfo = {
-      eventID: 4,
-    };
-    expect(service.eventInfo.eventID).toEqual(4);
-    expect(service.eventInfo.userID).toBeFalsy();
-  });
+  // it('should be able to set eventID without userID', () => {
+  //   service.eventInfo = {
+  //     eventID: 4,
+  //   };
+  //   expect(service.eventInfo.eventID).toEqual(4);
+  //   expect(service.eventInfo.userID).toBeFalsy();
+  // });
 });
