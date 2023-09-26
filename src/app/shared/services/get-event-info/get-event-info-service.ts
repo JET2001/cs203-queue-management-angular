@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 })
 export class GetEventInfoService extends BaseRestApiService {
   loadAllCarousellEvents(): Observable<any> {
-    return this.get('events/');
+    return this.get('events/highlighted');
   }
 
   loadAllEvents(): Observable<any> {

@@ -67,19 +67,33 @@ export class CarouselComponent implements OnInit {
         let event: Event = {
           eventID: obj.id,
           name: obj.name,
-          countries: [],
+          countries: obj.countries,
           maxQueueable: obj.maxQueueable,
           description: obj.description,
           image: obj.posterImagePath,
           isHighlighted: obj.highlighted,
         };
 
-        if (event.isHighlighted) {
-          this.events.push(event);
-        }
+        this._buildEventSummary(event);
 
-        this.isCarousellReady = true;
+        this.events.push(event);
+
       }
+      this.isCarousellReady = true;
     });
   }
+
+  private _buildEventSummary(event: Event): void {
+    let summaryStringBuilder = 'Coming to ';
+
+    // Build event summary
+    for (let i = 0; i < event.countries.length - 1; ++i) {
+      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ', ';
+    }
+
+    summaryStringBuilder +=
+      'and ' + event.countries[event.countries.length - 1];
+    event.summary = summaryStringBuilder + '!';
+  }
+
 }
