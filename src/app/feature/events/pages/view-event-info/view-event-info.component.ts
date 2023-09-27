@@ -175,7 +175,7 @@ export class ViewEventInfoComponent implements OnInit {
     if (
       this.userRegGroupInfo != undefined &&
       this.userRegGroupInfo.hasAllUsersConfirmed &&
-      this.userRegGroupInfo.queueIDs == undefined
+      this.userRegGroupInfo!.queueIDs == undefined
     ) {
       this.router.navigate(['/events', 'register', 'queue']);
     }

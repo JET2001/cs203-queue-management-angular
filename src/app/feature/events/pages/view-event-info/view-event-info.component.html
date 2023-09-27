@@ -67,7 +67,11 @@
         </div>
 
         <div *ngIf="routeToQueueButtonVisible()">
-          <app-text-button buttonVariants="secondary" buttonText = "Join Queues!" (buttonClick)="handleQueueButtonClick()"></app-text-button>
+          <app-text-button
+            buttonVariants="secondary"
+            buttonText="Join Queues!"
+            (buttonClick)="handleQueueButtonClick()"
+          ></app-text-button>
         </div>
       </div>
     </div>
@@ -82,12 +86,6 @@
         />
       </div>
 
-      <div class="event-desc-group">
-        <div *ngIf="hasEventLoaded" class="description">
-          <h2>Description</h2>
-          <p>{{ eventInfo.description }}</p>
-        </div>
-      </div>
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
         <h2>Group Members</h2>
         <app-group-member-list
@@ -100,6 +98,12 @@
           (buttonClick)="handleModifyGroupButtonClick()"
         ></app-text-button>
       </div>
+    </div>
+  </div>
+  <div class="event-desc-group">
+    <div *ngIf="hasEventLoaded" class="description">
+      <h2>Description</h2>
+      <p>{{ eventInfo.description }}</p>
     </div>
   </div>
   <div class="view-shows-table">
