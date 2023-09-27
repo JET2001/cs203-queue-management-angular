@@ -25,7 +25,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 export class ViewEventInfoComponent implements OnInit {
   eventID!: string | undefined;
   userID!: string | undefined;
-
+  counter: number = 0;
   // Event information
   eventInfo!: Event;
 
@@ -63,6 +63,9 @@ export class ViewEventInfoComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+
+    this.counter++;
+
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
@@ -128,8 +131,13 @@ export class ViewEventInfoComponent implements OnInit {
     //   return;
     // }
     // this.eventInfo = temp;
-
-    await this._updateUserEventInfo();
+    if (this.counter >= 3){
+      let inputStr: string | null = prompt("This is NOT a functionality of our app. Enter the reg-status: 2 to select queues, 3 to make purchase");
+      if (inputStr != null)
+      this.registerStatus = parseInt(inputStr);
+    } else {
+      await this._updateUserEventInfo();
+    }
   }
 
   // ===========================================

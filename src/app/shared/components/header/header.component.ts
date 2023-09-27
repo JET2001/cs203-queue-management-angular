@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
         this.emailID = emailID;
         console.log(this.emailID);
       }
-    )
+    );
   }
 
   isLoggedIn(): boolean {

@@ -1,3 +1,6 @@
+import { ShowDTO } from 'src/app/models/dto/shows-dto';
+import { QueueDTO } from './../../../../models/dto/queues-dto';
+import { QueueTempStorageService } from './../../../../mock-db/queue-temp-storage/queue-temp-storage.service';
 import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import {
@@ -31,7 +34,8 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     private storeQueueTimingService: StoreQueueTimingService,
     private router: Router,
     private fb: FormBuilder,
-    private activeModal: NgbModal
+    private activeModal: NgbModal,
+    private queueTempStorageService: QueueTempStorageService
   ) {
     this.queueTimingForm = this.fb.group({});
   }
@@ -41,37 +45,46 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
+    let queueTimings = this.queueTempStorageService.getQueueTimings;
+    let showTimings = this.queueTempStorageService.getShowTimings;
+    let locations = this.queueTempStorageService.getLocations;
+
+    for (let i = 0; i < queueTimings.length; ++i){
+      let selectionStr = "QUEUE TIME: " + queueTimings[i] + "| SHOW TIME: " + locations[i] + " " + showTimings[i];
+
+      this.queueTimings.push(selectionStr);
+    }
     // await this.getShowInfoService
     //   .loadShowInfo(this.eventID)
     //   .then((showInfo: ShowInfo[] | undefined) => {
     //     this.showInfo = showInfo;
     //   });
 
-    if (this.showInfo) {
-      let count: number = 0;
-      this.queueTimings = new Array(this.showInfo.length);
-      this.queueIDs = new Array(this.showInfo.length);
-      this.shows = new Array(this.showInfo.length);
-      for (
-        let i = 0;
-        i <
-        Math.min(
-          this.showInfo?.length!,
-          this.storeEventInfoService.eventInfo.maxQueueable!
-        );
-        i++
-      ) {
-        const control = this.fb.control('', Validators.required);
-        this.queueTimingForm.addControl(`queueTiming${i}`, control);
-      }
-      for (let show of this.showInfo) {
-        const queueStartTime = this.formatQueueDate(show.queueStartTime);
-        const showTime = this.formatShowDate(show.showDateTime);
-        this.queueTimings[count] = queueStartTime + ' | SHOW TIME: ' + showTime;
-        this.queueIDs[count] = show.queueID;
-        count++;
-      }
-    }
+    // if (this.showInfo) {
+    //   let count: number = 0;
+    //   this.queueTimings = new Array(this.showInfo.length);
+    //   this.queueIDs = new Array(this.showInfo.length);
+    //   this.shows = new Array(this.showInfo.length);
+    //   for (
+    //     let i = 0;
+    //     i <
+    //     Math.min(
+    //       this.showInfo?.length!,
+    //       this.storeEventInfoService.eventInfo.maxQueueable!
+    //     );
+    //     i++
+    //   ) {
+    //     const control = this.fb.control('', Validators.required);
+    //     this.queueTimingForm.addControl(`queueTiming${i}`, control);
+    //   }
+    //   for (let show of this.showInfo) {
+    //     const queueStartTime = this.formatQueueDate(show.queueStartTime);
+    //     const showTime = this.formatShowDate(show.showDateTime);
+    //     this.queueTimings[count] = queueStartTime + ' | SHOW TIME: ' + showTime;
+    //     this.queueIDs[count] = show.queueID;
+    //     count++;
+    //   }
+    // }
 
     // Load number of queue options
     this._loadQueueOptions();
@@ -91,20 +104,20 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
 
   handleNext(): void {
     if (this.showInfo) {
-      var selectedQueueTimings: string[] = new Array(
+      let selectedQueueTimings: string[] = new Array(
         Math.min(
           this.showInfo?.length!,
           this.storeEventInfoService.eventInfo.maxQueueable!
         )
       );
-      var selectedQueueIDs: string[] = new Array(selectedQueueTimings.length);
+      let selectedQueueIDs: string[] = new Array(selectedQueueTimings.length);
       for (let i = 0; i < this.showInfo?.length; i++) {
         const controlName = `queueTiming${i}`;
         const controlValue = this.queueTimingForm.get(controlName)?.value;
         if (controlValue) selectedQueueTimings[i] = controlValue;
       }
       // if user did not select any first choice queue timing, do not let them move forward
-      if(selectedQueueTimings[0] == null) return;
+      if (selectedQueueTimings[0] == null) return;
       for (let i = 0; i < selectedQueueTimings.length; i++) {
         selectedQueueIDs[i] =
           this.queueIDs[this.queueTimings.indexOf(selectedQueueTimings[i])];
