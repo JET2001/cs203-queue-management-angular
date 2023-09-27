@@ -78,26 +78,12 @@
         />
       </div>
 
-      <div class="event-info-group">
-        <h2>Event Details</h2>
-        <div *ngIf="datesAreValid()">
-          <p>
-            {{ earliestShowDate.toDateString() }} ~
-            {{ latestShowDate.toDateString() }}
-          </p>
-        </div>
-        <div class="concert-details-button">
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="View Seat Map"
-          ></app-text-button>
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="Conditions of Entry"
-          ></app-text-button>
+      <div class="event-desc-group">
+        <div *ngIf="hasEventLoaded" class="description">
+          <h2>Description</h2>
+          <p>{{ eventInfo.description }}</p>
         </div>
       </div>
-
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
         <h2>Group Members</h2>
         <app-group-member-list

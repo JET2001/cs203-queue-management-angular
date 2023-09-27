@@ -8,6 +8,7 @@ import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import { showTimes } from 'src/app/mock-db/MockDB-v2';
 import { ShowDTO } from 'src/app/models/dto/shows-dto';
+import { QueueTempStorageService } from 'src/app/mock-db/queue-temp-storage/queue-temp-storage.service';
 
 @Component({
   selector: 'app-view-shows',
@@ -27,7 +28,8 @@ export class ViewShowsComponent implements OnInit {
 
   constructor(
     private storeEventInfoService: StoreEventInfoService,
-    private getShowInfoService: GetShowInfoService
+    private getShowInfoService: GetShowInfoService,
+    private queueTempStorageService: QueueTempStorageService
   ) // private datePipe: DatePipe
   {}
 
@@ -35,15 +37,13 @@ export class ViewShowsComponent implements OnInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.getShowInfoService.loadShowInfo(this.eventID!).subscribe(
       (data: any) => {
+        this.queueTempStorageService.loadQueuesForShows(data).then();
         for (let obj of data) {
-          console.log(obj.dateTime, obj.locationName, obj.queueStartTime);
           this.showInfo.push({
             eventDateAndTime: obj.dateTime.toString(),
             venue: obj.locationName.toString(),
             queueStartTime: obj.queues[0].startDateTime.toString()
           });
-          // this.showInfo.push({location: obj.locationName});
-          // this.showInfo.push({queueStartTime: obj.queueStartTime});
         }
         this.loading = false;
       },

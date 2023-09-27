@@ -108,8 +108,6 @@ export class ViewEventInfoComponent implements OnInit {
       },
     ];
 
-
-
     // const temp = this.getEventInfoService.getEventInfo(this.eventID);
     this.getEventInfoService
       .getEventInfo(this.eventID)
@@ -121,16 +119,15 @@ export class ViewEventInfoComponent implements OnInit {
           maxQueueable: data.maxQueueable,
           description: data.description,
           image: data.posterImagePath,
-          isHighlighted: data.highlighted,
+          isHighlighted: data.highlighted
         };
+        this.hasEventLoaded = true;
       });
     // if (temp == undefined) {
     //   this.router.navigate(['/home']);
     //   return;
     // }
     // this.eventInfo = temp;
-
-    this.hasEventLoaded = true;
 
     await this._updateUserEventInfo();
   }
@@ -193,11 +190,11 @@ export class ViewEventInfoComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
 
-    this.getRegGroupService
-      .getRegGroupOfUser(this.eventID!, this.userID)
-      .subscribe((regGroup: any) => {
-        this.userRegGroupInfo = regGroup;
-      });
+    // this.getRegGroupService
+    //   .getRegGroupOfUser(this.eventID!, this.userID)
+    //   .subscribe((regGroup: any) => {
+    //     this.userRegGroupInfo = regGroup;
+    //   });
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
@@ -205,7 +202,6 @@ export class ViewEventInfoComponent implements OnInit {
     this._getRegistrationStatusOfUser();
 
     this.activeIndex = this._mapRegStatusToRegStepper();
-    // await this._getUserRegGroupMemberInfo();
   }
 
   private _mapRegStatusToRegStepper(): number {
