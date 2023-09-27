@@ -3,21 +3,38 @@ import { locations, queues, shows } from 'src/app/mock-db/MockDB';
 import { Queue } from 'src/app/models/queue';
 import { Location } from '../../../models/location';
 import { Show } from '../../../models/show';
+import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { showTimes } from 'src/app/mock-db/MockDB-v2';
 
 export interface ShowInfo extends Show, Queue, Location {}
 
 @Injectable({
   providedIn: 'root',
 })
-export class GetShowInfoService {
-  constructor() {}
+export class GetShowInfoService extends BaseRestApiService{
+  constructor(protected override http: HttpClient) {
+    super(http);
+  }
 
   // Load all shows for this event, load queue timings, location, and seat category.
-  loadShowInfo(eventID: string | undefined): Promise<ShowInfo[] | undefined> {
-    if (eventID == undefined) return Promise.resolve(undefined);
-
-    return Promise.resolve(this._getAllShowInfo(eventID));
+  loadShowInfo(eventID: string): Observable<any> {
+    try {
+      return this.get("events/" + eventID + "/shows");
+    }
+    catch(e) {
+      return of(showTimes); // json of the data that i want to see
+    }
   }
+
+
+
+  // loadShowInfo(eventID: string | undefined): Promise<ShowInfo[] | undefined> {
+  //   if (eventID == undefined) return Promise.resolve(undefined);
+
+  //   return Promise.resolve(this._getAllShowInfo(eventID));
+  // }
 
   private _getAllShowInfo(eventID: string): ShowInfo[] {
     let showInfo: ShowInfo[] = [];

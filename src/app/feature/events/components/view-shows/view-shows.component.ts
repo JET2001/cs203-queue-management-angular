@@ -5,6 +5,9 @@ import {
 } from 'src/app/shared/services/get-show-info/get-show-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Table } from 'primeng/table';
+import { DatePipe } from '@angular/common';
+import { showTimes } from 'src/app/mock-db/MockDB-v2';
+import { ShowDTO } from 'src/app/models/dto/shows-dto';
 
 @Component({
   selector: 'app-view-shows',
@@ -13,7 +16,7 @@ import { Table } from 'primeng/table';
 })
 export class ViewShowsComponent implements OnInit {
   eventID: string | undefined;
-  showInfo: any[];
+  showInfo: any[] = [];
   loading: boolean = true;
   @ViewChild('dt') dt: Table | undefined;
   columns: any[] = [
@@ -25,24 +28,25 @@ export class ViewShowsComponent implements OnInit {
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private getShowInfoService: GetShowInfoService
-  ) {}
+  ) // private datePipe: DatePipe
+  {}
 
-  async ngOnInit() {
+  ngOnInit(): void {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
-
-    await this.getShowInfoService
-      .loadShowInfo(this.eventID)
-      .then((showInfo: ShowInfo[] | undefined) => {
-        this.showInfo = new Array(showInfo?.length);
-        if (showInfo) {
-          showInfo.forEach((info: ShowInfo) => {
-            this.showInfo.push({
-              eventDateAndTime: info.showDateTime,
-              venue: info.locationName,
-              queueStartTime: info.queueStartTime,
-            });
+    this.getShowInfoService.loadShowInfo(this.eventID!).subscribe(
+      (data: any) => {
+        for (let obj of data) {
+          console.log(obj.dateTime, obj.locationName, obj.queueStartTime);
+          this.showInfo.push({
+            eventDateAndTime: obj.dateTime.toString(),
+            venue: obj.locationName.toString(),
+            queueStartTime: obj.queues[0].startDateTime.toString()
           });
+          // this.showInfo.push({location: obj.locationName});
+          // this.showInfo.push({queueStartTime: obj.queueStartTime});
         }
-      });
+        this.loading = false;
+      },
+    );
   }
 }

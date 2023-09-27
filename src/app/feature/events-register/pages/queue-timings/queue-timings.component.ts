@@ -41,11 +41,11 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
-    await this.getShowInfoService
-      .loadShowInfo(this.eventID)
-      .then((showInfo: ShowInfo[] | undefined) => {
-        this.showInfo = showInfo;
-      });
+    // await this.getShowInfoService
+    //   .loadShowInfo(this.eventID)
+    //   .then((showInfo: ShowInfo[] | undefined) => {
+    //     this.showInfo = showInfo;
+    //   });
 
     if (this.showInfo) {
       let count: number = 0;
