@@ -40,6 +40,7 @@ export class ViewShowsComponent implements OnInit {
         this.queueTempStorageService.loadQueuesForShows(data).then();
         for (let obj of data) {
           this.showInfo.push({
+            queueID: obj.queueId,
             eventDateAndTime: obj.dateTime.toString(),
             venue: obj.locationName.toString(),
             queueStartTime: obj.queues[0].startDateTime.toString()

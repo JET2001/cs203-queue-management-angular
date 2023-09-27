@@ -8,7 +8,7 @@ import { Show } from 'src/app/models/show';
 })
 export class QueueTempStorageService {
   constructor() {}
-
+  queueIds: string[];
   queueTimings: string[];
   showTimings: string[];
   locations: string[];
@@ -17,8 +17,10 @@ export class QueueTempStorageService {
     this.queueTimings = new Array();
     this.showTimings = new Array();
     this.locations = new Array();
+    this.queueIds = new Array();
     for (let obj of data) {
       for (let queue of obj.queues) {
+        this.queueIds.push(obj.queueId)
         this.queueTimings.push(queue.startDateTime);
         this.showTimings.push(obj.dateTime);
         this.locations.push(obj.locationName);
@@ -34,5 +36,9 @@ export class QueueTempStorageService {
   }
   public get getLocations(): string[] {
     return this.locations;
+  }
+
+  public get getQueueIds(): string[] {
+    return this.queueIds;
   }
 }
