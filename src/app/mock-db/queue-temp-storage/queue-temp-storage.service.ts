@@ -10,11 +10,14 @@ export class QueueTempStorageService {
 
   constructor() { }
 
-  queueTimings: string[] = [];
-  showTimings: string[] = [];
-  locations: string[] = [];
+  queueTimings: string[];
+  showTimings: string[];
+  locations: string[];
 
   public async loadQueuesForShows(data: any) : Promise<void> {
+    this.queueTimings = new Array();
+    this.showTimings = new Array();
+    this.locations = new Array();
     for (let obj of data){
       for (let queue of obj.queues){
         this.queueTimings.push(queue.startDateTime);
