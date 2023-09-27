@@ -87,7 +87,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
       let i = 0;
       i <
       Math.min(
-        // this.showInfo?.length!,
+        4, // changed for demo
         this.queueTimings.length
       );
       i++
@@ -207,7 +207,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
       let i: number = 0;
       i <
       Math.min(
-        // this.showInfo?.length!,
+        4,// this.showInfo?.length!,
         this.queueTimings.length
       );
       i++
