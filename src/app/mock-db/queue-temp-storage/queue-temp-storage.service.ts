@@ -17,7 +17,7 @@ export class QueueTempStorageService {
   public async loadQueuesForShows(data: any) : Promise<void> {
     for (let obj of data){
       for (let queue of obj.queues){
-        this.queueTimings.push(queue.queueStartTime);
+        this.queueTimings.push(queue.startDateTime);
         this.showTimings.push(obj.dateTime);
         this.locations.push(obj.locationName);
       }

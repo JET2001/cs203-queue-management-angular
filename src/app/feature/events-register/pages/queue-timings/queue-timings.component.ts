@@ -1,17 +1,15 @@
-import { ShowDTO } from 'src/app/models/dto/shows-dto';
-import { QueueDTO } from './../../../../models/dto/queues-dto';
-import { QueueTempStorageService } from './../../../../mock-db/queue-temp-storage/queue-temp-storage.service';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
+import { QueueTempStorageService } from './../../../../mock-db/queue-temp-storage/queue-temp-storage.service';
 import {
   GetShowInfoService,
   ShowInfo,
 } from './../../../../shared/services/get-show-info/get-show-info.service';
-import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
 
 @Component({
   selector: 'app-queue-timings',
@@ -49,11 +47,16 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     let showTimings = this.queueTempStorageService.getShowTimings;
     let locations = this.queueTempStorageService.getLocations;
 
+    this.queueTimings = new Array();
     for (let i = 0; i < queueTimings.length; ++i){
       let selectionStr = "QUEUE TIME: " + queueTimings[i] + "| SHOW TIME: " + locations[i] + " " + showTimings[i];
 
       this.queueTimings.push(selectionStr);
     }
+
+    // this.getShowInfoService.loadShowInfo(this.eventID!).subscribe((data: any) => {
+      
+    // })
     // await this.getShowInfoService
     //   .loadShowInfo(this.eventID)
     //   .then((showInfo: ShowInfo[] | undefined) => {
