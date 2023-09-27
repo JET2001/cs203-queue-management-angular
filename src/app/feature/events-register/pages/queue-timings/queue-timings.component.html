@@ -16,10 +16,6 @@
     />
   </div>
 
-  <div *ngFor="let queue of queueTimings">
-    {{ queue }}
-  </div>
-
   <form [formGroup]="queueTimingForm">
     <div
       *ngFor="let optionNo of queueOptions"
