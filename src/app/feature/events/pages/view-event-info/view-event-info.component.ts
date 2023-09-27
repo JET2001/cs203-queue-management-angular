@@ -15,6 +15,7 @@ import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { MenuItem, MessageService } from 'primeng/api';
+import { DelayCounter } from 'src/app/mock-db/DelayCounter';
 
 @Component({
   selector: 'app-view-event-info',
@@ -25,7 +26,6 @@ import { MenuItem, MessageService } from 'primeng/api';
 export class ViewEventInfoComponent implements OnInit {
   eventID!: string | undefined;
   userID!: string | undefined;
-  counter: number = 0;
   // Event information
   eventInfo!: Event;
 
@@ -59,18 +59,21 @@ export class ViewEventInfoComponent implements OnInit {
     private getUserInfoService: GetUserInfoService,
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
-    private messageService: MessageService
+    private messageService: MessageService,
+
+    private delayCounter: DelayCounter // for demo only.
   ) {}
 
   async ngOnInit(): Promise<void> {
-
-    this.counter++;
-
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
       return;
     }
+
+    if (this.delayCounter.value <= 2) {
+      this.delayCounter.setCounter = this.delayCounter.value+1;
+    } 
 
     this.steps = [
       {
@@ -122,7 +125,7 @@ export class ViewEventInfoComponent implements OnInit {
           maxQueueable: data.maxQueueable,
           description: data.description,
           image: data.posterImagePath,
-          isHighlighted: data.highlighted
+          isHighlighted: data.highlighted,
         };
         this.hasEventLoaded = true;
       });
@@ -131,15 +134,10 @@ export class ViewEventInfoComponent implements OnInit {
     //   return;
     // }
     // this.eventInfo = temp;
-    if (this.counter >= 3){
-      let inputStr: string | null = prompt("This is NOT a functionality of our app. Enter the reg-status: 2 to select queues, 3 to make purchase");
-      if (inputStr != null)
-      this.registerStatus = parseInt(inputStr);
-    } else {
-      await this._updateUserEventInfo();
-    }
+    await this._updateUserEventInfo();
   }
 
+  ngAfterContentInit(): void {}
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
@@ -317,5 +315,19 @@ export class ViewEventInfoComponent implements OnInit {
     this.otherMemberMobileList = [];
     this.otherMemberConfirmList = [];
     this.hasUserConfirmed = false;
+  }
+
+
+
+
+//====================
+// DEMO ONLY
+// ==================
+  routeToQueueButtonVisible(): boolean {
+    return this.delayCounter.value > 2;
+  }
+
+  handleQueueButtonClick(): void {
+    this.router.navigate(['/events','register', 'queue']);
   }
 }

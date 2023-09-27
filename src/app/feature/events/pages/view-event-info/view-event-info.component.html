@@ -65,6 +65,10 @@
             buttonText="INTERNAL ERROR"
           ></app-text-button>
         </div>
+
+        <div *ngIf="routeToQueueButtonVisible()">
+          <app-text-button buttonVariants="secondary" buttonText = "Join Queues!" (buttonClick)="handleQueueButtonClick()"></app-text-button>
+        </div>
       </div>
     </div>
   </div>
