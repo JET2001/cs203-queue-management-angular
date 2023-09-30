@@ -5,8 +5,7 @@ import { Location } from '../../../models/location';
 import { Show } from '../../../models/show';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { showTimes } from 'src/app/mock-db/MockDB-v2';
+import { Observable } from 'rxjs';
 
 export interface ShowInfo extends Show, Queue, Location {}
 
@@ -20,12 +19,8 @@ export class GetShowInfoService extends BaseRestApiService{
 
   // Load all shows for this event, load queue timings, location, and seat category.
   loadShowInfo(eventID: string): Observable<any> {
-    try {
-      return this.get("events/" + eventID + "/shows");
-    }
-    catch(e) {
-      return of(showTimes); // json of the data that i want to see
-    }
+    return this.get("events/" + eventID + "/shows");
+
   }
 
 
