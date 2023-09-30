@@ -13,7 +13,7 @@ export const eventRegisterRoutes : Routes = [
   {
     path: 'queue',
     component: QueueTimingsComponent,
-    canActivate:[queueRegisterGuard()]
+    // canActivate:[queueRegisterGuard()]  //LEFT OUT FOR DEMO ONLY
   },
   {
     path: 'preview',

@@ -15,6 +15,7 @@ import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { MenuItem, MessageService } from 'primeng/api';
+import { DelayCounter } from 'src/app/mock-db/DelayCounter';
 
 @Component({
   selector: 'app-view-event-info',
@@ -25,7 +26,6 @@ import { MenuItem, MessageService } from 'primeng/api';
 export class ViewEventInfoComponent implements OnInit {
   eventID!: string | undefined;
   userID!: string | undefined;
-
   // Event information
   eventInfo!: Event;
 
@@ -59,7 +59,9 @@ export class ViewEventInfoComponent implements OnInit {
     private getUserInfoService: GetUserInfoService,
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
-    private messageService: MessageService
+    private messageService: MessageService,
+
+    private delayCounter: DelayCounter // for demo only.
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -68,6 +70,10 @@ export class ViewEventInfoComponent implements OnInit {
       this.router.navigate(['/home']);
       return;
     }
+
+    if (this.delayCounter.value <= 2) {
+      this.delayCounter.setCounter = this.delayCounter.value+1;
+    } 
 
     this.steps = [
       {
@@ -108,8 +114,6 @@ export class ViewEventInfoComponent implements OnInit {
       },
     ];
 
-    
-
     // const temp = this.getEventInfoService.getEventInfo(this.eventID);
     this.getEventInfoService
       .getEventInfo(this.eventID)
@@ -123,18 +127,17 @@ export class ViewEventInfoComponent implements OnInit {
           image: data.posterImagePath,
           isHighlighted: data.highlighted,
         };
+        this.hasEventLoaded = true;
       });
     // if (temp == undefined) {
     //   this.router.navigate(['/home']);
     //   return;
     // }
     // this.eventInfo = temp;
-
-    this.hasEventLoaded = true;
-
     await this._updateUserEventInfo();
   }
 
+  ngAfterContentInit(): void {}
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
@@ -172,7 +175,7 @@ export class ViewEventInfoComponent implements OnInit {
     if (
       this.userRegGroupInfo != undefined &&
       this.userRegGroupInfo.hasAllUsersConfirmed &&
-      this.userRegGroupInfo.queueIDs == undefined
+      this.userRegGroupInfo!.queueIDs == undefined
     ) {
       this.router.navigate(['/events', 'register', 'queue']);
     }
@@ -193,11 +196,11 @@ export class ViewEventInfoComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
 
-    this.getRegGroupService
-      .getRegGroupOfUser(this.eventID!, this.userID)
-      .subscribe((regGroup: any) => {
-        this.userRegGroupInfo = regGroup;
-      });
+    // this.getRegGroupService
+    //   .getRegGroupOfUser(this.eventID!, this.userID)
+    //   .subscribe((regGroup: any) => {
+    //     this.userRegGroupInfo = regGroup;
+    //   });
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
@@ -205,7 +208,6 @@ export class ViewEventInfoComponent implements OnInit {
     this._getRegistrationStatusOfUser();
 
     this.activeIndex = this._mapRegStatusToRegStepper();
-    await this._getUserRegGroupMemberInfo();
   }
 
   private _mapRegStatusToRegStepper(): number {
@@ -213,17 +215,17 @@ export class ViewEventInfoComponent implements OnInit {
       case RegStatus.NOT_LOGGED_IN:
       case RegStatus.NOT_REGISTERED:
         return RegStepper.NOT_LOGGED_IN;
-      
+
       case RegStatus.PENDING_CONFIRMATION:
       case RegStatus.GROUP_CONFIRMED:
         return RegStepper.PENDING_CONFIRMATION;
-      
+
       case RegStatus.REGISTERED:
         return RegStepper.REGISTERED;
-      
+
       case RegStatus.PURCHASED:
         return RegStepper.PURCHASED;
-      
+
       default:
         throw new Error('Invalid registration status');
     }
@@ -272,32 +274,32 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
-  private async _getUserRegGroupMemberInfo(): Promise<void> {
-    if (this.userRegGroupInfo) {
-      const groupUserIDs = this.userRegGroupInfo.userIDs;
-      for (let i = 0; i < groupUserIDs.length; ++i) {
-        if (groupUserIDs[i] != this.userID) {
-          await this.getUserInfoService
-            .loadUserInfo(groupUserIDs[i])
-            .then((user: User | undefined) => {
-              if (user == undefined) {
-                return;
-              }
-              this.otherMemberEmailList.push(user.email);
-              this.otherMemberConfirmList.push(
-                this.userRegGroupInfo!.confirmed[i]
-              );
-              this.otherMemberMobileList.push(user.mobileNo);
+  // private async _getUserRegGroupMemberInfo(): Promise<void> {
+  //   if (this.userRegGroupInfo) {
+  //     const groupUserIDs = this.userRegGroupInfo.userIDs;
+  //     for (let i = 0; i < groupUserIDs.length; ++i) {
+  //       if (groupUserIDs[i] != this.userID) {
+  //         await this.getUserInfoService
+  //           .loadUserInfo(groupUserIDs[i])
+  //           .then((user: User | undefined) => {
+  //             if (user == undefined) {
+  //               return;
+  //             }
+  //             this.otherMemberEmailList.push(user.email);
+  //             this.otherMemberConfirmList.push(
+  //               this.userRegGroupInfo!.confirmed[i]
+  //             );
+  //             this.otherMemberMobileList.push(user.mobileNo);
 
-              this.storeRegGroupService.emailList = this.otherMemberEmailList;
-              this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-            });
-        } else {
-          this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-        }
-      }
-    }
-  }
+  //             this.storeRegGroupService.emailList = this.otherMemberEmailList;
+  //             this.storeRegGroupService.mobileList = this.otherMemberMobileList;
+  //           });
+  //       } else {
+  //         this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
+  //       }
+  //     }
+  //   }
+  // }
 
   private _isEarlier(timeA: Date, timeB: Date): boolean {
     return timeA.getTime() - timeB.getTime() < 0;
@@ -313,5 +315,19 @@ export class ViewEventInfoComponent implements OnInit {
     this.otherMemberMobileList = [];
     this.otherMemberConfirmList = [];
     this.hasUserConfirmed = false;
+  }
+
+
+
+
+//====================
+// DEMO ONLY
+// ==================
+  routeToQueueButtonVisible(): boolean {
+    return this.delayCounter.value > 2;
+  }
+
+  handleQueueButtonClick(): void {
+    this.router.navigate(['/events','register', 'queue']);
   }
 }
