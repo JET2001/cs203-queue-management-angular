@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
 export interface EventInfoParams {
-  eventID?: number; // optional arguments
+  eventID?: string; // optional arguments
   eventTitle?: string;
-  userID?: number;
-  groupID?: number;
-  queueID?: number[];
+  userID?: string;
+  groupID?: string;
+  queueID?: string[];
   maxQueueable?: number;
 }
 

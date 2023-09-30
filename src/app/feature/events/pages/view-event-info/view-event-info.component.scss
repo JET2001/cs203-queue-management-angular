@@ -1,3 +1,13 @@
+@import "/src/styles.scss";
+
+.stepper-container {
+  margin-bottom: 40px;
+}
+
+.p-steps .p-steps-item .p-menuitem-link {
+  background: none;
+}
+
 .container-body {
   padding-left: 89px;
   padding-top: 44px;
@@ -29,4 +39,12 @@
 
 .view-shows-table {
   margin-top: 20px;
+}
+
+.event-desc-group {
+  margin-top: 20px;
+}
+
+.queue-button {
+  margin-top: 10px;
 }

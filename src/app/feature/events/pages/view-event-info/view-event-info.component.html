@@ -4,6 +4,9 @@
 ></app-header>
 <div class="container-body">
   <div class="container-top">
+    <div class="stepper-container">
+      <p-steps [model]="steps" [activeIndex]="activeIndex"></p-steps>
+    </div>
     <div class="parent">
       <div class="event-title">
         <h1 *ngIf="hasEventLoaded">{{ eventInfo.name }}</h1>
@@ -50,10 +53,24 @@
             buttonText="PURCHASED"
           ></app-text-button>
         </div>
+        <div *ngSwitchCase="'6'">
+          <app-text-button
+            buttonVariants="successful"
+            buttonText="ACCEPT INVITATION"
+          ></app-text-button>
+        </div>
         <div *ngSwitchDefault>
           <app-text-button
             buttonVariants="warning"
             buttonText="INTERNAL ERROR"
+          ></app-text-button>
+        </div>
+
+        <div *ngIf="routeToQueueButtonVisible()" class="queue-button">
+          <app-text-button
+            buttonVariants="secondary"
+            buttonText="Join Queues!"
+            (buttonClick)="handleQueueButtonClick()"
           ></app-text-button>
         </div>
       </div>
@@ -69,26 +86,6 @@
         />
       </div>
 
-      <div class="event-info-group">
-        <h2>Event Details</h2>
-        <div *ngIf="datesAreValid()">
-          <p>
-            {{ earliestShowDate.toDateString() }} ~
-            {{ latestShowDate.toDateString() }}
-          </p>
-        </div>
-        <div class="concert-details-button">
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="View Seat Map"
-          ></app-text-button>
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="Conditions of Entry"
-          ></app-text-button>
-        </div>
-      </div>
-
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
         <h2>Group Members</h2>
         <app-group-member-list
@@ -101,6 +98,12 @@
           (buttonClick)="handleModifyGroupButtonClick()"
         ></app-text-button>
       </div>
+    </div>
+  </div>
+  <div class="event-desc-group">
+    <div *ngIf="hasEventLoaded" class="description">
+      <h2>Description</h2>
+      <p>{{ eventInfo.description }}</p>
     </div>
   </div>
   <div class="view-shows-table">

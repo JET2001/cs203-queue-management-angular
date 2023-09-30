@@ -5,7 +5,11 @@ import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { of } from 'rxjs';
 import { baseURL } from '../../constants/api-paths';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 class TestingApiService1 extends BaseRestApiService {
   protected override httpHeaders = {
     headers: new HttpHeaders({
@@ -28,7 +32,7 @@ describe('BaseRestApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedModule],
-      providers: [HttpClient, TestingApiService1, HttpHandler]
+      providers: [HttpClient, TestingApiService1, HttpHandler],
     });
     service = TestBed.inject(TestingApiService1);
     http = TestBed.inject(HttpClient);
@@ -37,5 +41,4 @@ describe('BaseRestApiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
 });

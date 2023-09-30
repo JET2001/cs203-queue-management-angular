@@ -9,6 +9,8 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { ReplaySubject } from 'rxjs';
+import { User } from 'src/app/models/user';
+import {  RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 
 @Component({
   selector: 'app-group-registration',
@@ -17,8 +19,8 @@ import { ReplaySubject } from 'rxjs';
 })
 export class GroupRegistrationComponent implements OnInit {
   // Fields
-  eventID!: number | undefined;
-  groupID!: number | undefined;
+  eventID!: string | undefined;
+  groupID!: string | undefined;
   eventTitle!: string | undefined;
   verified: boolean;
   keyStrokeDetected: boolean = false;
@@ -66,8 +68,38 @@ export class GroupRegistrationComponent implements OnInit {
 
   confirm(): void {
     // Save to DB
-    // Route back to login
-    this.router.navigate(['/events']);
+    const emailList: string[] = [];
+    const mobileList: string[] = [];
+    for(let invitee of this.invitees){ //invitee is of type formcontrol
+      emailList.push(invitee[0].value);
+      mobileList.push(invitee[1].value);
+    }
+    // Load the user's ID
+    const user: User = this.authService.user!; // definitely won't be null, because of the authguard.
+    emailList.push(user.email);
+    mobileList.push(user.mobileNo);
+
+    const eventID : string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
+
+    this.storeRegGroupService.saveGroup(emailList, mobileList, user.email, eventID).subscribe(
+      (data: any) => {
+        const userRegGroup : RegGroupDTOResp = {
+          regGroupID: data.id,
+          eventId: data.eventId,
+          groupLeaderUserId: data.groupLeaderId,
+          groupLeaderEmail: data.groupLeaderEmail,
+          groupSize: data.groupSize,
+          userGroup: data.userGroup
+        };
+        this.storeRegGroupService.regGroup = userRegGroup;
+
+        this.router.navigate(['/events']);
+      },
+      (error: Error) => {
+        // console.log(error.message);
+        this.router.navigate(['/events']);
+      }
+    );
   }
 
   backToConcert(): void {
@@ -75,7 +107,7 @@ export class GroupRegistrationComponent implements OnInit {
   }
 
   onTextChange(): void {
-    console.log("text changed");
+    // console.log("text changed");
     this.verified = false;
   }
 
@@ -87,9 +119,9 @@ export class GroupRegistrationComponent implements OnInit {
 
       this.verified = (result0 && result1 && result2);
       // Use the boolean values in the verify function
-      console.log('Result for inviteeNum 0:', result0);
-      console.log('Result for inviteeNum 1:', result1);
-      console.log('Result for inviteeNum 2:', result2);
+      // console.log('Result for inviteeNum 0:', result0);
+      // console.log('Result for inviteeNum 1:', result1);
+      // console.log('Result for inviteeNum 2:', result2);
     } catch (error) {
       console.error('An error occurred in verify():', error);
     }
@@ -122,19 +154,19 @@ export class GroupRegistrationComponent implements OnInit {
         this.invitees[inviteeNum][0].value !== '' &&
         this.invitees[inviteeNum][1].value !== ''
       ) {
-        console.log('Starting promise resolution...');
+        // console.log('Starting promise resolution...');
         this.getUserInfoService
           .getUserID(
             this.invitees[inviteeNum][0].value,
             this.invitees[inviteeNum][1].value
           )
           .then((retrievedId) => {
-            console.log('Promise resolved with:', retrievedId);
+            // console.log('Promise resolved with:', retrievedId);
             if (retrievedId !== undefined) {
-              console.log(`User ID: ${retrievedId}`);
+              // console.log(`User ID: ${retrievedId}`);
               Valid = true;
             } else {
-              console.log('User not found.');
+              // console.log('User not found.');
               Valid = false;
             }
             resolve(Valid);
@@ -143,7 +175,7 @@ export class GroupRegistrationComponent implements OnInit {
             console.error('An error occurred:', error);
             reject(error);
           });
-        console.log('Promise request sent...');
+        // console.log('Promise request sent...');
       } else {
         resolve(Valid);
       }
