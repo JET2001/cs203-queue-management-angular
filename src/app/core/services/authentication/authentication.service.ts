@@ -85,7 +85,7 @@ export class AuthenticationService extends BaseRestApiService {
       "mobile": data.mobile,
       "password": data.password
     });
-    console.log("auth headers =" + headers.get('email') + " " + headers.get('mobile') + " " + headers.get('password'));
+    // console.log("auth headers =" + headers.get('email') + " " + headers.get('mobile') + " " + headers.get('password'));
     // headers.set('Content-Type', 'text/plain; charset=utf-8');
     return this.http.post(`${baseURL}/${path}`, {},{
       headers,

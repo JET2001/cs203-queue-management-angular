@@ -51,7 +51,7 @@ export class CarouselComponent implements OnInit {
   }
 
   handleLearnMoreButtonClick(eventID: string): void {
-    console.log(eventID);
+    // console.log(eventID);
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
     };
