@@ -29,9 +29,9 @@ export class HeaderComponent implements OnInit {
     this.email$.subscribe(
       (emailID: string | undefined) => {
         this.emailID = emailID;
-        console.log(this.emailID);
+        // console.log(this.emailID);
       }
-    )
+    );
   }
 
   isLoggedIn(): boolean {

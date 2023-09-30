@@ -7,6 +7,7 @@ import { BaseRestApiService } from '../base-rest-api/base-rest-api.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { baseURL } from '../../constants/api-paths';
+import { User } from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,12 @@ export class AuthenticationService extends BaseRestApiService {
   private _userID: string | undefined = undefined;
   private _email: string | undefined = undefined;
 
-  private _emailSubject : BehaviorSubject<string | undefined> = new BehaviorSubject(this._email);
-  public email$: Observable<string | undefined> = this._emailSubject.asObservable();
+  private _userObject: User | undefined = undefined;
+
+  private _emailSubject: BehaviorSubject<string | undefined> =
+    new BehaviorSubject(this._email);
+  public email$: Observable<string | undefined> =
+    this._emailSubject.asObservable();
 
   constructor(
     private activeModal: NgbModal,
@@ -26,7 +31,15 @@ export class AuthenticationService extends BaseRestApiService {
     super(http);
   }
 
-  public get emailSubject() : BehaviorSubject<string | undefined> {
+  public get user(): User | undefined {
+    return this._userObject;
+  }
+
+  public set user(user: User | undefined) {
+    this._userObject = user;
+  }
+
+  public get emailSubject(): BehaviorSubject<string | undefined> {
     return this._emailSubject;
   }
   // userIDSubject : BehaviorSubject<string | undefined> = new B
@@ -38,15 +51,10 @@ export class AuthenticationService extends BaseRestApiService {
     this._userID = userID;
   }
   public get isLoggedIn(): boolean {
-    return this._userID != undefined;
+    return this._userObject != undefined && this.localStorageService.userToken != null;
   }
   public get isVerified(): boolean {
-    if (!this.isLoggedIn) return false;
-
-    for (let user of Users) {
-      if (user.userID == this._userID) return user.isVerified;
-    }
-    return false;
+    return this._userObject != undefined ? this._userObject.isVerified : false;
   }
 
   public saveAuthToken(authToken: string) {
@@ -62,24 +70,27 @@ export class AuthenticationService extends BaseRestApiService {
     mobile: string,
     password: string
   ): Observable<any> {
-    return this.post('users/auth/login', {
-      // TODO: This is supposed to be in the HTTPHeader, but i forgot about it when i was developing the login API, this should be changed in subsequent versions.
+    return this.post('auth/login', {
       email: email,
       mobile: mobile,
       password: password,
     });
   }
 
-  // We must modify this in order for the JWT Token to be interpreted correctly.
+  // We must modify the responseType and headers in order to use the login API.
   protected override post(path: string, data: any): Observable<any> {
-    let headers : HttpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json'
+    let headers: HttpHeaders = new HttpHeaders({
+      // 'Content-Type': 'application/json',
+      "email": data.email,
+      "mobile": data.mobile,
+      "password": data.password
     });
+    // console.log("auth headers =" + headers.get('email') + " " + headers.get('mobile') + " " + headers.get('password'));
     // headers.set('Content-Type', 'text/plain; charset=utf-8');
-    return this.http.post(`${baseURL}/${path}`,
-      data,
-      { headers , responseType:'text'}
-    )
+    return this.http.post(`${baseURL}/${path}`, {},{
+      headers,
+      responseType: 'text',
+    });
   }
 
   public get email(): string | undefined {

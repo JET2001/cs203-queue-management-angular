@@ -3,21 +3,33 @@ import { locations, queues, shows } from 'src/app/mock-db/MockDB';
 import { Queue } from 'src/app/models/queue';
 import { Location } from '../../../models/location';
 import { Show } from '../../../models/show';
+import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface ShowInfo extends Show, Queue, Location {}
 
 @Injectable({
   providedIn: 'root',
 })
-export class GetShowInfoService {
-  constructor() {}
+export class GetShowInfoService extends BaseRestApiService{
+  constructor(protected override http: HttpClient) {
+    super(http);
+  }
 
   // Load all shows for this event, load queue timings, location, and seat category.
-  loadShowInfo(eventID: string | undefined): Promise<ShowInfo[] | undefined> {
-    if (eventID == undefined) return Promise.resolve(undefined);
+  loadShowInfo(eventID: string): Observable<any> {
+    return this.get("events/" + eventID + "/shows");
 
-    return Promise.resolve(this._getAllShowInfo(eventID));
   }
+
+
+
+  // loadShowInfo(eventID: string | undefined): Promise<ShowInfo[] | undefined> {
+  //   if (eventID == undefined) return Promise.resolve(undefined);
+
+  //   return Promise.resolve(this._getAllShowInfo(eventID));
+  // }
 
   private _getAllShowInfo(eventID: string): ShowInfo[] {
     let showInfo: ShowInfo[] = [];
