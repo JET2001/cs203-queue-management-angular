@@ -5,9 +5,6 @@ import {
 } from 'src/app/shared/services/get-show-info/get-show-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Table } from 'primeng/table';
-import { DatePipe } from '@angular/common';
-import { showTimes } from 'src/app/mock-db/MockDB-v2';
-import { ShowDTO } from 'src/app/models/dto/shows-dto';
 import { QueueTempStorageService } from 'src/app/mock-db/queue-temp-storage/queue-temp-storage.service';
 
 @Component({

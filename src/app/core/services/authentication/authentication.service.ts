@@ -71,20 +71,23 @@ export class AuthenticationService extends BaseRestApiService {
     password: string
   ): Observable<any> {
     return this.post('auth/login', {
-      // TODO: This is supposed to be in the HTTPHeader, but i forgot about it when i was developing the login API, this should be changed in subsequent versions.
       email: email,
       mobile: mobile,
       password: password,
     });
   }
 
-  // We must modify this in order for the JWT Token to be interpreted correctly.
+  // We must modify the responseType and headers in order to use the login API.
   protected override post(path: string, data: any): Observable<any> {
     let headers: HttpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
+      "email": data.email,
+      "mobile": data.mobile,
+      "password": data.password
     });
+    // console.log("auth headers =" + headers.get('email') + " " + headers.get('mobile') + " " + headers.get('password'));
     // headers.set('Content-Type', 'text/plain; charset=utf-8');
-    return this.http.post(`${baseURL}/${path}`, data, {
+    return this.http.post(`${baseURL}/${path}`, {},{
       headers,
       responseType: 'text',
     });

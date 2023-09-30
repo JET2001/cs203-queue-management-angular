@@ -114,7 +114,7 @@ export class LoginPopupComponent implements OnInit {
           }
         },
         (error: Error) => {
-          console.log(error.message);
+          // console.log(error.message);
           // if (error.message)
         }
       );
