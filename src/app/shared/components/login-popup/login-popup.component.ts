@@ -4,6 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { GetUserInfoService } from '../../services/get-user-info/get-user-info.service';
 import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-popup',
@@ -24,7 +25,8 @@ export class LoginPopupComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private getUserInfoService: GetUserInfoService
+    private getUserInfoService: GetUserInfoService,
+    private router: Router
   ) {
     this.loginFG = this.fb.group({
       email: this.emailFC,
@@ -47,30 +49,8 @@ export class LoginPopupComponent implements OnInit {
       .subscribe(
         (data: string | boolean) => {
           // User gets a JWT token
-          // console.log(data);
           if (typeof data == typeof '') {
             this.authService.saveAuthToken(JSON.parse(JSON.stringify(data)));
-
-            // Hardcoded user, we got CORS errors.
-            // const user: User = {
-            //   userID : "2",
-            //   mobileNo : "06598231539",
-            //   email : "jrteo.2022@smu.edu.sg",
-            //   authenticatorID: "002",
-            //   "isVerified": true
-            // };
-            // console.log(user);
-
-            // this.authService.user = user;
-
-            // this.loginFG.reset();
-            // // Dismiss this active modal
-            // this.activeModal.dismiss();
-            // // Authenticate user
-            // this.authService.authenticateUser().then((data: boolean) => {
-            //   // Log in user
-            //   this.authService.email = email;
-            // });
 
             // Make another call to get the user object --> quite inefficient for now. But possibly can refactor.
             this.getUserInfoService.loadUserInfo(email).subscribe(
@@ -146,5 +126,9 @@ export class LoginPopupComponent implements OnInit {
     let mobile: string = this.mobileFC.value;
     mobile = mobile.replace('+', '0');
     return mobile;
+  }
+
+  handleRegisterClick(): void {
+    this.router.navigate(['/user', 'register']);
   }
 }
