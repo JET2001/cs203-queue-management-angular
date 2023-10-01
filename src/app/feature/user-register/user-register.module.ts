@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { userRegisterRoutes } from './user-register.routing';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AccountCreationComponent],

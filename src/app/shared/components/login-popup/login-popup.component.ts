@@ -41,7 +41,7 @@ export class LoginPopupComponent implements OnInit {
   loginUser(): void {
     if (!this._fieldsAllValid()) return;
 
-    // Process mobile number.
+    // Process mobile number
     let mobile = this.processMobile();
     let email = this.emailFC.value;
     this.authService

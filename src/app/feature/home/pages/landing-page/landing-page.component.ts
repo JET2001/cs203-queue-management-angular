@@ -1,9 +1,6 @@
-import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { MessageService } from 'primeng/api';
-import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-landing-page',

@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
-  FormGroup,
-  Validators,
+  FormGroup
 } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { OtpPopupComponent } from 'src/app/shared/components/otp-popup/otp-popup.component';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 
 @Component({
@@ -15,7 +16,6 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
 export class AccountCreationComponent implements OnInit {
   showOTPButton: boolean = false;
   userHasExistingAccount: boolean = false;
-  // to check if mobile number exists
   mobileNumberExists: boolean = false;
   passwordsMatch: boolean = true;
   otpVerified: boolean = false;
@@ -27,7 +27,8 @@ export class AccountCreationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private getUserInfoService: GetUserInfoService
+    private getUserInfoService: GetUserInfoService,
+    private ngbModal: NgbModal
   ) {
     this.signUpForm = fb.group({});
   }
@@ -91,9 +92,16 @@ export class AccountCreationComponent implements OnInit {
     }
   }
 
+  showOTPPopup(): void {
+    const modalRef = this.ngbModal.open(OtpPopupComponent, { centered: true });
+    modalRef.componentInstance.mobileVerified.subscribe((value: boolean) => {
+      this.otpVerified = value;
+    });
+  }
+
   checkNextButton(): boolean {
     // temporary, until we implement OTP
-    this.otpVerified = true;
+    // this.otpVerified = true;
     if (
       !this.userHasExistingAccount &&
       this.passwordsMatch &&

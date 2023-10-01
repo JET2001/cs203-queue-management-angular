@@ -36,6 +36,7 @@
           *ngIf="showOTPButton"
           buttonText="Get OTP"
           buttonVariants="primary"
+          (buttonClick)="showOTPPopup()"
         ></app-text-button>
       </div>
       <app-input-field
