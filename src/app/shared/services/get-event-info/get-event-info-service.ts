@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { events } from 'src/app/mock-db/MockDB';
-import { Event } from '../../../models/event';
+import { Observable } from 'rxjs';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Event } from '../../../models/event';
 
 @Injectable({
   providedIn: 'root',

@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { InputFieldComponent } from './components/input-field/input-field.component';
 import { TextButtonComponent } from './components/text-button/text-button.component';
 import { LoginPopupComponent } from './components/login-popup/login-popup.component';
+import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { LoginPopupComponent } from './components/login-popup/login-popup.compon
     InputFieldComponent,
     HeaderComponent,
     GaVerificationPopupComponent,
-    LoginPopupComponent
+    LoginPopupComponent,
+    OtpPopupComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { LoginPopupComponent } from './components/login-popup/login-popup.compon
     CarouselModule,
     GaVerificationPopupComponent,
     LoginPopupComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OtpPopupComponent
   ],
 })
 export class SharedModule {}
