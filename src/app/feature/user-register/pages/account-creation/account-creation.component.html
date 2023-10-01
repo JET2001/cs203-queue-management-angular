@@ -1,1 +1,58 @@
-<p>account-creation works!</p>
+<app-header></app-header>
+<div class="container">
+  <h1>Sign up</h1>
+  <form [formGroup]="signUpForm">
+    <div class="input-fields">
+      <div class="email-field">
+        <app-input-field
+          placeholder="Email"
+          inputType="email"
+          [inputValue]="emailFC"
+        ></app-input-field>
+        <div *ngIf="userHasExistingAccount" class="failure-message">
+          <img
+            src="assets/icons/failure.svg"
+            alt="User has an existing account"
+            class="failure-icon"
+          />
+          <div class="verify-email">User has an existing account</div>
+        </div>
+      </div>
+      <div class="mobile-field">
+        <app-input-field
+          placeholder="Mobile with prefix"
+          inputType="mobile"
+          [inputValue]="mobileFC"
+        ></app-input-field>
+        <app-text-button
+          *ngIf="showOTPButton"
+          buttonText="Get OTP"
+          buttonVariants="primary"
+        ></app-text-button>
+      </div>
+      <app-input-field
+        placeholder="Create a password"
+        inputType="password"
+        [inputValue]="password1FC"
+      ></app-input-field>
+      <div class="password-retype-field">
+        <app-input-field
+          placeholder="Retype your password"
+          inputType="password"
+          [inputValue]="password2FC"
+        ></app-input-field>
+        <div *ngIf="!passwordsMatch" class="password-error">
+          <img
+            src="assets/icons/failure.svg"
+            alt="User has an existing account"
+            class="failure-icon"
+          />
+          <div>Passwords do not match</div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="next-button">
+      <app-text-button *ngIf="showNextButton" buttonVariants="primary" buttonText="Next"></app-text-button>
+  </div>
+</div>

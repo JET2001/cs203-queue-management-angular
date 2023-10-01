@@ -1,0 +1,59 @@
+@import "/src/styles.scss";
+
+.container {
+  padding-left: 89px;
+  padding-top: 44px;
+  padding-right: 89px;
+  padding-bottom: 44px;
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  margin-top: 40px;
+}
+
+.email-field {
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+}
+
+.mobile-field {
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+}
+
+.failure-message {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+  align-items: center;
+}
+
+.failure-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.password-retype-field {
+    display: flex;
+    flex-direction: row;
+    column-gap: 15px;
+    align-items: center;
+}
+
+.password-error {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    -webkit-text-fill-color: $error-2;
+}
+
+.next-button {
+    margin-top: 40px;
+    display: flex;
+    justify-content: end;
+}

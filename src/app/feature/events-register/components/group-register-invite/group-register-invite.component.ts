@@ -1,13 +1,11 @@
 import {
+  AfterViewInit,
   Component,
-  Output,
   EventEmitter,
   Input,
-  OnInit,
-  AfterViewInit,
+  Output
 } from '@angular/core';
-import { Form, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 
 @Component({
