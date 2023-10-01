@@ -13,7 +13,21 @@ export class GetUserInfoService extends BaseRestApiService {
   }
 
   loadUserInfo(email: string): Observable<any> {
-    return this.get('users/'+ email);
+    return this.get('users/' + email);
+  }
+
+  // existingMobileNumber(mobile: string): Observable<any> {
+  existingMobileNumber(mobile: string): Promise<boolean> {
+    return Promise.resolve(this._checkMobile(mobile));
+  }
+
+  private _checkMobile(mobile: string): boolean {
+    for (let user of Users) {
+      if (user.mobileNo === mobile) {
+        return true;
+      }
+    }
+    return false;
   }
 
   getUserID(email: string, mobile: string): Promise<string | undefined> {
@@ -22,7 +36,7 @@ export class GetUserInfoService extends BaseRestApiService {
 
   private _getUserID(email: string, mobile: string): string | undefined {
     for (let user of Users) {
-      if (user.email == email && user.mobileNo == mobile) return user.userID;
+      if (user.email === email && user.mobileNo === mobile) return user.userID;
     }
     return undefined;
   }

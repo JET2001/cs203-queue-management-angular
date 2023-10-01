@@ -15,8 +15,9 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
 export class AccountCreationComponent implements OnInit {
   showOTPButton: boolean = false;
   userHasExistingAccount: boolean = false;
+  // to check if mobile number exists
+  mobileNumberExists: boolean = false;
   passwordsMatch: boolean = true;
-  showNextButton: boolean = false;
   otpVerified: boolean = false;
   signUpForm: FormGroup;
   emailFC: FormControl = new FormControl('');
@@ -48,7 +49,7 @@ export class AccountCreationComponent implements OnInit {
     this.signUpForm.get('password2')?.valueChanges.subscribe((value) => {
       this.checkIfPasswordsMatch();
       this.checkNextButton();
-    })
+    });
   }
 
   async verifyEmail() {
@@ -64,27 +65,46 @@ export class AccountCreationComponent implements OnInit {
   }
 
   checkIfPasswordsMatch(): void {
-    if (this.signUpForm.get('password1')?.value !== this.signUpForm.get('password2')?.value) {
+    if (
+      this.signUpForm.get('password1')?.value !==
+      this.signUpForm.get('password2')?.value
+    ) {
       this.passwordsMatch = false;
     } else {
       this.passwordsMatch = true;
     }
   }
 
-  handleShowOTPButton(): void {
+  async handleShowOTPButton() {
     if (this.signUpForm.get('mobile')?.valid) {
-      this.showOTPButton = true;
+      await this.getUserInfoService
+        .existingMobileNumber(this.signUpForm.get('mobile')?.value)
+        .then((value) => {
+          if (value) {
+            this.mobileNumberExists = true;
+            this.showOTPButton = false;
+          } else {
+            this.mobileNumberExists = false;
+            this.showOTPButton = true;
+          }
+        });
     }
   }
 
-  checkNextButton(): void {
+  checkNextButton(): boolean {
     // temporary, until we implement OTP
     this.otpVerified = true;
-    
-    if (!this.userHasExistingAccount && this.passwordsMatch && this.otpVerified) {
-      this.showNextButton = true;
+    if (
+      !this.userHasExistingAccount &&
+      this.passwordsMatch &&
+      this.otpVerified &&
+      !this.mobileNumberExists &&
+      this.signUpForm.get('password2')?.value !== '' &&
+      this.signUpForm.get('mobile')?.value !== ''
+    ) {
+      return true;
     } else {
-      this.showNextButton = false;
+      return false;
     }
   }
 }

@@ -24,6 +24,14 @@
           inputType="mobile"
           [inputValue]="mobileFC"
         ></app-input-field>
+        <div *ngIf="mobileNumberExists" class="failure-message">
+          <img
+            src="assets/icons/failure.svg"
+            alt="Mobile number already exists"
+            class="failure-icon"
+          />
+          <div class="verify-email">Mobile number already exists</div>
+        </div>
         <app-text-button
           *ngIf="showOTPButton"
           buttonText="Get OTP"
@@ -53,6 +61,10 @@
     </div>
   </form>
   <div class="next-button">
-      <app-text-button *ngIf="showNextButton" buttonVariants="primary" buttonText="Next"></app-text-button>
+    <app-text-button
+      *ngIf="checkNextButton()"
+      buttonVariants="primary"
+      buttonText="Next"
+    ></app-text-button>
   </div>
 </div>
