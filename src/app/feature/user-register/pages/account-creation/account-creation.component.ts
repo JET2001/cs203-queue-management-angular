@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OtpPopupComponent } from 'src/app/shared/components/otp-popup/otp-popup.component';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
+import { VerifyEmailPopupComponent } from '../../components/verify-email-popup/verify-email-popup.component';
+import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
 
 @Component({
   selector: 'app-account-creation',
@@ -28,7 +26,8 @@ export class AccountCreationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private getUserInfoService: GetUserInfoService,
-    private ngbModal: NgbModal
+    private ngbModal: NgbModal,
+    private storeUserInfoService: StoreUserInfoService
   ) {
     this.signUpForm = fb.group({});
   }
@@ -89,6 +88,8 @@ export class AccountCreationComponent implements OnInit {
             this.showOTPButton = true;
           }
         });
+    } else {
+      this.mobileNumberExists = false;
     }
   }
 
@@ -114,5 +115,20 @@ export class AccountCreationComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  saveData(): void {
+    this.storeUserInfoService.storeUserInfo(
+      this.signUpForm.get('email')?.value,
+      this.signUpForm.get('mobile')?.value,
+      this.signUpForm.get('password2')?.value
+    );
+  }
+
+  openVerificationModal(): void {
+    const modalRef = this.ngbModal.open(VerifyEmailPopupComponent, {
+      centered: true,
+    });
+    modalRef.componentInstance.email = this.signUpForm.get('email')?.value;
   }
 }
