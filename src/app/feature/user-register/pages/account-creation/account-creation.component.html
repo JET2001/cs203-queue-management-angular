@@ -66,6 +66,8 @@
       *ngIf="checkNextButton()"
       buttonVariants="primary"
       buttonText="Next"
+      (buttonClick)="openVerificationModal()"
+      (buttonClick)="saveData()"
     ></app-text-button>
   </div>
 </div>
