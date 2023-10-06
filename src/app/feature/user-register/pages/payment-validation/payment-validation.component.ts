@@ -18,10 +18,14 @@ import {
 export class PaymentValidationComponent {
   cardNumberFG: FormGroup;
   cardNumberFC: FormControl;
+  expDateFC: FormControl;
+  cvvFC: FormControl;
 
   constructor(private fb: FormBuilder) {
     this.cardNumberFC = new FormControl('', []);
-    this.cardNumberFG = fb.group(this.cardNumberFC);
+    this.expDateFC = new FormControl('', []);
+    this.cvvFC = new FormControl('', []);
+    this.cardNumberFG = fb.group([this.cardNumberFC, this.expDateFC, this.cvvFC]);
   }
 
 

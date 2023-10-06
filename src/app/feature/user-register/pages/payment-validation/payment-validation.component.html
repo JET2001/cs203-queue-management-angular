@@ -1,8 +1,17 @@
 <app-header></app-header>
-<h2>Card Validator</h2>
-<form [formGroup]="cardNumberFG">
-  <app-input-field
-    inputType="credit-card"
-    [inputValue]="cardNumberFC"
-  ></app-input-field>
-</form>
+<div class="container">
+  <h1>Payment Setup</h1>
+  <h2>Accepted Cards</h2>
+  <form [formGroup]="cardNumberFG">
+    <app-input-field
+      inputType="credit-card"
+      [inputValue]="cardNumberFC"
+      placeholder="Card Number"
+    ></app-input-field>
+    <app-input-field
+      inputType="expiration-date"
+      placeholder="MMYY"
+    ></app-input-field>
+    <app-input-field inputType="cvv" placeholder="CVV"></app-input-field>
+  </form>
+</div>

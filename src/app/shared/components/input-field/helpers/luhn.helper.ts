@@ -34,6 +34,5 @@ export const luhnCheck = (cardNumber: string): boolean => {
 
   // 6. add last digit to sum
   // 7. if sum is factor of 10, it is a valid card number
-  console.log((sum + lastDigit) % 10 === 0);
   return (sum + lastDigit) % 10 === 0;
 };

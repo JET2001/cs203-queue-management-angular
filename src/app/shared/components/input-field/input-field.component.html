@@ -45,8 +45,14 @@
   </div>
   <div
     class="input-error-message"
-    *ngIf="inputValue.hasError('luhn') && inputType === 'credit-card' && !inputValue.hasError('required')"
+    *ngIf="inputValue.hasError('luhn') && inputType === 'credit-card'"
   >
     Please enter a valid credit card number.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'expiration-date'">
+    Please enter a valid date.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'cvv'">
+    Please enter a valid CVV.
   </div>
 </div>

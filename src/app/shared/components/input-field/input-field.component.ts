@@ -23,7 +23,9 @@ export class InputFieldComponent implements OnInit {
     | 'email'
     | 'password'
     | 'auth-code'
-    | 'credit-card' = 'text';
+    | 'credit-card'
+    | 'expiration-date'
+    | 'cvv' = 'text';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
   @Input() inputValue: FormControl = new FormControl('', []);
@@ -76,6 +78,12 @@ export class InputFieldComponent implements OnInit {
         Validators.minLength(12),
         luhnValidator(),
       ]);
+    } else if (this.inputType === 'expiration-date') {
+      this.inputValue.addValidators(
+        Validators.pattern(/^(0[1-9]|1[0-2])\d{2}$/)
+      );
+    } else if (this.inputType === 'cvv') {
+      this.inputValue.addValidators(Validators.pattern(/^\d{3,4}$/));
     }
     this.inputValue.updateValueAndValidity();
   }
@@ -101,6 +109,18 @@ export class InputFieldComponent implements OnInit {
     } else if (this.inputType === 'mobile') {
       return {
         mask: [/\+/, ...digitMask(10)],
+        guide: false,
+        showMask: true,
+      };
+    } else if (this.inputType === 'expiration-date') {
+      return {
+        mask: [/^[0-1]$/, /^[0-9]$/, /^\d$/, /^\d$/],
+        guide: false,
+        showMask: true,
+      };
+    } else if (this.inputType === 'cvv') {
+      return {
+        mask: digitMask(4),
         guide: false,
         showMask: true,
       };
