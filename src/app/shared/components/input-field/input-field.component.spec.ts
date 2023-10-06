@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { TextMaskModule } from '@myndmanagement/text-mask';
 import { InputFieldComponent } from './input-field.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from 'primeng/api';
 
 describe('InputFieldComponent', () => {
   let component: InputFieldComponent;
@@ -11,7 +11,7 @@ describe('InputFieldComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [InputFieldComponent],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule, TextMaskModule]
     });
     fixture = TestBed.createComponent(InputFieldComponent);
     component = fixture.componentInstance;

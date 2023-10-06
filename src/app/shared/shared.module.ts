@@ -38,7 +38,8 @@ import { TextMaskModule } from '@myndmanagement/text-mask';
     GaVerificationPopupComponent,
     LoginPopupComponent,
     ReactiveFormsModule,
-    OtpPopupComponent
+    OtpPopupComponent,
+    TextMaskModule
   ],
 })
 export class SharedModule {}
