@@ -3,12 +3,14 @@
     class="custom-input"
     [type]="getInputType()"
     [formControl]="inputValue"
+    [textMask]="inputMaskWrapper()"
     [placeholder]="placeholder"
     [ngClass]="{
       'input-border-error':
         (inputValue.hasError('required') ||
           inputValue.hasError('email') ||
           inputValue.hasError('pattern') ||
+          inputValue.hasError('luhn') ||
           inputValue.invalid) &&
         inputValue.touched,
       'auth-code-input': inputType == 'auth-code'
@@ -20,6 +22,7 @@
       (inputValue.hasError('required') || inputValue.invalid) &&
       !inputValue.hasError('email') &&
       !inputValue.hasError('pattern') &&
+      !inputValue.hasError('luhn') && 
       inputValue.touched
     "
   >
@@ -39,5 +42,11 @@
     *ngIf="inputValue.hasError('pattern') && inputType === 'auth-code'"
   >
     Code should be 6 digits.
+  </div>
+  <div
+    class="input-error-message"
+    *ngIf="inputValue.hasError('luhn') && inputType === 'credit-card' && !inputValue.hasError('required')"
+  >
+    Please enter a valid credit card number.
   </div>
 </div>

@@ -1,0 +1,8 @@
+<app-header></app-header>
+<h2>Card Validator</h2>
+<form [formGroup]="cardNumberFG">
+  <app-input-field
+    inputType="credit-card"
+    [inputValue]="cardNumberFC"
+  ></app-input-field>
+</form>
