@@ -4,3 +4,28 @@
   padding-right: 89px;
   padding-bottom: 44px;
 }
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 26px;
+  margin: 40px 0px;
+}
+
+.exp-cvv-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+}
+
+.billing-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 26px;
+}
+
+.address-input {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}

@@ -13,7 +13,10 @@
           inputValue.hasError('luhn') ||
           inputValue.invalid) &&
         inputValue.touched,
-      'auth-code-input': inputType == 'auth-code'
+      'auth-code-input': inputType === 'auth-code',
+      'expiration-date-input': inputType === 'expiration-date',
+      'cvv-input': inputType === 'cvv',
+      'zip-input': inputType === 'zip' 
     }"
   />
   <div
@@ -54,5 +57,8 @@
   </div>
   <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'cvv'">
     Please enter a valid CVV.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'zip'">
+    Please enter a valid postal code.
   </div>
 </div>

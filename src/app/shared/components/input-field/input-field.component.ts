@@ -25,7 +25,8 @@ export class InputFieldComponent implements OnInit {
     | 'auth-code'
     | 'credit-card'
     | 'expiration-date'
-    | 'cvv' = 'text';
+    | 'cvv'
+    | 'zip' = 'text';
   @Input() placeholder: string = '';
   @Input() isRequired: boolean = true;
   @Input() inputValue: FormControl = new FormControl('', []);
@@ -84,6 +85,10 @@ export class InputFieldComponent implements OnInit {
       );
     } else if (this.inputType === 'cvv') {
       this.inputValue.addValidators(Validators.pattern(/^\d{3,4}$/));
+    } else if (this.inputType === 'zip') {
+      this.inputValue.addValidators(
+        Validators.pattern(/^[a-zA-Z0-9 -]{1,10}$/)
+      );
     }
     this.inputValue.updateValueAndValidity();
   }
@@ -121,6 +126,12 @@ export class InputFieldComponent implements OnInit {
     } else if (this.inputType === 'cvv') {
       return {
         mask: digitMask(4),
+        guide: false,
+        showMask: true,
+      };
+    } else if (this.inputType === 'zip') {
+      return {
+        mask: digitMask(10),
         guide: false,
         showMask: true,
       };
