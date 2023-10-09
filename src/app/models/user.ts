@@ -5,4 +5,5 @@ export interface User {
   password?: string;
   authenticatorID?: string;
   isVerified: boolean;
+  isPaymentVerified?: boolean;
 }
