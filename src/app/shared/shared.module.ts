@@ -9,6 +9,7 @@ import { InputFieldComponent } from './components/input-field/input-field.compon
 import { TextButtonComponent } from './components/text-button/text-button.component';
 import { LoginPopupComponent } from './components/login-popup/login-popup.component';
 import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
+import { TextMaskModule } from '@myndmanagement/text-mask';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
     ButtonModule,
     ReactiveFormsModule,
     FormsModule,
+    TextMaskModule
   ],
   exports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
     GaVerificationPopupComponent,
     LoginPopupComponent,
     ReactiveFormsModule,
-    OtpPopupComponent
+    OtpPopupComponent,
+    TextMaskModule
   ],
 })
 export class SharedModule {}

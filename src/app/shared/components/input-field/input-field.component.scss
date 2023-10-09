@@ -26,6 +26,18 @@
     width: 200px;
 }
 
+.expiration-date-input {
+    width: 180px;
+}
+
+.cvv-input {
+    width: 100px;
+}
+
+.zip-input {
+    width: 150px;
+}
+
 .input-border-error {
     border-style: solid;
     border-color: $error-2;
