@@ -8,6 +8,7 @@ import { LocalStorageService } from '../local-storage/local-storage.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { baseURL } from '../../constants/api-paths';
 import { User } from 'src/app/models/user';
+import { SetupPaymentPopupComponent } from 'src/app/feature/user-register/components/setup-payment-popup/setup-payment-popup.component';
 
 @Injectable({
   providedIn: 'root',
@@ -104,6 +105,11 @@ export class AuthenticationService extends BaseRestApiService {
 
   public authenticateUser(): Promise<boolean> {
     this.activeModal.open(GaVerificationPopupComponent, { centered: true });
+    return Promise.resolve(true);
+  }
+
+  public setUpPayment(): Promise<boolean> {
+    this.activeModal.open(SetupPaymentPopupComponent, { centered: true });
     return Promise.resolve(true);
   }
 }

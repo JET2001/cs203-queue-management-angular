@@ -5,22 +5,20 @@
       aria-label="Close"
       class="btn-close"
       (click)="activeModal.dismiss('Cross click')"
-      (click)="routeBackToHome()"
     ></button>
   </div>
   <div class="modal-body">
     <div class="verify-description">
-      Please verify your email address by clicking on the link sent to
-      {{ email }}
+      Please set up your payment method to register for events.
     </div>
     <div class="verify-button">
       <app-text-button
         buttonVariants="primary"
         buttonText="OK"
         (click)="activeModal.dismiss('Cross click')"
-        (buttonClick)="routeBackToHome()"
+        (buttonClick)="routeToPaymentSetup()"
       ></app-text-button>
-      <button class="resend-email">Resend Email</button>
+      <button class="not-now" (click)="activeModal.dismiss('Cross click')">Not now</button>
     </div>
   </div>
 </div>

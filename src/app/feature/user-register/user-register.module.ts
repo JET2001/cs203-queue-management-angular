@@ -7,9 +7,10 @@ import { VerifyEmailPopupComponent } from './components/verify-email-popup/verif
 import { AccountCreationComponent } from './pages/account-creation/account-creation.component';
 import { PaymentValidationComponent } from './pages/payment-validation/payment-validation.component';
 import { userRegisterRoutes } from './user-register.routing';
+import { SetupPaymentPopupComponent } from './components/setup-payment-popup/setup-payment-popup.component';
 
 @NgModule({
-  declarations: [AccountCreationComponent, VerifyEmailPopupComponent, PaymentValidationComponent],
+  declarations: [AccountCreationComponent, VerifyEmailPopupComponent, PaymentValidationComponent, SetupPaymentPopupComponent],
   imports: [
     RouterModule.forChild(userRegisterRoutes),
     CommonModule,
