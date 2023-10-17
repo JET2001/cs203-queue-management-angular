@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem, MessageService } from 'primeng/api';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { DelayCounter } from 'src/app/mock-db/DelayCounter';
 import { Event } from 'src/app/models/event';
 import { RegGroup } from 'src/app/models/reg-group';
-import { User } from 'src/app/models/user';
 import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import {
@@ -11,11 +13,8 @@ import {
 } from 'src/app/shared/services/get-show-info/get-show-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { RegStatus, RegStepper } from '../../constants/reg-status';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
-import { MenuItem, MessageService } from 'primeng/api';
-import { DelayCounter } from 'src/app/mock-db/DelayCounter';
+import { RegStatus, RegStepper } from '../../constants/reg-status';
 
 @Component({
   selector: 'app-view-event-info',

@@ -22,11 +22,11 @@ export class GetUserInfoService extends BaseRestApiService {
   }
 
   private _checkMobile(mobile: string): boolean {
-    for (let user of Users) {
-      if (user.mobileNo === mobile) {
-        return true;
-      }
-    }
+    // for (let user of Users) {
+    //   if (user.mobileNo === mobile) {
+    //     return true;
+    //   }
+    // }
     return false;
   }
 

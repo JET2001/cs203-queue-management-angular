@@ -94,6 +94,7 @@ export class AccountCreationComponent implements OnInit {
   }
 
   showOTPPopup(): void {
+    this.storeUserInfoService.sendOtp(this.signUpForm.get('mobile')?.value);
     const modalRef = this.ngbModal.open(OtpPopupComponent, { centered: true });
     modalRef.componentInstance.mobileVerified.subscribe((value: boolean) => {
       this.otpVerified = value;
@@ -118,7 +119,7 @@ export class AccountCreationComponent implements OnInit {
   }
 
   saveData(): void {
-    this.storeUserInfoService.storeUserInfo(
+    this.storeUserInfoService.createNewUser(
       this.signUpForm.get('email')?.value,
       this.signUpForm.get('mobile')?.value,
       this.signUpForm.get('password2')?.value

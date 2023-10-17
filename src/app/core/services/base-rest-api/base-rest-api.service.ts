@@ -1,13 +1,12 @@
-import { Injectable, inject } from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
-  HttpParams,
-  HttpParamsOptions,
+  HttpParams
 } from '@angular/common/http';
-import { baseURL } from '../../constants/api-paths';
+import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { baseURL } from '../../constants/api-paths';
 
 @Injectable({
   providedIn: 'root',
