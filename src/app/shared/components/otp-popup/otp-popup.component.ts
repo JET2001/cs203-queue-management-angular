@@ -22,16 +22,16 @@ export class OtpPopupComponent {
 
   handleVerify(): void {
     const otp = this.otpFC.value;
-    //this.mobileVerified.emit(true);
-    // this.otpVerified = this.storeUserInfoService.verifyOtp(otp);
-    this.otpVerified = false;
-    this.mobileVerified.emit(this.otpVerified);
-    if (!this.otpVerified) {
 
-    } else {
-      this.activeModal.close();
-    }
-   // this.mobileVerified.emit(this.storeUserInfoService.verifyOtp(otp));
+    this.storeUserInfoService.verifyOtp(otp).then((value) => {
+      this.otpVerified = value.data.valid;
+
+      this.mobileVerified.emit(this.otpVerified);
+      if (!this.otpVerified) {
+      } else {
+        this.activeModal.close();
+      }
+    });
   }
 
   resendOtp() {}

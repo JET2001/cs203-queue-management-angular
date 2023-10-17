@@ -60,7 +60,7 @@ export class StoreUserInfoService extends BaseRestApiService {
       });
   }
 
-  public verifyOtp(otp: string): boolean {
+  public async verifyOtp(otp: string) {
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Basic ${Buffer.from(
@@ -71,18 +71,7 @@ export class StoreUserInfoService extends BaseRestApiService {
     data.append('Code', otp);
     data.append('To', this.mobile);
 
-    axios
-      .post(this.verifyOTPUrl, data, { headers })
-      .then((response) => {
-        console.log('OTP Verified ', response.data);
-      })
-      .catch((error) => {
-        console.error(
-          'Error ',
-          error.response ? error.response.data : error.message
-        );
-        return false;
-      });
-      return true;
+    return axios
+      .post(this.verifyOTPUrl, data, { headers });
   }
 }
