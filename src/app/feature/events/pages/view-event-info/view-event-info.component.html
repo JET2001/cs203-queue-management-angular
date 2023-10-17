@@ -65,6 +65,14 @@
             buttonText="INTERNAL ERROR"
           ></app-text-button>
         </div>
+
+        <div *ngIf="routeToQueueButtonVisible()" class="queue-button">
+          <app-text-button
+            buttonVariants="secondary"
+            buttonText="Join Queues!"
+            (buttonClick)="handleQueueButtonClick()"
+          ></app-text-button>
+        </div>
       </div>
     </div>
   </div>
@@ -76,26 +84,6 @@
           alt="{{ eventInfo.name }} poster"
           class="event-poster"
         />
-      </div>
-
-      <div class="event-info-group">
-        <h2>Event Details</h2>
-        <div *ngIf="datesAreValid()">
-          <p>
-            {{ earliestShowDate.toDateString() }} ~
-            {{ latestShowDate.toDateString() }}
-          </p>
-        </div>
-        <div class="concert-details-button">
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="View Seat Map"
-          ></app-text-button>
-          <app-text-button
-            buttonVariants="secondary"
-            buttonText="Conditions of Entry"
-          ></app-text-button>
-        </div>
       </div>
 
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
@@ -110,6 +98,12 @@
           (buttonClick)="handleModifyGroupButtonClick()"
         ></app-text-button>
       </div>
+    </div>
+  </div>
+  <div class="event-desc-group">
+    <div *ngIf="hasEventLoaded" class="description">
+      <h2>Description</h2>
+      <p>{{ eventInfo.description }}</p>
     </div>
   </div>
   <div class="view-shows-table">

@@ -1,0 +1,26 @@
+@import "/src/styles.scss";
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.verify-button {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.resend-email {
+    border-width: 0px;
+    margin-bottom: 20px;
+    background-color: transparent;
+    font-size: $sub-text-3-font-size;
+    font-weight: $sub-text-3-font-weight;
+    -webkit-text-fill-color: $gray-4;
+}

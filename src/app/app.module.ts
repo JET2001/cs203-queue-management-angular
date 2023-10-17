@@ -6,7 +6,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { appRoutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptor/auth-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,9 +21,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     RouterModule.forRoot(appRoutes),
     NgbModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [HttpClient],
+  providers: [
+    HttpClient,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

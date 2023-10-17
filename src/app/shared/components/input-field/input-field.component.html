@@ -3,15 +3,20 @@
     class="custom-input"
     [type]="getInputType()"
     [formControl]="inputValue"
+    [textMask]="inputMaskWrapper()"
     [placeholder]="placeholder"
     [ngClass]="{
       'input-border-error':
         (inputValue.hasError('required') ||
           inputValue.hasError('email') ||
           inputValue.hasError('pattern') ||
+          inputValue.hasError('luhn') ||
           inputValue.invalid) &&
         inputValue.touched,
-      'auth-code-input': inputType == 'auth-code'
+      'auth-code-input': inputType === 'auth-code',
+      'expiration-date-input': inputType === 'expiration-date',
+      'cvv-input': inputType === 'cvv',
+      'zip-input': inputType === 'zip' 
     }"
   />
   <div
@@ -20,6 +25,7 @@
       (inputValue.hasError('required') || inputValue.invalid) &&
       !inputValue.hasError('email') &&
       !inputValue.hasError('pattern') &&
+      !inputValue.hasError('luhn') && 
       inputValue.touched
     "
   >
@@ -39,5 +45,20 @@
     *ngIf="inputValue.hasError('pattern') && inputType === 'auth-code'"
   >
     Code should be 6 digits.
+  </div>
+  <div
+    class="input-error-message"
+    *ngIf="inputValue.hasError('luhn') && inputType === 'credit-card'"
+  >
+    Please enter a valid credit card number.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'expiration-date'">
+    Please enter a valid date.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'cvv'">
+    Please enter a valid CVV.
+  </div>
+  <div class="input-error-message" *ngIf="inputValue.hasError('pattern') && inputType === 'zip'">
+    Please enter a valid postal code.
   </div>
 </div>

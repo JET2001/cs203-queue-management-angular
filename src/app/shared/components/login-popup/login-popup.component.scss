@@ -10,6 +10,12 @@
   margin-top: 40px;
 }
 
+.modal-body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .input-fields {
   display: flex;
   justify-content: center;
@@ -50,4 +56,6 @@
 
 .join-us {
   margin-bottom: 20px;
+  border-width: 0px;
+  background-color: transparent;
 }

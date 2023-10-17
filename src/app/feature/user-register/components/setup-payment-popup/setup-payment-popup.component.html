@@ -1,0 +1,24 @@
+<div>
+  <div class="modal-header">
+    <button
+      type="button"
+      aria-label="Close"
+      class="btn-close"
+      (click)="activeModal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="verify-description">
+      Please set up your payment method to register for events.
+    </div>
+    <div class="verify-button">
+      <app-text-button
+        buttonVariants="primary"
+        buttonText="OK"
+        (click)="activeModal.dismiss('Cross click')"
+        (buttonClick)="routeToPaymentSetup()"
+      ></app-text-button>
+      <button class="not-now" (click)="activeModal.dismiss('Cross click')">Not now</button>
+    </div>
+  </div>
+</div>

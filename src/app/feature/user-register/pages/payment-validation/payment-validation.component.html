@@ -1,0 +1,36 @@
+<app-header></app-header>
+<div class="container">
+  <h1>Payment Setup</h1>
+  <!-- <h2>Accepted Cards</h2> -->
+  <form [formGroup]="cardNumberFG">
+    <div class="card-container">
+      <app-input-field
+        inputType="credit-card"
+        [inputValue]="cardNumberFC"
+        placeholder="Card Number"
+      ></app-input-field>
+      <div class="exp-cvv-container">
+        <app-input-field
+          inputType="expiration-date"
+          placeholder="MMYY"
+          [inputValue]="expDateFC"
+        ></app-input-field>
+        <app-input-field inputType="cvv" placeholder="CVV" [inputValue]="cvvFC"></app-input-field>
+      </div>
+    </div>
+  </form>
+  <h2> Billing Information </h2>
+  <form [formGroup]="billingFG">
+    <div class="billing-container">
+      <app-input-field placeholder="Name as shown on card"></app-input-field>
+      <app-input-field placeholder="Street"></app-input-field>
+      <div class="address-input">
+        <app-input-field placeholder="City"></app-input-field>
+        <app-input-field placeholder="State"></app-input-field>
+        <app-input-field placeholder="Zip/ Postal Code" inputType="zip"></app-input-field>
+      </div>
+      <app-input-field placeholder="Email address" inputType="email"></app-input-field>
+      <app-input-field placeholder="Phone number" inputType="mobile"></app-input-field>
+    </div>
+  </form>
+</div>

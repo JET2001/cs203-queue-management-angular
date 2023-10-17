@@ -1,33 +1,42 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
 import { Users } from 'src/app/mock-db/MockDB';
-import { User } from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GetUserInfoService {
-  constructor() {}
+export class GetUserInfoService extends BaseRestApiService {
+  constructor(protected override http: HttpClient) {
+    super(http);
+  }
 
-  loadUserInfo(userID: string | undefined): Promise<User | undefined> {
-    if (userID == undefined) return Promise.resolve(undefined);
+  loadUserInfo(email: string): Observable<any> {
+    return this.get('users/' + email);
+  }
 
-    return Promise.resolve(this._getUserInfo(userID));
+  // existingMobileNumber(mobile: string): Observable<any> {
+  existingMobileNumber(mobile: string): Promise<boolean> {
+    return Promise.resolve(this._checkMobile(mobile));
+  }
+
+  private _checkMobile(mobile: string): boolean {
+    for (let user of Users) {
+      if (user.mobileNo === mobile) {
+        return true;
+      }
+    }
+    return false;
   }
 
   getUserID(email: string, mobile: string): Promise<string | undefined> {
     return Promise.resolve(this._getUserID(email, mobile));
   }
 
-  private _getUserInfo(userID: string): User | undefined {
-    for (let user of Users) {
-      if (user.userID == userID) return user;
-    }
-    return undefined;
-  }
-
   private _getUserID(email: string, mobile: string): string | undefined {
     for (let user of Users) {
-      if (user.email == email && user.mobileNo == mobile) return user.userID;
+      if (user.email === email && user.mobileNo === mobile) return user.userID;
     }
     return undefined;
   }
