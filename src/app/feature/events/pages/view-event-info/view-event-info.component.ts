@@ -73,7 +73,7 @@ export class ViewEventInfoComponent implements OnInit {
 
     if (this.delayCounter.value <= 2) {
       this.delayCounter.setCounter = this.delayCounter.value+1;
-    } 
+    }
 
     this.steps = [
       {

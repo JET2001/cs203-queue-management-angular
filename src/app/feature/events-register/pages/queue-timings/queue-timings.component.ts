@@ -31,6 +31,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   queueIDs: string[];
   shows: string[];
   queueOptions: number[] = [];
+  isNextDisabled = true;
 
   constructor(
     private getShowInfoService: GetShowInfoService,
@@ -214,5 +215,17 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     ) {
       this.queueOptions.push(i);
     }
+  }
+
+  onOptionSelected(): void {
+    for (let i = 0; i < this.queueOptions.length; i++) {
+      const controlName = `queueTiming${i}`;
+      const controlValue = this.queueTimingForm.get(controlName)?.value;
+      if (!controlValue) {
+        this.isNextDisabled = true;
+        return;
+      }
+    }
+      this.isNextDisabled = false;
   }
 }
