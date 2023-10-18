@@ -11,7 +11,7 @@
       <div class="event-title">
         <h1 *ngIf="hasEventLoaded">{{ eventInfo.name }}</h1>
       </div>
-      <div class="reg-status-group" [ngSwitch]="registerStatus">
+      <div *ngIf = "hasRegGroupInfoLoaded" class="reg-status-group" [ngSwitch]="registerStatus">
         <div *ngSwitchCase="'0'">
           <app-text-button
             [buttonVariants]="'primary'"

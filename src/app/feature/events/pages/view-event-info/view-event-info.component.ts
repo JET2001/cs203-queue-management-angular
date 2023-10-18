@@ -51,7 +51,7 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Utility variables
   hasEventLoaded: boolean = false;
-
+  hasRegGroupInfoLoaded: boolean = false;
   // Group Registration Info
   regGroupInfo: RegGroupDTOResp | undefined = undefined;
   // groupLeaderId: string | undefined = undefined;
@@ -199,14 +199,7 @@ export class ViewEventInfoComponent implements OnInit {
 
     // Load user's registration group and queues
     this._getUserRegGroupMemberInfo();
-
-    // Registration status of the user affects what button the user sees
-    // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
-    // see reg-status.ts file for the statuses.
-    this._getRegistrationStatusOfUser();
-
-    // Set the stepper
-    this.activeIndex = this._mapRegStatusToRegStepper();
+    console.log("this.regGroupInfo = ", this.regGroupInfo);
   }
 
   private _mapRegStatusToRegStepper(): number {
@@ -253,7 +246,7 @@ export class ViewEventInfoComponent implements OnInit {
     this.latestShowDate = latestShow;
   }
 
-  private _getRegistrationStatusOfUser(): void {
+  private _setRegistrationStatusOfUser(): void {
     if (this.authService.userID == undefined) {
       this.registerStatus = RegStatus.NOT_LOGGED_IN;
       return;
@@ -315,11 +308,21 @@ export class ViewEventInfoComponent implements OnInit {
           hasAllUsersConfirmed: data.hasAllUsersConfirmed,
           groupLeaderUserId: groupLeaderId,
           queueList: queueList
-        }
+        };
+
+        // Set Registration Status of user
+        this._setRegistrationStatusOfUser();
+
+        // Set the stepper
+        this.activeIndex = this._mapRegStatusToRegStepper();
+        this.hasRegGroupInfoLoaded = true;
         console.log(this.regGroupInfo);
       },
       (error: Error) => {
         console.log(error);
+        this._setRegistrationStatusOfUser();
+        this.activeIndex = this._mapRegStatusToRegStepper();
+        this.hasRegGroupInfoLoaded = true;
         if (error.message == "400") {
           // User is not registered
           return;
@@ -359,6 +362,8 @@ export class ViewEventInfoComponent implements OnInit {
     this.otherMemberMobileList = [];
     this.otherMemberConfirmList = [];
     this.hasUserConfirmed = false;
+    this.registerStatus = RegStatus.NOT_REGISTERED;
+    this.activeIndex = RegStepper.NOT_LOGGED_IN;
   }
 
 
