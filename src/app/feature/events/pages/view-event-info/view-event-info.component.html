@@ -89,8 +89,7 @@
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
         <h2>Group Members</h2>
         <app-group-member-list
-          [memberEmailList]="otherMemberEmailList"
-          [confirmList]="otherMemberConfirmList"
+          [userGroupList]="regGroupInfo!.userGroup"
         ></app-group-member-list>
         <app-text-button
           buttonVariants="warning"

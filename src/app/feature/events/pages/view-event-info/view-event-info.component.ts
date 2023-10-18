@@ -289,7 +289,8 @@ export class ViewEventInfoComponent implements OnInit {
               userID: user.id,
               mobileNo: user.mobile,
               email: user.email,
-              isVerified: true
+              isVerified: true,
+              confirmed: user.confirmed
             };
             userList.push(userObj);
           } else {
