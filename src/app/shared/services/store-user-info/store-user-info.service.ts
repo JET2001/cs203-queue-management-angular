@@ -73,6 +73,5 @@ export class StoreUserInfoService extends BaseRestApiService {
 
     return axios
       .post(this.verifyOTPUrl, data, { headers });
-    return true;
   }
 }
