@@ -11,7 +11,8 @@ export const userRegisterRoutes: Routes = [
         path: 'card-setup',
         component: PaymentValidationComponent
     }, {
-        path: 'verify-email',
+        //user/verify/token/db3548af-b826-4182-ac34-7f9d623a76fa
+        path: 'verify/token/:token',
         component: VerifyEmailComponent
     }
 ]

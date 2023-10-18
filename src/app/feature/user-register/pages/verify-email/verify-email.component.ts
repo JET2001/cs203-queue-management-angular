@@ -18,18 +18,22 @@ export class VerifyEmailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParams['token'];
-    this.storeUserInfoService.verifyEmail(token).subscribe({
+    const token = this.route.snapshot.paramMap.get('token');
+    console.log(token);
+    this.storeUserInfoService.verifyEmail(token!).subscribe({
       next: () => this.noError(),
       error: () => this.hasError(),
     });
+
   }
 
   noError() {
+    console.log('here')
     this.router.navigate(['/home']);
   }
 
   hasError() {
+    console.log('error')
     this.router.navigate(['/home']);
     this.messageService.add({
       severity: 'error',

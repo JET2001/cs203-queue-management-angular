@@ -22,6 +22,7 @@ export class StoreUserInfoService extends BaseRestApiService {
   }
 
   public createNewUser(email: string, mobile: string, password: string): void {
+    mobile = mobile.replace('+', '0');
     this.post('users/register', {
       email: email,
       mobile: mobile,
@@ -31,8 +32,9 @@ export class StoreUserInfoService extends BaseRestApiService {
     });
   }
 
-  public verifyEmail(token: string): Observable<any> {
-    return this.post('auth/verification/', { token });
+  public verifyEmail(tokens: string): Observable<any> {
+    console.log(tokens);
+    return this.post('users/auth/verification/', { "token": tokens });
   }
 
   sendOtp(mobile: string) {
@@ -71,7 +73,6 @@ export class StoreUserInfoService extends BaseRestApiService {
     data.append('Code', otp);
     data.append('To', this.mobile);
 
-    return axios
-      .post(this.verifyOTPUrl, data, { headers });
+    return axios.post(this.verifyOTPUrl, data, { headers });
   }
 }
