@@ -15,7 +15,8 @@ import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { MenuItem, MessageService } from 'primeng/api';
-import { DelayCounter } from 'src/app/mock-db/DelayCounter';
+import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { QueueDTO } from 'src/app/models/dto/queues-dto';
 
 @Component({
   selector: 'app-view-event-info',
@@ -50,6 +51,13 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Utility variables
   hasEventLoaded: boolean = false;
+
+  // Group Registration Info
+  regGroupInfo: RegGroupDTOResp | undefined = undefined;
+  // groupLeaderId: string | undefined = undefined;
+  // hasUserConfirmed!: boolean;
+  // hasAllUsersConfirmed !: boolean;
+
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
@@ -60,8 +68,6 @@ export class ViewEventInfoComponent implements OnInit {
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
     private messageService: MessageService,
-
-    private delayCounter: DelayCounter // for demo only.
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -69,10 +75,6 @@ export class ViewEventInfoComponent implements OnInit {
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
       return;
-    }
-
-    if (this.delayCounter.value <= 2) {
-      this.delayCounter.setCounter = this.delayCounter.value+1;
     }
 
     this.steps = [
@@ -114,7 +116,7 @@ export class ViewEventInfoComponent implements OnInit {
       },
     ];
 
-    // const temp = this.getEventInfoService.getEventInfo(this.eventID);
+    // Get event information
     this.getEventInfoService
       .getEventInfo(this.eventID)
       .subscribe((data: any) => {
@@ -129,20 +131,18 @@ export class ViewEventInfoComponent implements OnInit {
         };
         this.hasEventLoaded = true;
       });
-    // if (temp == undefined) {
-    //   this.router.navigate(['/home']);
-    //   return;
-    // }
-    // this.eventInfo = temp;
-    await this._updateUserEventInfo();
+
+
+    // Load user information if user is logged in.
+    // Note that this function will be also be triggered when the user logs in after being routed to this page.
+    this._updateUserEventInfo();
   }
 
-  ngAfterContentInit(): void {}
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
-  async handleUserLoginLogoutChange(): Promise<void> {
-    await this._updateUserEventInfo();
+  handleUserLoginLogoutChange(): void {
+    this._updateUserEventInfo();
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
@@ -192,21 +192,20 @@ export class ViewEventInfoComponent implements OnInit {
   // ==========================================================
   // Utility functions
   // ==========================================================
-  private async _updateUserEventInfo(): Promise<void> {
+  private _updateUserEventInfo(): void {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
+    if (this.userID == undefined) return;
 
-    // this.getRegGroupService
-    //   .getRegGroupOfUser(this.eventID!, this.userID)
-    //   .subscribe((regGroup: any) => {
-    //     this.userRegGroupInfo = regGroup;
-    //   });
+    // Load user's registration group and queues
+    this._getUserRegGroupMemberInfo();
 
     // Registration status of the user affects what button the user sees
     // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
     // see reg-status.ts file for the statuses.
     this._getRegistrationStatusOfUser();
 
+    // Set the stepper
     this.activeIndex = this._mapRegStatusToRegStepper();
   }
 
@@ -260,46 +259,91 @@ export class ViewEventInfoComponent implements OnInit {
       return;
     }
 
-    if (this.userRegGroupInfo == undefined) {
+    if (this.regGroupInfo == undefined) {
       this.registerStatus = RegStatus.NOT_REGISTERED;
-    } else if (!this.userRegGroupInfo.hasAllUsersConfirmed) {
+    } else if (!this.regGroupInfo.hasAllUsersConfirmed) {
       this.registerStatus = RegStatus.PENDING_CONFIRMATION;
       return;
-    } else if (this.userRegGroupInfo.queueIDs == undefined) {
+    } else if (this.regGroupInfo.queueList?.length == 0) {
       this.registerStatus = RegStatus.GROUP_CONFIRMED;
-    } else if (this.userRegGroupInfo.purchaseID == undefined) {
+    } else if (this.regGroupInfo.purchaseID == undefined) {
       this.registerStatus = RegStatus.REGISTERED;
     } else {
       this.registerStatus = RegStatus.PURCHASED;
     }
   }
 
-  // private async _getUserRegGroupMemberInfo(): Promise<void> {
-  //   if (this.userRegGroupInfo) {
-  //     const groupUserIDs = this.userRegGroupInfo.userIDs;
-  //     for (let i = 0; i < groupUserIDs.length; ++i) {
-  //       if (groupUserIDs[i] != this.userID) {
-  //         await this.getUserInfoService
-  //           .loadUserInfo(groupUserIDs[i])
-  //           .then((user: User | undefined) => {
-  //             if (user == undefined) {
-  //               return;
-  //             }
-  //             this.otherMemberEmailList.push(user.email);
-  //             this.otherMemberConfirmList.push(
-  //               this.userRegGroupInfo!.confirmed[i]
-  //             );
-  //             this.otherMemberMobileList.push(user.mobileNo);
+  private _getUserRegGroupMemberInfo(): void {
+    if (this.eventID == undefined || !this.authService.isLoggedIn) {
+      this.registerStatus = RegStatus.NOT_LOGGED_IN;
+      return;
+    }
+    this.getRegGroupService.getRegGroupOfUser(this.eventID, this.authService.userID).subscribe(
+      (data: any) => {
+        // Find group leader and userInfo
+        let userList: User[] = [];
+        let groupLeaderId: string = "";
 
-  //             this.storeRegGroupService.emailList = this.otherMemberEmailList;
-  //             this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-  //           });
-  //       } else {
-  //         this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-  //       }
-  //     }
-  //   }
-  // }
+        // Load users
+        for (let user of data.userInfoList){
+          // Find group leader of user's group
+          if (user.groupLeader){
+            groupLeaderId = user.id;
+          }
+          // Store all group members of this user in a list.
+          if (user.id != this.authService.userID){
+            let userObj = {
+              userID: user.id,
+              mobileNo: user.mobile,
+              email: user.email,
+              isVerified: true
+            };
+            userList.push(userObj);
+          } else {
+            this.hasUserConfirmed = user.confirmed;
+          }
+        }
+
+        // Load registered queues
+        let queueList : QueueDTO[] = this._fillRegisteredQueues(data);
+
+        this.regGroupInfo = {
+          userGroup : userList,
+          groupSize: userList.length + 1, // add the current user
+          regGroupID: data.groupId,
+          eventId: data.eventId,
+          hasAllUsersConfirmed: data.hasAllUsersConfirmed,
+          groupLeaderUserId: groupLeaderId,
+          queueList: queueList
+        }
+        console.log(this.regGroupInfo);
+      },
+      (error: Error) => {
+        console.log(error);
+        if (error.message == "400") {
+          // User is not registered
+          return;
+        } else {
+          // TODO: Internal Server Error
+        }
+      }
+    )
+  }
+
+  private _fillRegisteredQueues(data: any): QueueDTO[] {
+    let queueList: QueueDTO[] = [];
+    for (let queue of data.queueList){
+      let queueObj : QueueDTO = {
+        showID: queue.showId,
+        queueID: queue.queueId,
+        queueStartTime: queue.startDateTime,
+        queueEndTime: queue.endDateTime
+      }
+      queueList.push(queueObj);
+    }
+    return queueList;
+  }
+
 
   private _isEarlier(timeA: Date, timeB: Date): boolean {
     return timeA.getTime() - timeB.getTime() < 0;
@@ -324,7 +368,7 @@ export class ViewEventInfoComponent implements OnInit {
 // DEMO ONLY
 // ==================
   routeToQueueButtonVisible(): boolean {
-    return this.delayCounter.value > 2;
+    return true;
   }
 
   handleQueueButtonClick(): void {

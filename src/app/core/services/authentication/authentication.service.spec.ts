@@ -18,7 +18,7 @@ describe('AuthenticationService', () => {
     });
     service = TestBed.inject(AuthenticationService);
     httpClient = TestBed.inject(HttpClient);
-  httpTestingController = TestBed.inject(HttpTestingController);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
 

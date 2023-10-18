@@ -1,4 +1,5 @@
 import { User } from "../user";
+import { QueueDTO } from "./queues-dto";
 import { UserDTO } from "./user-dto";
 
 
@@ -10,9 +11,13 @@ export interface RegGroupDTOReq {
 
 export interface RegGroupDTOResp {
   regGroupID?: string;
+  purchaseID?: string;
   userGroup: User[];
-  eventId: string;
+  eventId?: string;
   groupSize?: number;
   groupLeaderUserId: string;
-  groupLeaderEmail: string;
+  groupLeaderEmail?: string;
+  hasAllUsersConfirmed? : boolean;
+  queueList?: QueueDTO[];
+
 }
