@@ -11,21 +11,23 @@
     <div class="auth-description">
       Please enter the OTP to verify your mobile number
     </div>
-    <div class="otp-input-field">
-        <app-input-field
-          inputType="auth-code"
-          placeholder="Enter OTP"
-          [inputValue]="otpFC"
-        ></app-input-field>
+    <div class="otp-input-field-container">
+        <div class="otp-input-field">
+          <app-input-field
+            inputType="auth-code"
+            placeholder="Enter OTP"
+            [inputValue]="otpFC"
+          ></app-input-field>
+        </div>
+        <p *ngIf="!otpVerified" class="otp-error">Wrong OTP</p>
     </div>
     <div class="validate-button">
       <app-text-button
         buttonVariants="primary"
         buttonText="Validate OTP"
         (buttonClick)="handleVerify()"
-        (click)="activeModal.dismiss('Cross click')"
       ></app-text-button>
-      <button class="resend-otp">Resend OTP</button>
+      <button class="resend-otp" (click)="resendOtp()">Resend OTP</button>
     </div>
   </div>
 </div>

@@ -10,6 +10,8 @@ import { TextButtonComponent } from './components/text-button/text-button.compon
 import { LoginPopupComponent } from './components/login-popup/login-popup.component';
 import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
 import { TextMaskModule } from '@myndmanagement/text-mask';
+import { MessagesModule } from 'primeng/messages';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { TextMaskModule } from '@myndmanagement/text-mask';
     ButtonModule,
     ReactiveFormsModule,
     FormsModule,
-    TextMaskModule
+    TextMaskModule,
+    MessagesModule,
   ],
   exports: [
     CommonModule,
@@ -39,7 +42,8 @@ import { TextMaskModule } from '@myndmanagement/text-mask';
     LoginPopupComponent,
     ReactiveFormsModule,
     OtpPopupComponent,
-    TextMaskModule
+    TextMaskModule,
+    MessagesModule
   ],
 })
 export class SharedModule {}

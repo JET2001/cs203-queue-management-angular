@@ -14,7 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthenticationService) {
     // For debugging purposes, set this authtoken every 1 hour
     this.authService.saveAuthToken(
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NjgyOTE1NiwiZXhwIjoxNjk2ODMyNzU2fQ.jnn-FsoN3J2Wd7FPOkid8vBDBysQctnpmKF86iaAquc'
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzYzMTgwNCwiZXhwIjoxNjk3NjM1NDA0fQ.OcvtL6KnPTVU-cDcdpd-xbzJopXweH9Ca5kjt2qDytI'
     );
   }
   

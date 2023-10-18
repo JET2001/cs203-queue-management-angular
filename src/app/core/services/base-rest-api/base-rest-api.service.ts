@@ -1,21 +1,19 @@
-import { Injectable, inject } from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
   HttpParams,
-  HttpParamsOptions,
 } from '@angular/common/http';
-import { baseURL } from '../../constants/api-paths';
+import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { baseURL } from '../../constants/api-paths';
 
 @Injectable({
   providedIn: 'root',
 })
 export abstract class BaseRestApiService {
-
   // Field inject HttpClient to prevent dependency conflicts
-  constructor(protected http: HttpClient) {};
+  constructor(protected http: HttpClient) {}
 
   protected httpHeaders = {
     headers: new HttpHeaders({
@@ -61,15 +59,15 @@ export abstract class BaseRestApiService {
   }
 
   // Get Request with Parameters.
-  protected getWithParams(path: string, params: HttpParams): Observable<any>{
+  protected getWithParams(path: string, params: HttpParams): Observable<any> {
     // let headers = new HttpHeaders();
     // headers = headers.append('Content-Type', 'application/json');
     // console.log(headers);
-    const options = {params: params, headers: this.httpHeaders.headers};
+    const options = { params: params, headers: this.httpHeaders.headers };
 
     return this.http.get(`${baseURL}/${path}`, options).pipe(
       tap({
-        error:(error: HttpErrorResponse) => this.handleError(error)
+        error: (error: HttpErrorResponse) => this.handleError(error),
       })
     );
   }
