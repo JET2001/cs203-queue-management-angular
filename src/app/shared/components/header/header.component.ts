@@ -4,43 +4,53 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  providers: [MessageService],
 })
 export class HeaderComponent implements OnInit {
   @Output() verifiedUserLoggingIn = new EventEmitter<void>();
   @Output() userLoggedOut = new EventEmitter<void>();
   emailID: string | undefined = undefined;
 
-  email$ !: Observable<string | undefined>;
+  email$!: Observable<string | undefined>;
 
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private activeModal: NgbModal
+    private activeModal: NgbModal,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-
     this.email$ = this.authService.email$;
-    this.email$.subscribe(
-      (emailID: string | undefined) => {
-        this.emailID = emailID;
-        // console.log(this.emailID);
-      }
-    );
+    this.email$.subscribe((emailID: string | undefined) => {
+      this.emailID = emailID;
+      // console.log(this.emailID);
+    });
   }
 
   isLoggedIn(): boolean {
     return this.authService.email != undefined;
   }
   handleLoginButtonClick(): void {
-    this.activeModal.open(LoginPopupComponent, { centered: true });
+    const modalRef = this.activeModal.open(LoginPopupComponent, {
+      centered: true,
+    });
+    modalRef.componentInstance.userIsVerifiedEvent.subscribe((value: boolean) => {
+      if (!value) {
+        this.messageService.add({
+          severity: 'error',
+          detail:
+            'Please verify your email address by clicking the link sent to your email',
+        });
+      }
+    });
   }
-
 
   // loginUser(): void {
 
@@ -84,5 +94,4 @@ export class HeaderComponent implements OnInit {
     if (window.location.href.includes('home')) return; // don't route anywhere if we are already on the home page.
     this.router.navigate(['/home']);
   }
-
 }

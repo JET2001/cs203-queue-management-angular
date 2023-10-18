@@ -17,6 +17,8 @@ export class LoginPopupComponent implements OnInit {
   mobileFC: FormControl = new FormControl('', []);
   passwordFC: FormControl = new FormControl('', []);
   checkboxFC: FormControl = new FormControl(false);
+  @Output() userIsVerifiedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  userIsVerified: boolean = false;
 
   // Error message fields
   showInvalidLoginMessage: boolean = false;
@@ -62,36 +64,41 @@ export class LoginPopupComponent implements OnInit {
                   email: data.email,
                   authenticatorID: data.authenticatorId,
                   isVerified: data.verified,
-                  isPaymentVerified: data.isPaymentVerified,
                 };
-                console.log(user);
-
-                this.authService.user = user;
+                if (!user.isVerified) {
+                  this.userIsVerifiedEvent.emit(false);
+                  return;
+                } else {
+                  this.userIsVerifiedEvent.emit(true);
+                  this.authService.user = user;
+                }
 
                 this.loginFG.reset();
                 // Dismiss this active modal
                 this.activeModal.dismiss();
-                // Authenticate user
-                if (!user.isVerified) {
-                  this.authService.authenticateUser().then((data: boolean) => {
-                    // Log in user
-                    this.authService.email = email;
-                  });
-                }
-                if (!user.isPaymentVerified) {
-                  this.authService.setUpPayment().then((data: boolean) => {});
-                }
+                // // Authenticate user
+                // if (!user.isVerified) {
+                //   this.authService.authenticateUser().then((data: boolean) => {
+                //     // Log in user
+                //     this.authService.email = email;
+                //   });
+                // }
+                // if (!user.isPaymentVerified) {
+                //   this.authService.setUpPayment().then((data: boolean) => {});
+                // }
               });
 
             this.loginFG.reset();
             // Dismiss this active modal
             this.activeModal.dismiss();
-
-            // Authenticate user
-            this.authService.authenticateUser().then((data: boolean) => {
-              // Log in user
-              this.authService.email = email;
-            });
+            if (this.userIsVerified) {
+              // Authenticate user
+              this.authService.authenticateUser().then((data: boolean) => {
+                console.log('here');
+                // Log in user
+                this.authService.email = email;
+              });
+            }
 
             // return;
           } else {

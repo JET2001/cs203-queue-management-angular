@@ -102,8 +102,6 @@ export class AccountCreationComponent implements OnInit {
   }
 
   checkNextButton(): boolean {
-    // temporary, until we implement OTP
-    // this.otpVerified = true;
     if (
       !this.userHasExistingAccount &&
       this.passwordsMatch &&
@@ -124,6 +122,7 @@ export class AccountCreationComponent implements OnInit {
       this.signUpForm.get('mobile')?.value,
       this.signUpForm.get('password2')?.value
     );
+    this.openVerificationModal();
   }
 
   openVerificationModal(): void {

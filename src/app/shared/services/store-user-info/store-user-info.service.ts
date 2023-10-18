@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
@@ -22,7 +22,7 @@ export class StoreUserInfoService extends BaseRestApiService {
   }
 
   public createNewUser(email: string, mobile: string, password: string): void {
-    this.post('register', {
+    this.post('users/register', {
       email: email,
       mobile: mobile,
       password: password,
@@ -36,42 +36,43 @@ export class StoreUserInfoService extends BaseRestApiService {
   }
 
   sendOtp(mobile: string) {
-    this.mobile = mobile;
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${Buffer.from(
-        `${this.accountSid}:${this.authToken}`
-      ).toString('base64')}`,
-    };
-    const data = new URLSearchParams();
-    data.append('To', mobile);
-    data.append('Channel', 'sms');
+    // this.mobile = mobile;
+    // const headers = {
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    //   Authorization: `Basic ${Buffer.from(
+    //     `${this.accountSid}:${this.authToken}`
+    //   ).toString('base64')}`,
+    // };
+    // const data = new URLSearchParams();
+    // data.append('To', mobile);
+    // data.append('Channel', 'sms');
 
-    axios
-      .post(this.sendOTPUrl, data, { headers })
-      .then((response) => {
-        console.log('Service created successfully:', response.data);
-      })
-      .catch((error) => {
-        console.error(
-          'Error creating service:',
-          error.response ? error.response.data : error.message
-        );
-      });
+    // axios
+    //   .post(this.sendOTPUrl, data, { headers })
+    //   .then((response) => {
+    //     console.log('Service created successfully:', response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(
+    //       'Error creating service:',
+    //       error.response ? error.response.data : error.message
+    //     );
+    //   });
   }
 
   public async verifyOtp(otp: string) {
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${Buffer.from(
-        `${this.accountSid}:${this.authToken}`
-      ).toString('base64')}`,
-    };
-    const data = new URLSearchParams();
-    data.append('Code', otp);
-    data.append('To', this.mobile);
+    // const headers = {
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    //   Authorization: `Basic ${Buffer.from(
+    //     `${this.accountSid}:${this.authToken}`
+    //   ).toString('base64')}`,
+    // };
+    // const data = new URLSearchParams();
+    // data.append('Code', otp);
+    // data.append('To', this.mobile);
 
-    return axios
-      .post(this.verifyOTPUrl, data, { headers });
+    // return axios
+    //   .post(this.verifyOTPUrl, data, { headers });
+    return true;
   }
 }
