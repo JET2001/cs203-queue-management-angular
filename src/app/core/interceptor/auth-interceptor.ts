@@ -12,12 +12,8 @@ import { baseURL } from '../constants/api-paths';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthenticationService) {
-    // For debugging purposes, set this authtoken every 1 hour
-    this.authService.saveAuthToken(
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NjgyOTE1NiwiZXhwIjoxNjk2ODMyNzU2fQ.jnn-FsoN3J2Wd7FPOkid8vBDBysQctnpmKF86iaAquc'
-    );
   }
-  
+
   // Intercept for most urls, but we need to exclude some urls, for instance landing page. Here is where I exclude the injection of some urls
   excludePaths: Array<string> = [
     "users/auth/login",

@@ -5,7 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageService {
 
-  constructor() { }
+  constructor() {
+    localStorage.setItem("userToken", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzYxOTY4NiwiZXhwIjoxNjk3NjIzMjg2fQ.mjVo9Bquf3bqBhjn2jfeHUWNd-t7ahChFVoE0rGbFrc")
+  }
 
   public set userToken(userToken: string | null) {
     if (userToken == null) return;
