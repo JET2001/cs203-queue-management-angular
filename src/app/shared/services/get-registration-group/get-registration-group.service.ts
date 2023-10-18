@@ -13,21 +13,9 @@ export class GetRegistrationGroupService extends BaseRestApiService{
     eventID: string,
     userID: string | undefined
   ): Observable<any> {
-    // if (eventID == undefined || userID == undefined)
-    //   return Promise.resolve(undefined);
-    // return Promise.resolve(this._getRegGroupOfUser(eventID, userID));
+    if (eventID == "" || userID == undefined){
+      return new Observable<any>();
+    }
     return this.get('events-register/' + eventID + '/user/' + userID + '/group-info');
   }
-
-  // private _getRegGroupOfUser(
-  //   eventID: string,
-  //   userID: string
-  // ): RegGroup | undefined {
-  //   for (let group of RegGroups) {
-  //     if (group.eventID != eventID) continue;
-  //     if (!(userID in group.userIDs)) continue;
-  //     return group as RegGroup;
-  //   }
-  //   return undefined;
-  // }
 }
