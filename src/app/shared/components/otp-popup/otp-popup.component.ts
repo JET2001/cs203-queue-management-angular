@@ -24,7 +24,7 @@ export class OtpPopupComponent {
     const otp = this.otpFC.value;
 
     this.storeUserInfoService.verifyOtp(otp).then((value) => {
-      // this.otpVerified = value.data.valid;
+      this.otpVerified = value.data.valid;
       this.otpVerified = true;
       this.mobileVerified.emit(this.otpVerified);
       if (!this.otpVerified) {
