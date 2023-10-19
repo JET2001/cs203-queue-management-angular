@@ -82,14 +82,17 @@ export class GroupRegistrationComponent implements OnInit {
     const emailList: string[] = [];
     const mobileList: string[] = [];
     for(let invitee of this.invitees){ //invitee is of type formcontrol
+      if (invitee[0].value === '' || invitee[1].value === '') continue;
+
       emailList.push(invitee[0].value);
-      mobileList.push(invitee[1].value);
+      mobileList.push('0'.concat(invitee[1].value.substring(1))); // Parse the mobile number into a more compatible form.
     }
     // Load the user's ID
     const user: User = this.authService.user!; // definitely won't be null, because of the authguard.
     emailList.push(user.email);
     mobileList.push(user.mobileNo);
 
+    console.log(emailList, mobileList);
     const eventID : string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
 
     this.storeRegGroupService.saveGroup(emailList, mobileList, user.email, eventID).subscribe(
@@ -104,10 +107,12 @@ export class GroupRegistrationComponent implements OnInit {
         // };
         // this.storeRegGroupService.regGroup = userRegGroup;
 
+        console.log("Hello World! " + data);
+
         this.router.navigate(['/events']);
       },
       (error: Error) => {
-        // console.log(error.message);
+        console.log(error);
         this.router.navigate(['/events']);
       }
     );
@@ -143,23 +148,6 @@ export class GroupRegistrationComponent implements OnInit {
         console.error('An error occurred in verify():', error);
       }
     }, 5000);
-    // try {
-    //   for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx){
-    //     this.inputIsValid(inviteeIdx).subscribe(
-    //       (data: boolean | undefined) => {
-    //         this.inviteeVerified[inviteeIdx] = data;
-    //         console.log("Verified "+ inviteeIdx);
-    //       },
-    //       (error: Error) => {
-    //         this.inviteeVerified[inviteeIdx] = false;
-    //         console.log("Error " + inviteeIdx);
-    //       }
-    //     );
-    //   }
-    //   console.log("Verification complete!");
-    // } catch (error) {
-    //   console.error('An error occurred in verify():', error);
-    // }
   }
 
   isGroupVerified(): boolean {

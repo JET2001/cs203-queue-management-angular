@@ -30,8 +30,9 @@ export class StoreRegistrationGroupInfoService extends BaseRestApiService{
         email: email[i], mobile: mobile[i]
       });
     }
+    console.log("regGroupDTO = " + regGroupDTO);
 
-    return this.post('event-register/group', regGroupDTO);
+    return this.post('events-register/group', regGroupDTO);
   }
 
   public confirmUser(userID: string | undefined, eventID: string | undefined, groupID: string | undefined): Observable<any> {

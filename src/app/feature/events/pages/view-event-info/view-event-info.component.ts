@@ -190,6 +190,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo == undefined &&
       this.registerStatus == RegStatus.NOT_REGISTERED
     ) {
+      this.storeRegGroupService.modifyGroup = false;
       this.router.navigate(['/events', 'register', 'group']);
     }
   }
