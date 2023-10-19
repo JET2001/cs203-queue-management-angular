@@ -12,6 +12,12 @@ import { baseURL } from '../constants/api-paths';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthenticationService) {
+    // For debugging purposes, set this authtoken every 1 hour
+
+    // NOTE: I set this token directly in the constructor of the localstorageservice instead.
+    // this.authService.saveAuthToken(
+    //   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzYzMTgwNCwiZXhwIjoxNjk3NjM1NDA0fQ.OcvtL6KnPTVU-cDcdpd-xbzJopXweH9Ca5kjt2qDytI'
+    // );
   }
 
   // Intercept for most urls, but we need to exclude some urls, for instance landing page. Here is where I exclude the injection of some urls

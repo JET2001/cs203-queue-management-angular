@@ -1,12 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login-popup.component';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login-popup.component';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-carousel',
