@@ -228,7 +228,24 @@ export class ViewEventInfoComponent implements OnInit {
       !this.hasUserConfirmed &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
-      console.log('Confirm button handling');
+      this.storeRegGroupService.confirmUser(
+        this.authService.userID,
+        this.eventID,
+        this.regGroupInfo.regGroupID
+      ).subscribe(
+        (data: boolean) => {
+          if (data === true){
+            this._updateUserEventInfo();
+          }
+        },
+        (error: Error) => {
+          // TODO: Connection Error
+          // TODO: Unauthorized error
+          // TODO: Internal Server Error
+          // TODO: Conflict error
+          console.log(error);
+        }
+      );
     }
   }
 
@@ -239,7 +256,23 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo.groupLeaderUserId != this.authService.userID &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
-      console.log('Remove user button handling');
+      this.storeRegGroupService.removeUserFromGroup(
+        this.authService.userID,
+        this.eventID,
+        this.regGroupInfo.regGroupID
+      ).subscribe(
+        (data: boolean) => {
+          if (data === true){
+            this._updateUserEventInfo();
+          }
+        },
+        (error: Error) => {
+          // TODO: Connection Error
+          // TODO: Unauthorized Error
+          // TODO: Internal Server Error
+          // TODO: Conflict Error
+        }
+      );
     }
 
   }

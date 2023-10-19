@@ -81,7 +81,7 @@ export abstract class BaseRestApiService {
     // console.log(headers);
     const options = {params: params, headers: this.httpHeaders.headers};
 
-    return this.http.get(`${baseURL}/${path}`, options).pipe(
+    return this.http.delete(`${baseURL}/${path}`, options).pipe(
       tap({
         error:(error: HttpErrorResponse) => this.handleError(error)
       })
