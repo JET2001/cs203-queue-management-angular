@@ -65,7 +65,7 @@ export const events : Event[] = [
 export const Users : User[] = [
   {
     userID: "1",
-    mobileNo: "+6598231539",
+    mobileNo: "06586616057",
     email: "david.zhu.2022@smu.edu.sg",
     password: "password2",
     authenticatorID: "2",
@@ -80,14 +80,14 @@ export const Users : User[] = [
   },
   {
     userID: "3",
-    mobileNo: "+6598231539",
+    mobileNo: "06598231539",
     email: "jrteo.2022@smu.edu.sg",
     authenticatorID: "001",
     isVerified: true
   },
   {
     userID: "4",
-    mobileNo: "+6581996653",
+    mobileNo: "06581996653",
     email: "clarissatoh.2022@smu.edu.sg",
     password: "password3",
     authenticatorID: "3",
@@ -95,7 +95,7 @@ export const Users : User[] = [
   },
   {
     userID: "5",
-    mobileNo: "+6592366941",
+    mobileNo: "06592366941",
     email: "benedictlee.2022@smu.edu.sg",
     password: "password4",
     authenticatorID: "4",
