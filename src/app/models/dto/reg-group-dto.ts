@@ -19,5 +19,11 @@ export interface RegGroupDTOResp {
   groupLeaderEmail?: string;
   hasAllUsersConfirmed? : boolean;
   queueList?: QueueDTO[];
+}
 
+export interface ModifyRegGroupDTOReq{
+  userGroup: UserDTO[];
+  groupLeaderEmail: string;
+  groupLeaderId: string;
+  eventId: string;
 }

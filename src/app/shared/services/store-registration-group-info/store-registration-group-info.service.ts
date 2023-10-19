@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { baseURL } from 'src/app/core/constants/api-paths';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
-import { RegGroupDTOReq, RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { ModifyRegGroupDTOReq, RegGroupDTOReq, RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +33,23 @@ export class StoreRegistrationGroupInfoService extends BaseRestApiService{
     console.log("regGroupDTO = " + regGroupDTO);
 
     return this.post('events-register/group', regGroupDTO);
+  }
+
+  public saveModifiedGroup(email: string[], mobile: string[], userEmail: string, userId: string, eventId: string): Observable<any>{
+    const modifyGroupDTO : ModifyRegGroupDTOReq = {
+      groupLeaderEmail: userEmail,
+      groupLeaderId: userId,
+      eventId: eventId,
+      userGroup: []
+    };
+
+    for (let i = 0; i < email.length; ++i) {
+      modifyGroupDTO.userGroup.push({
+        email: email[i], mobile: mobile[i]
+      });
+    }
+
+    return this.post('events-register/modify-group', modifyGroupDTO);
   }
 
   public confirmUser(userID: string | undefined, eventID: string | undefined, groupID: string | undefined): Observable<any> {

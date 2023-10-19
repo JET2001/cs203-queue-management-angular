@@ -94,28 +94,15 @@ export class GroupRegistrationComponent implements OnInit {
 
     console.log(emailList, mobileList);
     const eventID : string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
-
-    this.storeRegGroupService.saveGroup(emailList, mobileList, user.email, eventID).subscribe(
-      (data: any) => {
-        // const userRegGroup : RegGroupDTOResp = {
-        //   regGroupID: data.id,
-        //   eventId: data.eventId,
-        //   groupLeaderUserId: data.groupLeaderId,
-        //   groupLeaderEmail: data.groupLeaderEmail,
-        //   groupSize: data.groupSize,
-        //   userGroup: data.userGroup
-        // };
-        // this.storeRegGroupService.regGroup = userRegGroup;
-
-        console.log("Hello World! " + data);
-
-        this.router.navigate(['/events']);
-      },
-      (error: Error) => {
-        console.log(error);
-        this.router.navigate(['/events']);
-      }
-    );
+    if (!this.modifyGroup){
+      // Submits the group object.
+      // Will route to the view-events page upon completion
+      this._handleCreateGroupSubmission(emailList, mobileList, user.email, eventID);
+    } else {
+      // Submits the group object for modification
+      // Will route to the view-events page upon completion
+      this._handleModifyGroupSubmission(emailList, mobileList, user.email, user.userID, eventID);
+    }
   }
 
   backToConcert(): void {
@@ -209,6 +196,36 @@ export class GroupRegistrationComponent implements OnInit {
       this.verified = false;
       this.inviteeVerified = [undefined, undefined, undefined];
   }
+
+
+  // ===================================================
+  // Handle group submission
+  // ===================================================
+  private _handleCreateGroupSubmission(emailList: string[], mobileList: string[], userEmail: string, eventID: string): void {
+    this.storeRegGroupService.saveGroup(emailList, mobileList, userEmail, eventID).subscribe(
+      (data: any) => {
+        this.router.navigate(['/events']);
+      },
+      (error: Error) => {
+        console.log(error);
+        this.router.navigate(['/events']);
+      }
+    );
+  }
+
+  private _handleModifyGroupSubmission(emailList: string[], mobileList: string[], userEmail: string, userId: string, eventID: string): void {
+    this.storeRegGroupService.saveModifiedGroup(emailList, mobileList, userEmail, userId, eventID).subscribe(
+      (data: any) => {
+        this.router.navigate(['/events']);
+      },
+      (error: Error) => {
+        console.log(error);
+        this.router.navigate(['/events']);
+      }
+    );
+  }
+
+
 
   private _userInfoNotEmpty(idx: number): boolean {
     return this.invitees[idx][0].value !== '' &&
