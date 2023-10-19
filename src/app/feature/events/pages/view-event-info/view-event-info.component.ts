@@ -273,6 +273,7 @@ export class ViewEventInfoComponent implements OnInit {
           // TODO: Unauthorized Error
           // TODO: Internal Server Error
           // TODO: Conflict Error
+          console.log(error);
         }
       );
     }
@@ -288,7 +289,6 @@ export class ViewEventInfoComponent implements OnInit {
 
     // Load user's registration group and queues
     this._getUserRegGroupMemberInfo();
-    // console.log('this.regGroupInfo = ', this.regGroupInfo);
   }
 
   private _mapRegStatusToRegStepper(): number {

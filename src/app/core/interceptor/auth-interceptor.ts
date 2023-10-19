@@ -31,7 +31,6 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Check if this is an API call, if it is not, do not intercept
-    console.log("request = ", req);
     if (!req.url.includes(`${baseURL}`)) {
       return next.handle(req);
     }
@@ -39,7 +38,6 @@ export class AuthInterceptor implements HttpInterceptor {
     for (let pathToExclude of this.excludePaths) {
       let pathRegEx = new RegExp(pathToExclude);
       if (pathRegEx.test(req.url)) {
-        // console.log("No token added to " + req.url.toString())
         return next.handle(req);
       }
     }
