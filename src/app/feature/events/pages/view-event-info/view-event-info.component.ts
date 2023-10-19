@@ -288,7 +288,7 @@ export class ViewEventInfoComponent implements OnInit {
 
     // Load user's registration group and queues
     this._getUserRegGroupMemberInfo();
-    console.log('this.regGroupInfo = ', this.regGroupInfo);
+    // console.log('this.regGroupInfo = ', this.regGroupInfo);
   }
 
   private _mapRegStatusToRegStepper(): number {

@@ -110,22 +110,20 @@ export class GroupRegistrationComponent implements OnInit {
   }
 
   onTextChange(): void {
-    // console.log("text changed");
     this.verified = false;
   }
 
   verify(): void {
+    console.log("Verification in progress - wait 5 seconds");
     setTimeout(() => {
       try {
         for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx){
           this.inputIsValid(inviteeIdx).subscribe(
             (data: boolean | undefined) => {
               this.inviteeVerified[inviteeIdx] = data;
-              console.log("Verified "+ inviteeIdx + ": " + data);
             },
             (error: Error) => {
               this.inviteeVerified[inviteeIdx] = false;
-              console.log("Error " + inviteeIdx);
               console.log(error);
             }
           );
@@ -145,17 +143,13 @@ export class GroupRegistrationComponent implements OnInit {
   }
 
   inputIsValid(inviteeNum: number): Observable<boolean | undefined> {
-    console.log("UserEmail = ", inviteeNum, ": ", this.invitees[inviteeNum][0].value);
-    console.log("UserMobile - ", inviteeNum, ": ", this.invitees[inviteeNum][1].value);
     // Case 1: if both fields are empty, there can be no invitation. return true
     if (this._userInfoIsEmpty(inviteeNum)) {
-      console.log("invitee " + inviteeNum + " is empty!");
       return of(true);
     }
 
     // Case 2: if one field is empty, input is incomplete. return false
     if (!this._userInfoNotEmpty(inviteeNum)) {
-      console.log("invitee " + inviteeNum + " is not filled properly!");
       return of(false);
     }
 
@@ -164,32 +158,6 @@ export class GroupRegistrationComponent implements OnInit {
     // there will be a '+', so concatenate '0'
     let mobile: string = '0'.concat(this.invitees[inviteeNum][1].value.substring(1));
     return this.getUserInfoService.getUserID(email, mobile);
-    // return new Promise((resolve, reject) => {
-    //   if (
-    //     this.invitees[inviteeNum][0].value !== '' &&
-    //     this.invitees[inviteeNum][1].value !== ''
-    //   ) {
-    //     this.getUserInfoService
-    //       .getUserID(
-    //         this.invitees[inviteeNum][0].value,
-    //         this.invitees[inviteeNum][1].value
-    //       )
-    //       .then((retrievedId) => {
-    //         if (retrievedId !== undefined) {
-    //           Valid = true;
-    //         } else {
-    //           Valid = false;
-    //         }
-    //         resolve(Valid);
-    //       })
-    //       .catch((error) => {
-    //         console.error('An error occurred:', error);
-    //         reject(error);
-    //       });
-    //   } else {
-    //     resolve(Valid);
-    //   }
-    // });
   }
 
   onKeyStrokeDetected() {
