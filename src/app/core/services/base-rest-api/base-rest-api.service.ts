@@ -24,6 +24,7 @@ export abstract class BaseRestApiService {
 
   // Post request
   protected post(path: string, data: any): Observable<any> {
+    console.log(data);
     return this.http.post(`${baseURL}/${path}`, data, this.httpHeaders).pipe(
       tap({
         error: (error: HttpErrorResponse) => this.handleError(error),

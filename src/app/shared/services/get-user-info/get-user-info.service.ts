@@ -30,8 +30,12 @@ export class GetUserInfoService extends BaseRestApiService {
     return false;
   }
 
-  getUserID(email: string, mobile: string): Promise<string | undefined> {
-    return Promise.resolve(this._getUserID(email, mobile));
+  // getUserID(email: string, mobile: string): Promise<string | undefined> {
+  //   return Promise.resolve(this._getUserID(email, mobile));
+  // }
+
+  getUserID(email: string, mobile: string): Observable<any> {
+    return this.get('users');
   }
 
   private _getUserID(email: string, mobile: string): string | undefined {

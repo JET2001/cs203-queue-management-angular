@@ -53,7 +53,7 @@ export class GroupRegisterInviteComponent implements AfterViewInit {
         this.invitees[inviteeNum][0].value,
         this.invitees[inviteeNum][1].value
       )
-      .then((userID: string | undefined) => {
+      .subscribe((userID: string | undefined) => {
         this.inviteeVerified[inviteeNum] = userID != undefined;
         this.userIDEvent.emit(userID);
       });
