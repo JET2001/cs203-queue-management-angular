@@ -198,9 +198,8 @@ export class ViewEventInfoComponent implements OnInit {
     // Only navigate if the user already has a group, and all members
     // in the group have confirmed, and that the queueIDs list is null.
     if (
-      this.regGroupInfo != undefined &&
-      this.regGroupInfo.hasAllUsersConfirmed &&
-      this.regGroupInfo!.queueList?.length == 0 &&
+      this.regGroupInfo?.hasAllUsersConfirmed &&
+      this.regGroupInfo?.queueList?.length == 0 &&
       this.registerStatus == RegStatus.GROUP_CONFIRMED
     ) {
       this.router.navigate(['/events', 'register', 'queue']);
@@ -216,6 +215,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.registerStatus < RegStatus.REGISTERED
     ) {
       this.storeRegGroupService.modifyGroup = true;
+      this.storeRegGroupService.regGroup = this.regGroupInfo;
 
       this.router.navigate(['/events', 'register', 'group']);
     }
