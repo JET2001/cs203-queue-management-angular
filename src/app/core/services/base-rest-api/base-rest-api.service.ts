@@ -50,7 +50,7 @@ export abstract class BaseRestApiService {
   }
 
   // Delete Request
-  protected delete(path: string, data: any): Observable<any> {
+  protected delete(path: string): Observable<any> {
     return this.http.delete(`${baseURL}/${path}`, this.httpHeaders).pipe(
       tap({
         error: (error: HttpErrorResponse) => this.handleError(error),
@@ -59,15 +59,23 @@ export abstract class BaseRestApiService {
   }
 
   // Get Request with Parameters.
-  protected getWithParams(path: string, params: HttpParams): Observable<any> {
-    // let headers = new HttpHeaders();
-    // headers = headers.append('Content-Type', 'application/json');
-    // console.log(headers);
-    const options = { params: params, headers: this.httpHeaders.headers };
+  protected getWithParams(path: string, params: HttpParams): Observable<any>  {
+    const options = {  params: params, headers: this.httpHeaders.headers  };
 
     return this.http.get(`${baseURL}/${path}`, options).pipe(
       tap({
         error: (error: HttpErrorResponse) => this.handleError(error),
+      })
+    );
+  }
+
+  // Delete Request with Parameters.
+  protected deleteWithParams(path: string, params: HttpParams): Observable<any>{
+    const options = {params: params, headers: this.httpHeaders.headers};
+
+    return this.http.delete(`${baseURL}/${path}`, options).pipe(
+      tap({
+        error:(error: HttpErrorResponse) => this.handleError(error)
       })
     );
   }

@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { baseURL } from 'src/app/core/constants/api-paths';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
-import { RegGroupDTOReq, RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { ModifyRegGroupDTOReq, RegGroupDTOReq, RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -29,10 +30,52 @@ export class StoreRegistrationGroupInfoService extends BaseRestApiService{
         email: email[i], mobile: mobile[i]
       });
     }
+    console.log("regGroupDTO = " + regGroupDTO);
 
-    return this.post('event-register/group', regGroupDTO);
+    return this.post('events-register/group', regGroupDTO);
   }
 
+  public saveModifiedGroup(email: string[], mobile: string[], userEmail: string, userId: string, eventId: string): Observable<any>{
+    const modifyGroupDTO : ModifyRegGroupDTOReq = {
+      groupLeaderEmail: userEmail,
+      groupLeaderId: userId,
+      eventId: eventId,
+      userGroup: []
+    };
+
+    for (let i = 0; i < email.length; ++i) {
+      modifyGroupDTO.userGroup.push({
+        email: email[i], mobile: mobile[i]
+      });
+    }
+
+    return this.post('events-register/modify-group', modifyGroupDTO);
+  }
+
+  public confirmUser(userID: string | undefined, eventID: string | undefined, groupID: string | undefined): Observable<any> {
+    if (userID == "" || eventID == "" || groupID == ""){
+      return new Observable<any>();
+    }
+    return this.put('events-register/group/event/user/confirm',
+    {
+      userId: userID,
+      eventId: eventID,
+      groupId: groupID
+    });
+  }
+
+  public removeUserFromGroup(userID: string | undefined, eventID: string | undefined, groupID: string | undefined): Observable<any> {
+    if (userID == undefined || eventID == undefined || groupID == undefined){
+      return new Observable<any>();
+    }
+    let params = new HttpParams();
+    params = params.append("userId", userID);
+    params = params.append("eventId", eventID);
+    params = params.append("groupId", groupID);
+
+    // See definition of delete below
+    return this.deleteWithParams("events-register/group/leave-group", params);
+  }
 
   public set regGroup(regGroup: RegGroupDTOResp | undefined) {
     this._regGroupDTO = regGroup;
