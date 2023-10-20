@@ -1,10 +1,10 @@
+import { Event } from "../models/event";
+import { Queue } from '../models/queue';
+import { RegGroup } from '../models/reg-group';
+import { SeatCategories } from '../models/seat-categories';
+import { Show } from '../models/show';
 import { Location } from './../models/location';
 import { User } from './../models/user';
-import { Event } from "../models/event";
-import { RegGroup } from '../models/reg-group';
-import { Queue } from '../models/queue';
-import { Show } from '../models/show';
-import { SeatCategories } from '../models/seat-categories';
 
 //=======================================================================
 // Events DB
