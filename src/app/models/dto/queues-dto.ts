@@ -5,6 +5,7 @@ export interface QueueDTO {
   queueID: string;
   queueStartTime: Date;
   queueEndTime: Date;
+  location?: string;
 }
 
 
