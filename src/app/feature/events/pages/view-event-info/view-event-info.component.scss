@@ -22,12 +22,17 @@
 }
 
 .event-poster {
-  width: 500px;
+  width: auto;
   height: 600px;
   object-fit: cover;
 }
 
 .reg-info-group {
+  margin-top: 20px;
+}
+
+.queue-info-group {
+  width: max-width;
   margin-top: 20px;
 }
 

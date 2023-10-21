@@ -51,6 +51,9 @@ export class ViewEventInfoComponent implements OnInit {
   hasEventLoaded: boolean = false;
   hasRegGroupInfoLoaded: boolean = false;
 
+  // QueueList
+  queueList: QueueDTO[];
+
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
@@ -64,6 +67,7 @@ export class ViewEventInfoComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.queueList = [];
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
@@ -146,6 +150,13 @@ export class ViewEventInfoComponent implements OnInit {
     );
   }
 
+  showQueuesInfo(): boolean {
+    return(
+      this.authService.isLoggedIn &&
+      this.registerStatus >= RegStatus.REGISTERED
+    )
+  }
+
   datesAreValid(): boolean {
     return (
       this.earliestShowDate != undefined && this.latestShowDate != undefined
@@ -196,7 +207,7 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
-  handleNextStepsButtonClick(): void {
+  handleQueueButtonClick(): void {
     // Only navigate if the user already has a group, and all members
     // in the group have confirmed, and that the queueIDs list is null.
     if (
@@ -390,7 +401,7 @@ export class ViewEventInfoComponent implements OnInit {
           }
 
           // Load registered queues
-          let queueList: QueueDTO[] = this._fillRegisteredQueues(data);
+          this.queueList = this._fillRegisteredQueues(data);
 
           this.regGroupInfo = {
             userGroup: userList,
@@ -399,7 +410,7 @@ export class ViewEventInfoComponent implements OnInit {
             eventId: data.eventId,
             hasAllUsersConfirmed: data.hasAllUsersConfirmed,
             groupLeaderUserId: groupLeaderId,
-            queueList: queueList,
+            queueList: this.queueList,
           };
 
           // Set Registration Status of user
@@ -432,6 +443,7 @@ export class ViewEventInfoComponent implements OnInit {
         queueID: queue.queueId,
         queueStartTime: queue.startDateTime,
         queueEndTime: queue.endDateTime,
+        location: (queue.locationName !== null)? queue.locationName : "Not specified"
       };
       queueList.push(queueObj);
     }
@@ -451,16 +463,5 @@ export class ViewEventInfoComponent implements OnInit {
     this.hasUserConfirmed = false;
     this.registerStatus = RegStatus.NOT_REGISTERED;
     this.activeIndex = RegStepper.NOT_LOGGED_IN;
-  }
-
-  //====================
-  // DEMO ONLY
-  // ==================
-  routeToQueueButtonVisible(): boolean {
-    return true;
-  }
-
-  handleQueueButtonClick(): void {
-    this.router.navigate(['/events', 'register', 'queue']);
   }
 }
