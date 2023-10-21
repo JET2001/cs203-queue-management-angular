@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,26 +8,30 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.scss'],
 })
-export class CarouselComponent implements OnInit {
+export class CarouselComponent extends BaseComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
   events: Event[] = [];
   isCarousellReady: boolean = false;
   id2CarousellEvent: Map<string, Event>;
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private getEventInfoService: GetEventInfoService,
     private router: Router,
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
     private getRegGroupService: GetRegistrationGroupService,
     private activeModal: NgbModal
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id2CarousellEvent = new Map<string, Event>();
@@ -42,10 +47,13 @@ export class CarouselComponent implements OnInit {
       this.hasError.emit();
       return;
     }
+    this.spinnerShow();
     // Get information for the event
     const eventSelected : Event | undefined = this.id2CarousellEvent.get(eventID);
-    if (eventSelected === undefined) return;
-
+    if (eventSelected === undefined) {
+      this.spinnerHide();
+      return;
+    }
     this.storeEventInfoService.eventInfo = {
         eventID: eventID,
         eventTitle: eventSelected.name,
@@ -67,6 +75,7 @@ export class CarouselComponent implements OnInit {
 
   handleLearnMoreButtonClick(eventID: string): void {
     // console.log(eventID);
+    this.spinnerShow();
     const eventSelected : Event | undefined = this.id2CarousellEvent.get(eventID);
 
     if(eventSelected !== undefined){
@@ -77,6 +86,7 @@ export class CarouselComponent implements OnInit {
       };
       this.router.navigate(['/events']);
     }
+    this.spinnerHide();
   }
 
   private _loadCarousellEvents(data: any): void {

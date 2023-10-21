@@ -1,3 +1,5 @@
+import { BaseComponent } from './../../../../base/base.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -25,7 +27,7 @@ import { User } from 'src/app/models/user';
   styleUrls: ['./view-event-info.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ViewEventInfoComponent implements OnInit {
+export class ViewEventInfoComponent extends BaseComponent implements OnInit {
   eventID!: string | undefined;
   userID!: string | undefined;
   // Event information
@@ -55,6 +57,7 @@ export class ViewEventInfoComponent implements OnInit {
   queueList: QueueDTO[];
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
     private getEventInfoService: GetEventInfoService,
@@ -63,8 +66,10 @@ export class ViewEventInfoComponent implements OnInit {
     private getUserInfoService: GetUserInfoService,
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+  ) {
+    super(spinner);
+  }
 
   async ngOnInit(): Promise<void> {
     this.queueList = [];
@@ -134,6 +139,10 @@ export class ViewEventInfoComponent implements OnInit {
     this._updateUserEventInfo();
   }
 
+  // ngAfterViewInit(): void {
+  //   this.spinner.show();
+  // }
+
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
@@ -202,6 +211,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo == undefined &&
       this.registerStatus == RegStatus.NOT_REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.modifyGroup = false;
       this.router.navigate(['/events', 'register', 'group']);
     }
@@ -215,6 +225,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo?.queueList?.length == 0 &&
       this.registerStatus == RegStatus.GROUP_CONFIRMED
     ) {
+      this.spinnerShow();
       this.router.navigate(['/events', 'register', 'queue']);
     }
   }
@@ -227,6 +238,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo.groupLeaderUserId == this.authService.userID &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.modifyGroup = true;
       this.storeRegGroupService.regGroup = this.regGroupInfo;
 
@@ -241,6 +253,7 @@ export class ViewEventInfoComponent implements OnInit {
       !this.hasUserConfirmed &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.confirmUser(
         this.authService.userID,
         this.eventID,
@@ -257,6 +270,7 @@ export class ViewEventInfoComponent implements OnInit {
           // TODO: Internal Server Error
           // TODO: Conflict error
           console.log(error);
+          this.spinnerHide();
         }
       );
     }
@@ -269,6 +283,7 @@ export class ViewEventInfoComponent implements OnInit {
       this.regGroupInfo.groupLeaderUserId != this.authService.userID &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.removeUserFromGroup(
         this.authService.userID,
         this.eventID,
@@ -285,6 +300,7 @@ export class ViewEventInfoComponent implements OnInit {
           // TODO: Internal Server Error
           // TODO: Conflict Error
           console.log(error);
+          this.spinnerHide();
         }
       );
     }
@@ -296,8 +312,10 @@ export class ViewEventInfoComponent implements OnInit {
   private _updateUserEventInfo(): void {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
-    if (this.userID == undefined) return;
-
+    if (this.userID == undefined) {
+      this.spinnerHide();
+      return;
+    }
     // Load user's registration group and queues
     this._getUserRegGroupMemberInfo();
   }
@@ -419,6 +437,7 @@ export class ViewEventInfoComponent implements OnInit {
           // Set the stepper
           this.activeIndex = this._mapRegStatusToRegStepper();
           this.hasRegGroupInfoLoaded = true;
+          this.spinnerHide();
         },
         (error: Error) => {
           console.log(error);
@@ -427,10 +446,11 @@ export class ViewEventInfoComponent implements OnInit {
           this.hasRegGroupInfoLoaded = true;
           if (error.message == '400') {
             // User is not registered
-            return;
           } else {
             // TODO: Internal Server Error
+
           }
+          this.spinnerHide();
         }
       );
   }

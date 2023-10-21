@@ -1,3 +1,5 @@
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
 import { Event } from 'src/app/models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
@@ -9,17 +11,20 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
   templateUrl: './upcoming-concerts.component.html',
   styleUrls: ['./upcoming-concerts.component.scss'],
 })
-export class UpcomingConcertsComponent implements OnInit {
+export class UpcomingConcertsComponent extends BaseComponent implements OnInit {
   @Input() userID: string | undefined = undefined;
   events: Event[];
   id2EventMap: Map<string, Event>;
   hasConcertsLoaded: boolean = false;
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private getEventInfoService: GetEventInfoService,
     private storeEventInfoService: StoreEventInfoService,
     private router: Router
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id2EventMap = new Map<string, Event>();
@@ -47,6 +52,7 @@ export class UpcomingConcertsComponent implements OnInit {
   handleButtonClick(eventID: string): void {
     const eventSelected : Event | undefined = this.id2EventMap.get(eventID);
     if (eventSelected === undefined) return;
+    this.spinnerShow();
     this.storeEventInfoService.eventInfo = {
       eventID: eventID,
       eventTitle: eventSelected.name,
