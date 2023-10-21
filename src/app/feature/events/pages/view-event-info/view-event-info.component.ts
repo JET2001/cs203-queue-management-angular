@@ -72,8 +72,6 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.spinnerShow();
-
     this.queueList = [];
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     if (this.eventID == undefined) {
