@@ -81,7 +81,6 @@
           class="event-poster"
         />
       </div>
-
       <div class="reg-info-group" *ngIf="showGroupMembersInfo()">
         <h2>Group Members</h2>
         <app-group-member-list
@@ -111,12 +110,16 @@
           </app-text-button>
         </div>
       </div>
+      <div *ngIf="showQueuesInfo()" class = 'queue-info-group'>
+        <h2>Registered Queues and Shows</h2>
+        <app-queues-list [queueList]="queueList"></app-queues-list>
+      </div>
     </div>
-  </div>
-  <div class="event-desc-group">
-    <div *ngIf="hasEventLoaded" class="description">
-      <h2>Description</h2>
-      <p>{{ eventInfo.description }}</p>
+    <div class="event-desc-group">
+      <div *ngIf="hasEventLoaded" class="description">
+        <h2>Description</h2>
+        <p>{{ eventInfo.description }}</p>
+      </div>
     </div>
   </div>
   <div class="view-shows-table">
