@@ -1,4 +1,4 @@
-<div class="upcoming-concerts-grid">
+<div *ngIf = "hasConcertsLoaded" class="upcoming-concerts-grid">
   <div *ngFor="let event of events" class="upcoming-concert-cell">
     <img
       [src]="'assets/posters/' + event.image"

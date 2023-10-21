@@ -6,6 +6,7 @@ import { LoginPopupComponent } from 'src/app/shared/components/login-popup/login
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
+import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 
 @Component({
   selector: 'app-carousel',
@@ -16,17 +17,20 @@ export class CarouselComponent implements OnInit {
   @Output() hasError = new EventEmitter<void>();
   events: Event[] = [];
   isCarousellReady: boolean = false;
-  id2CarousellEvent: Map<string, Event> = new Map<string, Event>();
+  id2CarousellEvent: Map<string, Event>;
 
   constructor(
     private getEventInfoService: GetEventInfoService,
     private router: Router,
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
+    private getRegGroupService: GetRegistrationGroupService,
     private activeModal: NgbModal
   ) {}
 
   ngOnInit(): void {
+    this.id2CarousellEvent = new Map<string, Event>();
+
     this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
       this._loadCarousellEvents(data);
     });
@@ -38,24 +42,41 @@ export class CarouselComponent implements OnInit {
       this.hasError.emit();
       return;
     }
-    this.getEventInfoService.getEventInfo(eventID).subscribe((event: any) => {
-      const eventSelected = event;
-      this.storeEventInfoService.eventInfo = {
+    // Get information for the event
+    const eventSelected : Event | undefined = this.id2CarousellEvent.get(eventID);
+    if (eventSelected === undefined) return;
+
+    this.storeEventInfoService.eventInfo = {
         eventID: eventID,
         eventTitle: eventSelected.name,
         maxQueueable: eventSelected.maxQueueable,
-      };
-      this.router.navigate(['/events', 'register', 'group']);
-    });
+    }
+
+    // Check if user has registered for an event
+    this.getRegGroupService.getRegGroupOfUser(eventID, this.authService.userID).subscribe(
+      (data: any) => {
+        // User has already registered --> route user to events page.
+        this.router.navigate(['/events']);
+      },
+      (error: Error) => {
+        // User has not registered. Now we can route to group-register.
+        this.router.navigate(['/events','register', 'group']);
+      }
+    );
   }
 
   handleLearnMoreButtonClick(eventID: string): void {
     // console.log(eventID);
-    this.storeEventInfoService.eventInfo = {
-      eventID: eventID,
-    };
+    const eventSelected : Event | undefined = this.id2CarousellEvent.get(eventID);
 
-    this.router.navigate(['/events']);
+    if(eventSelected !== undefined){
+      this.storeEventInfoService.eventInfo = {
+        eventID: eventSelected.eventID,
+        eventTitle: eventSelected.name,
+        maxQueueable: eventSelected.maxQueueable,
+      };
+      this.router.navigate(['/events']);
+    }
   }
 
   private _loadCarousellEvents(data: any): void {
@@ -75,7 +96,7 @@ export class CarouselComponent implements OnInit {
         this._buildEventSummary(event);
 
         this.events.push(event);
-
+        this.id2CarousellEvent.set(event.eventID, event);
       }
       this.isCarousellReady = true;
     });
