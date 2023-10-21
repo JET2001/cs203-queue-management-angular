@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -5,13 +6,14 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 import { GetUserInfoService } from '../../services/get-user-info/get-user-info.service';
 import { User } from 'src/app/models/user';
 import { Router } from '@angular/router';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-login-popup',
   templateUrl: './login-popup.component.html',
   styleUrls: ['./login-popup.component.scss'],
 })
-export class LoginPopupComponent implements OnInit {
+export class LoginPopupComponent extends BaseComponent implements OnInit {
   loginFG: FormGroup;
   emailFC: FormControl = new FormControl('', []);
   mobileFC: FormControl = new FormControl('', []);
@@ -24,12 +26,14 @@ export class LoginPopupComponent implements OnInit {
   showInvalidLoginMessage: boolean = false;
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
     private authService: AuthenticationService,
     private getUserInfoService: GetUserInfoService,
     private router: Router
   ) {
+    super(spinner);
     this.loginFG = this.fb.group({
       email: this.emailFC,
       mobile: this.mobileFC,
@@ -42,7 +46,7 @@ export class LoginPopupComponent implements OnInit {
 
   loginUser(): void {
     if (!this._fieldsAllValid()) return;
-
+    this.spinnerShow();
     // Process mobile number
     let mobile = this.processMobile();
     let email = this.emailFC.value;
@@ -91,6 +95,7 @@ export class LoginPopupComponent implements OnInit {
             this.loginFG.reset();
             // Dismiss this active modal
             this.activeModal.dismiss();
+            this.spinnerHide();
             if (this.userIsVerified) {
               // Authenticate user
               this.authService.authenticateUser().then((data: boolean) => {
@@ -104,11 +109,13 @@ export class LoginPopupComponent implements OnInit {
           } else {
             this.showInvalidLoginMessage = true;
             this.loginFG.reset();
+            this.spinnerHide();
           }
         },
         (error: Error) => {
           // console.log(error.message);
           // if (error.message)
+          this.spinnerHide();
         }
       );
   }
@@ -142,6 +149,7 @@ export class LoginPopupComponent implements OnInit {
   }
 
   handleRegisterClick(): void {
+    this.spinnerShow();
     this.router.navigate(['/user', 'register']);
   }
 }

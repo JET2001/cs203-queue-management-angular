@@ -20,7 +20,6 @@ export class LandingPageComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinnerShow();
     this.userID = this.authService.userID;
   }
 
