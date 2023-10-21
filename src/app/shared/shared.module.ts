@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
@@ -11,7 +11,6 @@ import { LoginPopupComponent } from './components/login-popup/login-popup.compon
 import { OtpPopupComponent } from './components/otp-popup/otp-popup.component';
 import { TextMaskModule } from '@myndmanagement/text-mask';
 import { MessagesModule } from 'primeng/messages';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,7 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     GaVerificationPopupComponent,
     LoginPopupComponent,
-    OtpPopupComponent
+    OtpPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -43,7 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     OtpPopupComponent,
     TextMaskModule,
-    MessagesModule
-  ],
+    MessagesModule,
+  ]
 })
 export class SharedModule {}

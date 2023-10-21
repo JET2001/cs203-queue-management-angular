@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -20,6 +21,7 @@ import { AuthInterceptor } from './core/interceptor/auth-interceptor';
     SharedModule,
     RouterModule.forRoot(appRoutes),
     NgbModule,
+    NgxSpinnerModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],
@@ -27,6 +29,7 @@ import { AuthInterceptor } from './core/interceptor/auth-interceptor';
     HttpClient,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
