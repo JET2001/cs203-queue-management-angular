@@ -1,3 +1,5 @@
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
 import {
   AfterContentInit,
   Component,
@@ -26,7 +28,7 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
   styleUrls: ['./queue-timings.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class QueueTimingsComponent implements OnInit, AfterContentInit {
+export class QueueTimingsComponent extends BaseComponent implements OnInit, AfterContentInit {
   eventID!: string | undefined;
   userID !: string | undefined;
   eventTitle: string | undefined;
@@ -44,6 +46,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   hasQueuesLoaded: boolean = false;
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private storeEventInfoService: StoreEventInfoService,
     private storeQueueTimingService: StoreQueueTimingService,
     private getQueueInfoService: GetQueueInfoService,
@@ -53,6 +56,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     private getRegGroupService: GetRegistrationGroupService,
     private authService: AuthenticationService
   ) {
+    super(spinner);
     this.queueTimingForm = this.fb.group({});
   }
 
@@ -99,9 +103,11 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
         }
 
         this.hasQueuesLoaded = true;
+        this.spinnerHide();
       },
       (error: Error) => {
         console.error(error);
+        this.spinnerHide();
       }
     );
   }
@@ -111,6 +117,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   }
 
   handleBackToConcert(): void {
+    this.spinnerShow();
     this.router.navigate(['/events']);
   }
 

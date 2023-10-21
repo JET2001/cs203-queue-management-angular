@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,13 +13,14 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import { User } from 'src/app/models/user';
 import {  RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { MAX_USERS_IN_GROUP } from '../../constants/event-register-constants';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-group-registration',
   templateUrl: './group-registration.component.html',
   styleUrls: ['./group-registration.component.scss'],
 })
-export class GroupRegistrationComponent implements OnInit {
+export class GroupRegistrationComponent extends BaseComponent implements OnInit {
   // Fields
   eventID!: string | undefined;
   groupID!: string | undefined;
@@ -47,15 +49,19 @@ export class GroupRegistrationComponent implements OnInit {
   inviteeVerified: (boolean | undefined)[] = [undefined, undefined, undefined];
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
     private router: Router,
     private getRegInfoService: GetRegistrationGroupService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
     private getUserInfoService: GetUserInfoService
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   async ngOnInit(): Promise<void> {
+    this.spinnerShow();
     // User, eventID should have been set and verified in events-register guard.
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
@@ -75,10 +81,12 @@ export class GroupRegistrationComponent implements OnInit {
         this.invitees[i][1].setValue(userMobile);
       }
     }
+    this.spinnerHide();
   }
 
   confirm(): void {
     // Save to DB
+    this.spinnerShow();
     const emailList: string[] = [];
     const mobileList: string[] = [];
     for(let invitee of this.invitees){ //invitee is of type formcontrol
@@ -114,7 +122,7 @@ export class GroupRegistrationComponent implements OnInit {
   }
 
   verify(): void {
-    console.log("Verification in progress - wait 5 seconds");
+    this.spinnerShow();
     setTimeout(() => {
       try {
         for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx){
@@ -128,7 +136,7 @@ export class GroupRegistrationComponent implements OnInit {
             }
           );
         }
-        console.log("Verification complete!");
+        this.spinnerHide();
       } catch (error) {
         console.error('An error occurred in verify():', error);
       }
