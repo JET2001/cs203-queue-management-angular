@@ -5,7 +5,9 @@
       <h1>{{ eventTitle }}</h1>
       <div>
         <h2>Queue Registration</h2>
-        <p>Choose your preferred queue timings. All fields have to be filled. </p>
+        <p>
+          Choose your preferred queue timings. All fields have to be filled.
+        </p>
       </div>
     </div>
     <img
@@ -17,17 +19,19 @@
   </div>
 
   <form [formGroup]="queueTimingForm">
-    <div
-      *ngFor="let optionNo of queueOptions"
-      class="queue-timing-dropdown-container"
-    >
-      Queue Timing #{{ optionNo + 1 }}
-      <p-dropdown
-        [options]="queueTimings"
-        [formControlName]="'queueTiming' + optionNo"
-        placeholder="Select a queue timing"
-        (onChange)="onOptionSelected()"
-      ></p-dropdown>
+    <div *ngIf="hasQueuesLoaded">
+      <div
+        *ngFor="let optionNo of queueOptions"
+        class="queue-timing-dropdown-container"
+      >
+        Queue Timing #{{ optionNo + 1 }}
+        <p-dropdown
+          [options]="queueTimings"
+          [formControlName]="'queueTiming' + optionNo"
+          placeholder="Select a queue timing"
+          (onChange)="onOptionSelected()"
+        ></p-dropdown>
+      </div>
     </div>
   </form>
   <div class="navigation-buttons">
@@ -42,7 +46,7 @@
       <app-text-button
         buttonVariants="primary"
         buttonText="Next"
-        (buttonClick)="handleNext()"
+        (buttonClick)="handleNextButtonClick()"
         [isDisabled]="this.isNextDisabled"
       ></app-text-button>
     </div>
