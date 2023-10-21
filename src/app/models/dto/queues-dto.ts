@@ -6,3 +6,22 @@ export interface QueueDTO {
   queueStartTime: Date;
   queueEndTime: Date;
 }
+
+
+export interface QueueDTOReq {
+  groupId: string;
+  userId: string;
+  eventId: string;
+  queueIdList: string[];
+  showIdList: string[];
+}
+
+export interface QueueDTOResp {
+  queueId: string;
+  queueStartTime: string;
+  queueEndTime: string;
+  showId: string;
+  eventId: string;
+  showDateTime: string;
+  locationName?: string;
+}
