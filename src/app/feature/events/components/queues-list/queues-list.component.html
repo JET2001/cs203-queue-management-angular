@@ -1,0 +1,12 @@
+<div class="parent">
+  <div class="queue-table-header">
+    <div class="queue-table-header-cell">Show Time</div>
+    <div class="queue-table-header-cell">Location</div>
+    <div class="queue-table-header-cell">Queue Time</div>
+  </div>
+  <div class="queue-table-row" *ngFor = "let queueObj of queueList">
+    <div class = 'queue-table-cell'>{{queueObj.showID}}</div>
+    <div class = 'queue-table-cell'>{{queueObj.location}}</div>
+    <div class = 'queue-table-cell'>{{queueObj.queueStartTime}}</div>
+  </div>
+</div>

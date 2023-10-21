@@ -110,8 +110,7 @@ export function registrationPreviewGuard(): CanActivateFn {
       StoreQueueTimingService
     );
     if (
-      storeQueueTimingsService.queueTimingPreferences.selectedQueueIDs
-        ?.length == 0
+      storeQueueTimingsService.selectionStrings.length == 0
     )
       denyAccess();
 

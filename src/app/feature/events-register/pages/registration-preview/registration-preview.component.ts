@@ -26,8 +26,7 @@ export class RegistrationPreviewComponent implements OnInit {
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
 
-    this.queueTimings =
-      this.storeQueueTimingService.queueTimingPreferences.selectedQueueTimings;
+    this.queueTimings = this.storeQueueTimingService.selectionStrings;
   }
 
   handleBackToQueueSelection(): void {
@@ -38,7 +37,21 @@ export class RegistrationPreviewComponent implements OnInit {
     this.activeModal.open(QueueTimingPopupComponent, { centered: true });
   }
 
-  handleNext(): void {
-    this.activeModal.open(GaRegistrationPopupComponent, { centered: true });
+  handleConfirmButtonClick(): void {
+    this.storeQueueTimingService.confirmQueueTimingsForGroup().subscribe(
+      (data: any) => {
+        if (data === true){
+          // Purchase successful
+          this.router.navigate(['/events']);
+        }
+        else{
+          console.error("Method returned false. Internal server error");
+        }
+      },
+      (error: Error) => {
+        console.error(error);
+        this.router.navigate(['/events','register']); // reselect queue options
+      }
+    )
   }
 }
