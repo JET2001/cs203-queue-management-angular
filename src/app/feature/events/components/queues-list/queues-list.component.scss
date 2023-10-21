@@ -1,0 +1,29 @@
+@import "src/styles.scss";
+.parent {
+  width: 100%;
+  display: table;
+}
+
+.queue-table-header {
+  display: table-header-group;
+  background-color: $gray-2;
+  font-weight: bold;
+}
+
+.queue-table-header-cell {
+  display: table-cell;
+  text-align: center;
+  border-bottom: 1px solid $gray-2;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.queue-table-row {
+  display: table-row;
+}
+
+.queue-table-cell {
+  display: table-cell;
+  text-align: center;
+}
+
