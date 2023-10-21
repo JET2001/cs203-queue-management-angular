@@ -1,3 +1,5 @@
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from './../../../../base/base.component';
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
@@ -8,16 +10,23 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
   styleUrls: ['./landing-page.component.scss'],
   providers: [MessageService],
 })
-export class LandingPageComponent implements OnInit {
+export class LandingPageComponent extends BaseComponent implements OnInit {
   userID!: string | undefined;
   constructor(
+    protected override spinner: NgxSpinnerService,
     private authService: AuthenticationService,
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
+    this.spinnerShow();
     this.userID = this.authService.userID;
   }
 
+  ngAfterContentInit(): void {
+    this.spinnerHide();
+  }
   // openErrorMessage(): void {
   //   this.messageService.add({
   //     severity: 'error',
