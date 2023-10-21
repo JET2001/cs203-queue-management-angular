@@ -213,6 +213,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       this.regGroupInfo == undefined &&
       this.registerStatus == RegStatus.NOT_REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.modifyGroup = false;
       this.router.navigate(['/events', 'register', 'group']);
     }
@@ -226,6 +227,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       this.regGroupInfo?.queueList?.length == 0 &&
       this.registerStatus == RegStatus.GROUP_CONFIRMED
     ) {
+      this.spinnerShow();
       this.router.navigate(['/events', 'register', 'queue']);
     }
   }
@@ -238,6 +240,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       this.regGroupInfo.groupLeaderUserId == this.authService.userID &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.modifyGroup = true;
       this.storeRegGroupService.regGroup = this.regGroupInfo;
 
@@ -252,6 +255,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       !this.hasUserConfirmed &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.confirmUser(
         this.authService.userID,
         this.eventID,
@@ -268,6 +272,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
           // TODO: Internal Server Error
           // TODO: Conflict error
           console.log(error);
+          this.spinnerHide();
         }
       );
     }
@@ -280,6 +285,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       this.regGroupInfo.groupLeaderUserId != this.authService.userID &&
       this.registerStatus < RegStatus.REGISTERED
     ) {
+      this.spinnerShow();
       this.storeRegGroupService.removeUserFromGroup(
         this.authService.userID,
         this.eventID,
@@ -296,6 +302,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
           // TODO: Internal Server Error
           // TODO: Conflict Error
           console.log(error);
+          this.spinnerHide();
         }
       );
     }

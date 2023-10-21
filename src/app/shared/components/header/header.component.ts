@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +14,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./header.component.scss'],
   providers: [MessageService],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent extends BaseComponent implements OnInit {
   @Output() verifiedUserLoggingIn = new EventEmitter<void>();
   @Output() userLoggedOut = new EventEmitter<void>();
   emailID: string | undefined = undefined;
@@ -20,11 +22,14 @@ export class HeaderComponent implements OnInit {
   email$!: Observable<string | undefined>;
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private authService: AuthenticationService,
     private router: Router,
     private activeModal: NgbModal,
     private messageService: MessageService
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.email$ = this.authService.email$;
@@ -92,6 +97,7 @@ export class HeaderComponent implements OnInit {
 
   handleConcertsButtonClick(): void {
     if (window.location.href.includes('home')) return; // don't route anywhere if we are already on the home page.
+    this.spinnerShow();
     this.router.navigate(['/home']);
   }
 }
