@@ -196,7 +196,7 @@ export class ViewEventInfoComponent implements OnInit {
     }
   }
 
-  handleNextStepsButtonClick(): void {
+  handleQueueButtonClick(): void {
     // Only navigate if the user already has a group, and all members
     // in the group have confirmed, and that the queueIDs list is null.
     if (
@@ -451,16 +451,5 @@ export class ViewEventInfoComponent implements OnInit {
     this.hasUserConfirmed = false;
     this.registerStatus = RegStatus.NOT_REGISTERED;
     this.activeIndex = RegStepper.NOT_LOGGED_IN;
-  }
-
-  //====================
-  // DEMO ONLY
-  // ==================
-  routeToQueueButtonVisible(): boolean {
-    return true;
-  }
-
-  handleQueueButtonClick(): void {
-    this.router.navigate(['/events', 'register', 'queue']);
   }
 }
