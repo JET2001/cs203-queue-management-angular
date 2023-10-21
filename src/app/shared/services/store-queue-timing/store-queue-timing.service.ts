@@ -4,14 +4,6 @@ import { Observable } from 'rxjs';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
 import { QueueDTOReq, QueueDTOResp } from 'src/app/models/dto/queues-dto';
 
-// export interface QueueTimingInfoParams {
-//   eventID?: string;
-//   userID?: string;
-//   selectedQueueIDs?: string[];
-//   selectedQueueTimings?: string[];
-//   groupID?: string;
-// }
-
 @Injectable({
   providedIn: 'root',
 })
