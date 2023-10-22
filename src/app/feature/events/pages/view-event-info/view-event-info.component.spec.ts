@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
@@ -20,7 +20,7 @@ import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-us
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { of } from 'rxjs';
+import { async, of, throwError } from 'rxjs';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { GroupMemberListComponent } from '../../components/group-member-list/group-member-list.component';
 import { QueuesListComponent } from '../../components/queues-list/queues-list.component';
@@ -354,9 +354,220 @@ describe('ViewEventInfoComponent', () => {
   });
 
 
-  // describe('user has not formed a group and is waiting for confirmation from their ')
+  describe('user has not formed a group and is waiting for confirmation from their registration', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ViewEventInfoComponent,
+          TextButtonComponent,
+          HeaderComponent,
+          ViewShowsComponent,
+          GroupMemberListComponent,
+          QueuesListComponent
+        ],
+        imports: [
+          SharedModule,
+          TableModule,
+          InputTextModule,
+          StepsModule,
+          HttpClientTestingModule,
+          RouterTestingModule
+        ],
+        providers: [MessageService],
+      });
 
+      // Inject services
+      http = TestBed.inject(HttpClient);
+      httpTestingController = TestBed.inject(HttpTestingController);
+      storeEventInfoService = TestBed.inject(StoreEventInfoService);
+      router = TestBed.inject(Router);
+      getEventInfoService = TestBed.inject(GetEventInfoService);
+      getRegGroupService = TestBed.inject(GetRegistrationGroupService);
+      authService = TestBed.inject(AuthenticationService);
+      storeRegGroupService = TestBed.inject(StoreRegistrationGroupInfoService);
+      messageService = TestBed.inject(MessageService);
 
+      // Return mock data, mock every service
+      spyOnProperty(storeEventInfoService, 'eventInfo' ,'get').and.returnValue({
+        eventID: 'TEST-EVENT-1',
+        eventTitle: 'test-event',
+        maxQueueable: 10
+      });
+      spyOn(router, 'navigate').and.stub();
+      spyOn(getEventInfoService, 'getEventInfo').and.returnValue(
+        of({
+          id : 'TEST-EVENT-1',
+          name: 'test-event',
+          maxQueueable: 10,
+          description: 'I am a test event!',
+          posterImagePath: 'taylor-swift.png',
+          countries: null,
+          highlighted: true
+        })
+      );
+
+      spyOnProperty(authService, 'userID', 'get').and.returnValue('TEST-USER-0');
+      spyOnProperty(authService, 'isLoggedIn', 'get').and.returnValue(true);
+
+      spyOn(getRegGroupService, 'getRegGroupOfUser').and.returnValue(of(
+        {
+          groupId: 'TEST-GROUP-1',
+          userInfoList: [
+            {
+              id: 'MOCK-USER-1',
+              mobile: '06590000001',
+              email: 'abc@example.com',
+              groupLeader: false,
+              confirmed: true
+            },
+            {
+              id: 'MOCK-USER-2',
+              mobile: '06591000000',
+              email: 'def@example.com',
+              groupLeader: true,
+              confirmed: true
+            },
+            {
+              id: 'TEST-USER-0',
+              mobile: '06591234567',
+              email: 'ghi@example.com',
+              groupLeader: false,
+              confirmed: false
+            }
+          ],
+          hasAllUsersConfirmed: false,
+          queueList: [] // empty queues
+        }
+      ));
+
+      spyOnProperty(storeRegGroupService, 'modifyGroup' ,'set').and.callThrough();
+      spyOnProperty(storeRegGroupService, 'regGroup', 'set').and.callThrough();
+      spyOn(storeRegGroupService, 'confirmUser').and.returnValue(of(true));
+      spyOn(storeRegGroupService, 'removeUserFromGroup').and.returnValue(of(true));
+
+      spyOn(messageService, 'add').and.stub();
+
+      fixture = TestBed.createComponent(ViewEventInfoComponent);
+
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    fit('hasAllUsersConfirmed should be false', () => {
+      expect(component.regGroupInfo?.hasAllUsersConfirmed).toBeFalse();
+    });
+
+    fit('hasUserConfirmed should be false', () => {
+      expect(component.hasUserConfirmed).toBeFalse();
+    });
+
+    fit('reg status of group should be set to PENDING CONFIRM', ()=>{
+      expect(component.registerStatus).toEqual(RegStatus.PENDING_CONFIRMATION);
+    });
+
+    fit('user should NOT see a modify group button', () => {
+      expect(component.showModifyGroupButton()).toBeFalse();
+    });
+
+    fit('user should see leave group and confirm group buttons', () => {
+      expect(component.showLeaveGroupButton()).toBeTrue();
+      expect(component.showConfirmRegButton()).toBeTrue();
+    });
+
+    fit('when user confirms, confirmUser should be called with the right parameters', () => {
+      component.handleConfirmRegButtonClick();
+      expect(storeRegGroupService.confirmUser).toHaveBeenCalledWith('TEST-USER-0', 'TEST-EVENT-1','TEST-GROUP-1');
+    });
+
+    fit('when user leaves group, removeUserFromGroup should be called with the right parameters', () => {
+      component.handleLeaveGroupButtonClick();
+      expect(storeRegGroupService.removeUserFromGroup).toHaveBeenCalledWith(
+        'TEST-USER-0',
+        'TEST-EVENT-1',
+        'TEST-GROUP-1'
+      );
+    });
+  });
+  describe('not registered user views the events page', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ViewEventInfoComponent,
+          TextButtonComponent,
+          HeaderComponent,
+          ViewShowsComponent,
+          GroupMemberListComponent,
+          QueuesListComponent
+        ],
+        imports: [
+          SharedModule,
+          TableModule,
+          InputTextModule,
+          StepsModule,
+          HttpClientTestingModule,
+          RouterTestingModule
+        ],
+        providers: [MessageService],
+      });
+
+      // Inject services
+      http = TestBed.inject(HttpClient);
+      httpTestingController = TestBed.inject(HttpTestingController);
+      storeEventInfoService = TestBed.inject(StoreEventInfoService);
+      router = TestBed.inject(Router);
+      getEventInfoService = TestBed.inject(GetEventInfoService);
+      getRegGroupService = TestBed.inject(GetRegistrationGroupService);
+      authService = TestBed.inject(AuthenticationService);
+      storeRegGroupService = TestBed.inject(StoreRegistrationGroupInfoService);
+      messageService = TestBed.inject(MessageService);
+
+      spyOnProperty(storeEventInfoService, 'eventInfo' ,'get').and.returnValue({
+        eventID: 'TEST-EVENT-1',
+        eventTitle: 'test-event',
+        maxQueueable: 10
+      });
+      spyOn(router, 'navigate').and.stub();
+      spyOn(getEventInfoService, 'getEventInfo').and.returnValue(
+        of({
+          id : 'TEST-EVENT-1',
+          name: 'test-event',
+          maxQueueable: 10,
+          description: 'I am a test event!',
+          posterImagePath: 'taylor-swift.png',
+          countries: null,
+          highlighted: true
+        })
+      );
+
+      spyOn(getRegGroupService, 'getRegGroupOfUser').and.returnValue(throwError(() => new Error("400")));
+
+    });
+
+    fit('should show the register status as NOT_LOGGED_IN', ()=>{
+      spyOnProperty(authService, 'userID', 'get').and.returnValue(undefined);
+      spyOnProperty(authService, 'isLoggedIn', 'get').and.returnValue(false);
+      component.handleUserLoginLogoutChange();
+      expect(component.registerStatus).toEqual(RegStatus.NOT_LOGGED_IN);
+    });
+
+    fit('userRegGroup should be undefined', () => {
+      spyOnProperty(authService, 'userID', 'get').and.returnValue(undefined);
+      spyOnProperty(authService, 'isLoggedIn', 'get').and.returnValue(false);
+      component.handleUserLoginLogoutChange();
+      expect(component.regGroupInfo).toBeFalsy();
+    });
+
+    fit('user logs in from the header component. should now show the users register status as NOT_REGISTERED', fakeAsync(() => {
+      spyOnProperty(authService, 'userID', 'get').and.returnValue('TEST-USER-0');
+      spyOnProperty(authService, 'isLoggedIn', 'get').and.returnValue(true);
+
+      component.handleUserLoginLogoutChange() // login user
+
+      tick(5000);
+      console.log(component.regGroupInfo, component.registerStatus);
+      expect(component.registerStatus).toEqual(RegStatus.NOT_REGISTERED);
+    }));
+  });
 
 });
 

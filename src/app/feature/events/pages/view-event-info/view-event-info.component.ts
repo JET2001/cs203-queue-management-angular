@@ -313,6 +313,8 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
     if (this.userID == undefined) {
+      this._setRegistrationStatusOfUser();
+      this._mapRegStatusToRegStepper();
       this.spinnerHide();
       return;
     }
