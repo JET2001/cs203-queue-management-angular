@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http/testing';
 import { TextButtonComponent } from '../text-button/text-button.component';
 import { HeaderComponent } from './header.component';
+import { MessagesModule } from 'primeng/messages';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -17,7 +18,7 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [HeaderComponent, TextButtonComponent],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MessagesModule],
     });
 
     httpClient = TestBed.inject(HttpClient);
