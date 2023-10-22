@@ -218,6 +218,145 @@ describe('ViewEventInfoComponent', () => {
 
   });
 
-  
+  describe('user has formed a group (user is groupleader) but not signed up for queues', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ViewEventInfoComponent,
+          TextButtonComponent,
+          HeaderComponent,
+          ViewShowsComponent,
+          GroupMemberListComponent,
+          QueuesListComponent
+        ],
+        imports: [
+          SharedModule,
+          TableModule,
+          InputTextModule,
+          StepsModule,
+          HttpClientTestingModule,
+          RouterTestingModule
+        ],
+        providers: [MessageService],
+      });
+
+      // Inject services
+      http = TestBed.inject(HttpClient);
+      httpTestingController = TestBed.inject(HttpTestingController);
+      storeEventInfoService = TestBed.inject(StoreEventInfoService);
+      router = TestBed.inject(Router);
+      getEventInfoService = TestBed.inject(GetEventInfoService);
+      getRegGroupService = TestBed.inject(GetRegistrationGroupService);
+      authService = TestBed.inject(AuthenticationService);
+      storeRegGroupService = TestBed.inject(StoreRegistrationGroupInfoService);
+      messageService = TestBed.inject(MessageService);
+
+      // Return mock data, mock every service
+      spyOnProperty(storeEventInfoService, 'eventInfo' ,'get').and.returnValue({
+        eventID: 'TEST-EVENT-1',
+        eventTitle: 'test-event',
+        maxQueueable: 10
+      });
+      spyOn(router, 'navigate').and.stub();
+      spyOn(getEventInfoService, 'getEventInfo').and.returnValue(
+        of({
+          id : 'TEST-EVENT-1',
+          name: 'test-event',
+          maxQueueable: 10,
+          description: 'I am a test event!',
+          posterImagePath: 'taylor-swift.png',
+          countries: null,
+          highlighted: true
+        })
+      );
+
+      spyOnProperty(authService, 'userID', 'get').and.returnValue('TEST-USER-0');
+      spyOnProperty(authService, 'isLoggedIn', 'get').and.returnValue(true);
+
+      spyOn(getRegGroupService, 'getRegGroupOfUser').and.returnValue(of(
+        {
+          groupId: 'TEST-GROUP-1',
+          userInfoList: [
+            {
+              id: 'MOCK-USER-1',
+              mobile: '06590000001',
+              email: 'abc@example.com',
+              groupLeader: false,
+              confirmed: true
+            },
+            {
+              id: 'MOCK-USER-2',
+              mobile: '06591000000',
+              email: 'def@example.com',
+              groupLeader: false,
+              confirmed: true
+            },
+            {
+              id: 'TEST-USER-0',
+              mobile: '06591234567',
+              email: 'ghi@example.com',
+              groupLeader: true,
+              confirmed: true
+            }
+          ],
+          hasAllUsersConfirmed: true,
+          queueList: [] // empty queues
+        }
+      ));
+
+      spyOnProperty(storeRegGroupService, 'modifyGroup' ,'set').and.callThrough();
+      spyOnProperty(storeRegGroupService, 'regGroup', 'set').and.callThrough();
+      spyOn(storeRegGroupService, 'confirmUser').and.returnValue(of(true));
+      spyOn(storeRegGroupService, 'removeUserFromGroup').and.returnValue(of(true));
+
+      spyOn(messageService, 'add').and.stub();
+
+      fixture = TestBed.createComponent(ViewEventInfoComponent);
+
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    fit('queueList should have length of 0', () => {
+      if (component.regGroupInfo?.queueList === undefined){
+        fail('queueList should not be undefined');
+      }
+      expect(component.regGroupInfo!.queueList!.length).toEqual(0);
+    })
+
+    fit('user reg status should be at GROUP_CONFIRMED', () => {
+      expect(component.registerStatus).toEqual(RegStatus.GROUP_CONFIRMED);
+    });
+
+    fit('user should see a button to modify group', () => {
+      expect(component.showModifyGroupButton()).toBeTrue();
+    });
+
+    fit ('user should not see leave group or confirm group buttons', () => {
+      expect(component.showConfirmRegButton()).toBeFalse();
+      expect(component.showLeaveGroupButton()).toBeFalse();
+    })
+
+    fit('when the modify group button is clicked, the router should navigate to events/register/group', () => {
+      component.handleModifyGroupButtonClick();
+      expect(router.navigate).toHaveBeenCalledWith(['/events','register', 'group']);
+    });
+
+    fit('when the modify group button is clicked, the modify group should be set', () => {
+      component.handleModifyGroupButtonClick();
+      expect(storeRegGroupService.modifyGroup).toBeTrue();
+    });
+    fit('when the modify group button is clicked, the reg group should be saved', () => {
+      component.handleModifyGroupButtonClick();
+      expect(storeRegGroupService.regGroup?.groupLeaderEmail).toEqual(component.regGroupInfo?.groupLeaderEmail);
+      expect(component.regGroupInfo?.groupLeaderUserId).toEqual(authService.userID);
+    });
+  });
+
+
+  // describe('user has not formed a group and is waiting for confirmation from their ')
+
+
+
 });
 
