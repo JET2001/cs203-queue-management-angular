@@ -11,6 +11,6 @@ export class SetupPaymentPopupComponent {
   constructor(public activeModal: NgbActiveModal, private router: Router) {}
 
   routeToPaymentSetup(): void {
-    this.router.navigate(['/user/card-setup']);
+    this.router.navigate(['/user/payment-setup']);
   }
 }

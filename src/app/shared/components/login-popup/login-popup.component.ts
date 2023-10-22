@@ -17,7 +17,10 @@ export class LoginPopupComponent implements OnInit {
   mobileFC: FormControl = new FormControl('', []);
   passwordFC: FormControl = new FormControl('', []);
   checkboxFC: FormControl = new FormControl(false);
-  @Output() userIsVerifiedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() allowLoginEvent: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
+  @Output() setUpPaymentEvent: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
   userIsVerified: boolean = false;
 
   // Error message fields
@@ -58,34 +61,33 @@ export class LoginPopupComponent implements OnInit {
             this.getUserInfoService
               .loadUserInfo(email)
               .subscribe((data: any) => {
+                console.log(data);
                 const user: User = {
                   userID: data.id,
                   mobileNo: data.mobile,
                   email: data.email,
                   authenticatorID: data.authenticatorId,
                   isVerified: data.verified,
+                  allowLogin: data.allowLogin,
                 };
-                if (!user.isVerified) {
-                  this.userIsVerifiedEvent.emit(false);
+                if (!user.allowLogin) {
+                  this.allowLoginEvent.emit(false);
                   return;
                 } else {
-                  this.userIsVerifiedEvent.emit(true);
+                  this.allowLoginEvent.emit(true);
                   this.authService.user = user;
                 }
 
                 this.loginFG.reset();
                 // Dismiss this active modal
                 this.activeModal.dismiss();
-                // // Authenticate user
-                // if (!user.isVerified) {
-                //   this.authService.authenticateUser().then((data: boolean) => {
-                //     // Log in user
-                //     this.authService.email = email;
-                //   });
-                // }
-                // if (!user.isPaymentVerified) {
-                //   this.authService.setUpPayment().then((data: boolean) => {});
-                // }
+
+                this.getUserInfoService
+                  .isPaymentVerified(user.email, user.mobileNo)
+                  .subscribe((value) => {
+                    if (!value) this.setUpPaymentEvent.emit(false);
+                    else this.setUpPaymentEvent.emit(true);
+                  });
               });
 
             this.loginFG.reset();

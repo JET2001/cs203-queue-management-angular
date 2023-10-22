@@ -28,7 +28,7 @@ describe('QueueTimingsComponent', () => {
         DropdownModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
-        SharedModule,
+        SharedModule
       ],
     });
     httpClient = TestBed.inject(HttpClient);

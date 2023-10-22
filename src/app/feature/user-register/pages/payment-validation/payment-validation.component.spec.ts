@@ -8,6 +8,7 @@ import { InputFieldComponent } from 'src/app/shared/components/input-field/input
 import { TextButtonComponent } from 'src/app/shared/components/text-button/text-button.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TextMaskModule } from '@myndmanagement/text-mask';
+import { MessagesModule } from 'primeng/messages';
 
 describe('PaymentValidationComponent', () => {
   let component: PaymentValidationComponent;
@@ -18,7 +19,7 @@ describe('PaymentValidationComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PaymentValidationComponent, HeaderComponent, InputFieldComponent, TextButtonComponent],
-      imports: [HttpClientTestingModule, ReactiveFormsModule, TextMaskModule]
+      imports: [HttpClientTestingModule, ReactiveFormsModule, TextMaskModule, MessagesModule]
     });
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);

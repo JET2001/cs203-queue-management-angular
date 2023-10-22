@@ -1,12 +1,12 @@
-import { StoreQueueTimingService } from './../../shared/services/store-queue-timing/store-queue-timing.service';
-import { Injectable, inject } from '@angular/core';
-import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { inject } from '@angular/core';
+import { CanActivateChildFn, CanActivateFn } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { RegGroup } from 'src/app/models/reg-group';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { RegGroup } from 'src/app/models/reg-group';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
-import { Location } from '@angular/common';
+import { StoreQueueTimingService } from './../../shared/services/store-queue-timing/store-queue-timing.service';
 
 /**
  * Guard for events register module

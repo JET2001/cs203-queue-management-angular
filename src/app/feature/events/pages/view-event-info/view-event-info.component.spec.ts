@@ -13,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { StepsModule } from 'primeng/steps';
 import { MessageService } from 'primeng/api';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MessagesModule } from 'primeng/messages';
 
 describe('ViewEventInfoComponent', () => {
   let component: ViewEventInfoComponent;
@@ -33,7 +34,8 @@ describe('ViewEventInfoComponent', () => {
         InputTextModule,
         StepsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MessagesModule
       ],
       providers: [MessageService],
     });
