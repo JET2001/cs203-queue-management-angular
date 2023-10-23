@@ -22,6 +22,7 @@ describe('QueueTimingsComponent', () => {
       declarations: [
         QueueTimingsComponent,
         HeaderComponent,
+        TextButtonComponent
       ],
       imports: [
         DropdownModule,
