@@ -7,6 +7,7 @@ import {
 import { RegistrationPreviewComponent } from './registration-preview.component';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { TextButtonComponent } from 'src/app/shared/components/text-button/text-button.component';
+import { MessagesModule } from 'primeng/messages';
 
 describe('RegistrationPreviewComponent', () => {
   let component: RegistrationPreviewComponent;
@@ -21,7 +22,7 @@ describe('RegistrationPreviewComponent', () => {
         HeaderComponent,
         TextButtonComponent,
       ],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MessagesModule],
     });
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);

@@ -313,6 +313,8 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
     if (this.userID == undefined) {
+      this._setRegistrationStatusOfUser();
+      this._mapRegStatusToRegStepper();
       this.spinnerHide();
       return;
     }
@@ -339,29 +341,6 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       default:
         throw new Error('Invalid registration status');
     }
-  }
-
-  private _calculateEarliestAndLatestShow(): void {
-    if (this.showInfo == undefined || this.showInfo.length == 0) {
-      this.earliestShowDate = new Date(0);
-      this.latestShowDate = new Date(0);
-      return;
-    }
-    let earliestShow = this.showInfo[0].showDateTime;
-    let latestShow = this.showInfo[0].showDateTime;
-
-    for (let show of this.showInfo) {
-      // Set earliest time
-      if (this._isEarlier(show.showDateTime, earliestShow)) {
-        earliestShow = show.showDateTime;
-      }
-      // Set latest time
-      else if (this._isLater(show.showDateTime, latestShow)) {
-        latestShow = show.showDateTime;
-      } else;
-    }
-    this.earliestShowDate = earliestShow;
-    this.latestShowDate = latestShow;
   }
 
   private _setRegistrationStatusOfUser(): void {
@@ -468,14 +447,6 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
       queueList.push(queueObj);
     }
     return queueList;
-  }
-
-  private _isEarlier(timeA: Date, timeB: Date): boolean {
-    return timeA.getTime() - timeB.getTime() < 0;
-  }
-
-  private _isLater(timeA: Date, timeB: Date): boolean {
-    return timeB.getTime() - timeA.getTime() < 0;
   }
 
   private _resetFields(): void {
