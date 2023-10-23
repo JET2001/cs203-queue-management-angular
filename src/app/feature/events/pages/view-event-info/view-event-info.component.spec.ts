@@ -1,18 +1,15 @@
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import {
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MessageService } from 'primeng/api';
-import { InputTextModule } from 'primeng/inputtext';
-import { StepsModule } from 'primeng/steps';
-import { TableModule } from 'primeng/table';
 import { of, throwError } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
@@ -25,8 +22,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { GroupMemberListComponent } from '../../components/group-member-list/group-member-list.component';
 import { QueuesListComponent } from '../../components/queues-list/queues-list.component';
 import { ViewShowsComponent } from '../../components/view-shows/view-shows.component';
-import { RegStatus, RegStepper } from '../../constants/reg-status';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { StepsModule } from 'primeng/steps';
+import { MessageService } from 'primeng/api';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ViewEventInfoComponent } from './view-event-info.component';
+import { RegStatus, RegStepper } from '../../constants/reg-status';
 
 describe('ViewEventInfoComponent', () => {
   let component: ViewEventInfoComponent;
