@@ -21,8 +21,8 @@ describe('QueueTimingsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         QueueTimingsComponent,
-        TextButtonComponent,
         HeaderComponent,
+        TextButtonComponent
       ],
       imports: [
         DropdownModule,

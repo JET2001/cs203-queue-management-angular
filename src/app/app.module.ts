@@ -16,6 +16,7 @@ import { AuthInterceptor } from './core/interceptor/auth-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
+  exports: [NgxSpinnerModule],
   imports: [
     BrowserModule,
     SharedModule,
