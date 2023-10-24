@@ -59,7 +59,7 @@ export class AccountCreationComponent extends BaseComponent implements OnInit, A
 
   async verifyEmail() {
     if (this.signUpForm.get('email')?.valid) {
-      await this.getUserInfoService
+      this.getUserInfoService
         .loadUserInfo(this.signUpForm.get('email')?.value)
         .subscribe((value) => {
           if (value) {
@@ -81,20 +81,28 @@ export class AccountCreationComponent extends BaseComponent implements OnInit, A
   }
 
   async handleShowOTPButton() {
+    console.log('here');
     if (this.signUpForm.get('mobile')?.valid) {
-      await this.getUserInfoService
+      console.log('here');
+      this.getUserInfoService
         .existingMobileNumber(this.signUpForm.get('mobile')?.value)
         .subscribe((value) => {
           console.log(value);
           if (value) {
+            console.log('here');
+
             this.mobileNumberExists = true;
             this.showOTPButton = false;
           } else {
+            console.log('here');
+
             this.mobileNumberExists = false;
             this.showOTPButton = true;
           }
         });
     } else {
+      console.log('here');
+
       this.mobileNumberExists = false;
     }
   }

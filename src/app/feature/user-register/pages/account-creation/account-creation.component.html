@@ -8,6 +8,7 @@
           placeholder="Email"
           inputType="email"
           [inputValue]="emailFC"
+          class="email"
         ></app-input-field>
         <div *ngIf="userHasExistingAccount" class="failure-message">
           <img
@@ -43,12 +44,14 @@
         placeholder="Create a password"
         inputType="password"
         [inputValue]="password1FC"
+        class="password1"
       ></app-input-field>
       <div class="password-retype-field">
         <app-input-field
           placeholder="Retype your password"
           inputType="password"
           [inputValue]="password2FC"
+          class="password2"
         ></app-input-field>
         <div *ngIf="!passwordsMatch" class="password-error">
           <img
