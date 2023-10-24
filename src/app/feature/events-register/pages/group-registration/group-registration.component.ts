@@ -2,14 +2,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { User } from 'src/app/models/user';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
+import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
-import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { User } from 'src/app/models/user';
-import {  RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { MAX_USERS_IN_GROUP } from '../../constants/event-register-constants';
 import { BaseComponent } from 'src/app/base/base.component';
 

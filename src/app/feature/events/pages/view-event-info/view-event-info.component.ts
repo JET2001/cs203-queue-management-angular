@@ -18,6 +18,8 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { QueueDTO } from 'src/app/models/dto/queues-dto';
+import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { QueueDTO } from 'src/app/models/dto/queues-dto';
 import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { User } from 'src/app/models/user';
 
