@@ -10,10 +10,7 @@ import { GetRegistrationGroupService } from 'src/app/shared/services/get-registr
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
-<<<<<<< HEAD
-import { Observable, ReplaySubject, of } from 'rxjs';
-=======
->>>>>>> f422469 (resolve merge conflict)
+import { Observable, of } from 'rxjs';
 import { MAX_USERS_IN_GROUP } from '../../constants/event-register-constants';
 import { BaseComponent } from 'src/app/base/base.component';
 
