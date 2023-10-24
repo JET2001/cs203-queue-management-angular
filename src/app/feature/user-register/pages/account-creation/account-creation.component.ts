@@ -5,8 +5,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OtpPopupComponent } from 'src/app/shared/components/otp-popup/otp-popup.component';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
-import { VerifyEmailPopupComponent } from '../../components/verify-email-popup/verify-email-popup.component';
 import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
+import { VerifyEmailPopupComponent } from '../../components/verify-email-popup/verify-email-popup.component';
 
 @Component({
   selector: 'app-account-creation',
@@ -84,7 +84,8 @@ export class AccountCreationComponent extends BaseComponent implements OnInit, A
     if (this.signUpForm.get('mobile')?.valid) {
       await this.getUserInfoService
         .existingMobileNumber(this.signUpForm.get('mobile')?.value)
-        .then((value) => {
+        .subscribe((value) => {
+          console.log(value);
           if (value) {
             this.mobileNumberExists = true;
             this.showOTPButton = false;

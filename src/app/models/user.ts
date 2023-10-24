@@ -6,5 +6,6 @@ export interface User {
   authenticatorID?: string;
   isVerified: boolean;
   isPaymentVerified?: boolean;
+  allowLogin?: boolean;
   confirmed?: boolean;
 }

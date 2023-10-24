@@ -1,14 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Users } from 'src/app/mock-db/MockDB';
+import { Injectable } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SetupPaymentPopupComponent } from 'src/app/feature/user-register/components/setup-payment-popup/setup-payment-popup.component';
+import { User } from 'src/app/models/user';
 import { GaVerificationPopupComponent } from 'src/app/shared/components/ga-verification-popup/ga-verification-popup.component';
+import { baseURL } from '../../constants/api-paths';
 import { BaseRestApiService } from '../base-rest-api/base-rest-api.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { baseURL } from '../../constants/api-paths';
-import { User } from 'src/app/models/user';
-import { SetupPaymentPopupComponent } from 'src/app/feature/user-register/components/setup-payment-popup/setup-payment-popup.component';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +46,7 @@ export class AuthenticationService extends BaseRestApiService {
   public get emailSubject(): BehaviorSubject<string | undefined> {
     return this._emailSubject;
   }
-  // userIDSubject : BehaviorSubject<string | undefined> = new B
+
   public get userID(): string | undefined {
     return this._userID;
   }

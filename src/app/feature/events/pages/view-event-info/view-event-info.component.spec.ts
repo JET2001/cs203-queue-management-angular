@@ -18,6 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { StepsModule } from 'primeng/steps';
 import { MessageService } from 'primeng/api';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MessagesModule } from 'primeng/messages';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { Router, RouterModule } from '@angular/router';
 import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';

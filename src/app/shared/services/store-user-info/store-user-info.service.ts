@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
 import axios from 'axios';
 import { Buffer } from 'buffer';
+import { Card } from 'src/app/models/card';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +35,10 @@ export class StoreUserInfoService extends BaseRestApiService {
 
   public verifyEmail(tokens: string): Observable<any> {
     console.log(tokens);
-    return this.post('users/auth/verification/', { "token": tokens });
+    return this.post('users/auth/verification/', { token: tokens });
   }
 
-  sendOtp(mobile: string) {
+  public sendOtp(mobile: string) {
     this.mobile = mobile;
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -74,5 +75,9 @@ export class StoreUserInfoService extends BaseRestApiService {
     data.append('To', this.mobile);
 
     return axios.post(this.verifyOTPUrl, data, { headers });
+  }
+
+  public storePaymentInfo(card: Card): Observable<any> {
+    return this.post('users/store-payment-info', card);
   }
 }

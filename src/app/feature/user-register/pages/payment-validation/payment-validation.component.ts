@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Card } from './../../../../models/card';
+import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
 
 @Component({
   selector: 'app-payment-validation',
@@ -24,7 +22,10 @@ export class PaymentValidationComponent {
   emailFC: FormControl;
   mobileFC: FormControl;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private storeUserInfoservice: StoreUserInfoService
+  ) {
     this.cardNumberFC = new FormControl('', []);
     this.expDateFC = new FormControl('', []);
     this.cvvFC = new FormControl('', []);
@@ -51,5 +52,24 @@ export class PaymentValidationComponent {
     ]);
   }
 
-  
+  public showSaveButton(): boolean {
+    if (this.cardNumberFG.invalid || this.billingFG.invalid) return false;
+    return true;
+  }
+
+  public saveCard(): void {
+    const card: Card = {
+      cardNumber: this.cardNumberFC.value,
+      expDate: this.expDateFC.value,
+      cvv: this.cvvFC.value,
+      name: this.nameFC.value,
+      street: this.streetFC.value,
+      city: this.cityFC.value,
+      state: this.stateFC.value,
+      zip: this.zipFC.value,
+      email: this.emailFC.value,
+      mobile: this.mobileFC.value,
+    };
+    this.storeUserInfoservice.storePaymentInfo(card);
+  }
 }

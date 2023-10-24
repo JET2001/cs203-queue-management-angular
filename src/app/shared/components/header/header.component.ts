@@ -1,11 +1,12 @@
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LoginPopupComponent } from '../login-popup/login-popup.component';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { LoginPopupComponent } from '../login-popup/login-popup.component';
+import { SetupPaymentPopupComponent } from 'src/app/feature/user-register/components/setup-payment-popup/setup-payment-popup.component';
 import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
@@ -46,7 +47,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     const modalRef = this.activeModal.open(LoginPopupComponent, {
       centered: true,
     });
-    modalRef.componentInstance.userIsVerifiedEvent.subscribe((value: boolean) => {
+    modalRef.componentInstance.allowLoginEvent.subscribe((value: boolean) => {
       if (!value) {
         this.messageService.add({
           severity: 'error',
@@ -55,40 +56,14 @@ export class HeaderComponent extends BaseComponent implements OnInit {
         });
       }
     });
+    modalRef.componentInstance.setUpPaymentEvent.subscribe((value: boolean) => {
+      if (!value) {
+        this.activeModal.open(SetupPaymentPopupComponent, {
+          centered: true,
+        });
+      }
+    });
   }
-
-  // loginUser(): void {
-
-  //   let userInputStr: string | null = prompt(
-  //     'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
-  //   );
-  //   if (!userInputStr) return;
-  //   let userInput: string | undefined = userInputStr;
-  //   if (userInput == undefined) return;
-  // loginUser(): void {
-
-  //   let userInputStr: string | null = prompt(
-  //     'Choose 1 user ID to log in as 0 for Jon, 1 for David, 2 for Clarissa, 3 for Ben, 4 for Ryan, and -1 to return: '
-  //   );
-  //   if (!userInputStr) return;
-  //   let userInput: string | undefined = userInputStr;
-  //   if (userInput == undefined) return;
-
-  //   this.authService.userID = userInput;
-  //   this.emailID = this.authService.email;
-  //   this._shortenEmailID();
-  //   this.authService.userID = userInput;
-  //   this.emailID = this.authService.email;
-  //   this._shortenEmailID();
-
-  //   if (this.authService.isVerified) {
-  //     this.verifiedUserLoggingIn.emit();
-  //   }
-  // }
-  //   if (this.authService.isVerified) {
-  //     this.verifiedUserLoggingIn.emit();
-  //   }
-  // }
 
   logoutUser(): void {
     this.authService.userID = undefined;
