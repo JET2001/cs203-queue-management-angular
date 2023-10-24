@@ -6,8 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { SetupPaymentPopupComponent } from 'src/app/feature/user-register/components/setup-payment-popup/setup-payment-popup.component';
 import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
