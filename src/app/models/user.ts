@@ -8,6 +8,4 @@ export interface User {
   isPaymentVerified?: boolean;
   confirmed?: boolean;
   allowLogin?: boolean;
-  confirmed?: boolean;
-  allowLogin?: boolean;
 }
