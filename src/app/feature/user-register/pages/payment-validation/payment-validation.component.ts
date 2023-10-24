@@ -24,7 +24,7 @@ export class PaymentValidationComponent {
 
   constructor(
     private fb: FormBuilder,
-    private storeUserInfoservice: StoreUserInfoService
+    private storeUserInfoService: StoreUserInfoService
   ) {
     this.cardNumberFC = new FormControl('', []);
     this.expDateFC = new FormControl('', []);
@@ -70,6 +70,6 @@ export class PaymentValidationComponent {
       email: this.emailFC.value,
       mobile: this.mobileFC.value,
     };
-    this.storeUserInfoservice.storePaymentInfo(card);
+    this.storeUserInfoService.storePaymentInfo(card);
   }
 }

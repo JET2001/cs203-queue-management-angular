@@ -17,6 +17,7 @@ export class GetUserInfoService extends BaseRestApiService {
 
   existingMobileNumber(mobile: string): Observable<any> {
     mobile = mobile.replace('+', '0');
+    console.log(mobile)
     return this.get('users/mobile/' + mobile);
   }
 
