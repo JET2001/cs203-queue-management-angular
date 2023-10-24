@@ -1,3 +1,5 @@
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
 import {
   AfterContentInit,
   Component,
@@ -15,6 +17,10 @@ import {
   GetShowInfoService,
   ShowInfo,
 } from './../../../../shared/services/get-show-info/get-show-info.service';
+import { QueueDTOResp } from 'src/app/models/dto/queues-dto';
+import { GetQueueInfoService } from 'src/app/shared/services/get-queue-info/get-queue-info.service';
+import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-queue-timings',
@@ -22,8 +28,9 @@ import {
   styleUrls: ['./queue-timings.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class QueueTimingsComponent implements OnInit, AfterContentInit {
+export class QueueTimingsComponent extends BaseComponent implements OnInit, AfterContentInit {
   eventID!: string | undefined;
+  userID !: string | undefined;
   eventTitle: string | undefined;
   showInfo: ShowInfo[] | undefined;
   queueTimingForm: FormGroup;
@@ -32,81 +39,77 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   shows: string[];
   queueOptions: number[] = [];
   isNextDisabled = true;
+  maxQueueable!: number;
+  userRegGroupId!: string;
+
+  selection2queueShowMap!: Map<string, QueueDTOResp>;
+  hasQueuesLoaded: boolean = false;
 
   constructor(
-    private getShowInfoService: GetShowInfoService,
+    protected override spinner: NgxSpinnerService,
     private storeEventInfoService: StoreEventInfoService,
     private storeQueueTimingService: StoreQueueTimingService,
+    private getQueueInfoService: GetQueueInfoService,
     private router: Router,
     private fb: FormBuilder,
     private activeModal: NgbModal,
-    private queueTempStorageService: QueueTempStorageService
+    private getRegGroupService: GetRegistrationGroupService,
+    private authService: AuthenticationService
   ) {
+    super(spinner);
     this.queueTimingForm = this.fb.group({});
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
     // EventID and users have been verified at this point.
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
     this.eventTitle = this.storeEventInfoService.eventInfo.eventTitle;
+    this.maxQueueable = this.storeEventInfoService.eventInfo.maxQueueable!;
+    this.userID = this.authService.userID;
+    this.queueTimings = [];
+    this.selection2queueShowMap = new Map<string, QueueDTOResp>();
 
-    let queueTimings = this.queueTempStorageService.getQueueTimings;
-    let showTimings = this.queueTempStorageService.getShowTimings;
-    let locations = this.queueTempStorageService.getLocations;
-    let queueIds = this.queueTempStorageService.getQueueIds;
+    this.getRegGroupService.getRegGroupOfUser(this.eventID!, this.userID).subscribe(
+      (data: any) => {
+        this.userRegGroupId = data.groupId;
+      },
+      (error: Error) => {
+        console.error(error);
+        this.router.navigate(['/events']);
+      }
+    );
 
-    this.queueTimings = new Array();
-    this.queueIDs = new Array();
-    for (let i = 0; i < queueTimings.length; ++i) {
-      let selectionStr =
-        'QUEUE TIME: ' +
-        queueTimings[i] +
-        '| SHOW TIME: ' +
-        locations[i] +
-        ' ' +
-        showTimings[i];
+    // Get all queuetimes, showtimes for the eventID
+    this.getQueueInfoService.getQueuesForEvent(this.eventID!).subscribe(
+      (data: any) => {
+        for (let queueObj of data) {
+          const queue: QueueDTOResp = {
+            queueId: queueObj.queueId,
+            queueStartTime: queueObj.startDateTime,
+            queueEndTime: queueObj.endDateTime,
+            showId: queueObj.showId,
+            eventId: queueObj.eventId,
+            showDateTime: queueObj.showDateTime,
+            locationName: queueObj.locationName,
+          };
+          this._processQueue(queue);
+        }
+        // Load number of queue options
+        this._loadQueueOptions();
 
-      this.queueTimings.push(selectionStr);
-      this.queueIDs.push(queueIds[i]);
-    }
+        for (let i = 0; i < Math.min(this.maxQueueable, this.selection2queueShowMap.size); i++) {
+          const control = this.fb.control('', Validators.required);
+          this.queueTimingForm.addControl(`queueTiming${i}`, control);
+        }
 
-    // this.getShowInfoService.loadShowInfo(this.eventID!).subscribe((data: any) => {
-
-    // })
-    // await this.getShowInfoService
-    //   .loadShowInfo(this.eventID)
-    //   .then((showInfo: ShowInfo[] | undefined) => {
-    //     this.showInfo = showInfo;
-    //   });
-
-    // if (this.showInfo) {
-    let count: number = 0;
-    //   this.queueTimings = new Array(this.showInfo.length);
-    //   this.queueIDs = new Array(this.showInfo.length);
-    //   this.shows = new Array(this.showInfo.length);
-    for (
-      let i = 0;
-      i <
-      Math.min(
-        4, // changed for demo
-        this.queueTimings.length
-      );
-      i++
-    ) {
-      const control = this.fb.control('', Validators.required);
-      this.queueTimingForm.addControl(`queueTiming${i}`, control);
-    }
-    // for (let show of this.showInfo) {
-    //   const queueStartTime = this.formatQueueDate(show.queueStartTime);
-    //   const showTime = this.formatShowDate(show.showDateTime);
-    //   this.queueTimings[count] = queueStartTime + ' | SHOW TIME: ' + showTime;
-    //   this.queueIDs[count] = show.queueID;
-    //   count++;
-    // }
-    //}
-
-    // Load number of queue options
-    this._loadQueueOptions();
+        this.hasQueuesLoaded = true;
+        this.spinnerHide();
+      },
+      (error: Error) => {
+        console.error(error);
+        this.spinnerHide();
+      }
+    );
   }
 
   ngAfterContentInit(): void {
@@ -114,6 +117,7 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
   }
 
   handleBackToConcert(): void {
+    this.spinnerShow();
     this.router.navigate(['/events']);
   }
 
@@ -121,36 +125,33 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     this.activeModal.open(QueueTimingPopupComponent, { centered: true });
   }
 
-  handleNext(): void {
-    // if (this.showInfo) {
-    let selectedQueueTimings: string[] = new Array(
-      //Math.min(
-        // this.showInfo?.length!,
-        // this.storeEventInfoService.eventInfo.maxQueueable!
-        this.queueTimings.length
-      //)
-    );
-    let selectedQueueIDs: string[] = new Array(selectedQueueTimings.length);
+  handleNextButtonClick(): void {
+    let selectedQueueTimings: string[] = [];
+    let selectedQueueShows: QueueDTOResp[] = [];
+
     for (let i = 0; i < this.queueTimings.length; i++) {
       const controlName = `queueTiming${i}`;
       const controlValue = this.queueTimingForm.get(controlName)?.value;
-      if (controlValue) selectedQueueTimings[i] = controlValue;
+      if (controlValue) {
+        // Save it in the list of selection strings
+        selectedQueueTimings.push(controlValue);
+
+        // Save it in the selected shows object.
+        let queueShowRef : QueueDTOResp | undefined = this.selection2queueShowMap.get(controlValue);
+        if (queueShowRef != undefined){
+          selectedQueueShows.push(queueShowRef);
+        }
+      }
     }
-    // if user did not select any first choice queue timing, do not let them move forward
-    if (selectedQueueTimings[0] == null) return;
-    for (let i = 0; i < selectedQueueTimings.length; i++) {
-      selectedQueueIDs[i] =
-        this.queueIDs[this.queueTimings.indexOf(selectedQueueTimings[i])];
+    // As long as users selected 1 queue, we can allow them to proceed
+    if (selectedQueueTimings.length !== 0 && selectedQueueTimings.length === selectedQueueShows.length){
+      this.storeQueueTimingService.setQueueTimingPreferences(
+        this.userRegGroupId, this.userID!, this.eventID!, selectedQueueShows
+      );
+      this.storeQueueTimingService.selectionStrings = selectedQueueTimings;
+      this.router.navigate(['/events','register','preview']);
     }
-    this.storeQueueTimingService.queueTimingPreferences = {
-      eventID: this.eventID,
-      userID: this.storeEventInfoService.eventInfo.userID,
-      selectedQueueIDs: selectedQueueIDs,
-      selectedQueueTimings: selectedQueueTimings,
-      groupID: this.storeEventInfoService.eventInfo.eventID,
-    };
-    this.router.navigate(['/events', 'register', 'preview']);
-    // }
+
   }
 
   formatQueueDate(date: Date): string {
@@ -203,12 +204,28 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
     return `${day} ${month} ${year}, Singapore 397718, ${hours}:${minutes} SGT`;
   }
 
+  private _processQueue(queue: QueueDTOResp): void {
+    let selectionStr =
+      'QUEUE TIME: ' +
+      queue.queueStartTime +
+      '| SHOW TIME: ' +
+      queue.locationName +
+      ' ' +
+      queue.showDateTime;
+
+    // Add it to queueTimings screen (for FE display)
+    this.queueTimings.push(selectionStr);
+
+    // Add to map
+    this.selection2queueShowMap.set(selectionStr, queue);
+  }
+
   private _loadQueueOptions(): void {
     for (
       let i: number = 0;
       i <
       Math.min(
-        4,// this.showInfo?.length!,
+        this.maxQueueable,
         this.queueTimings.length
       );
       i++
@@ -226,6 +243,6 @@ export class QueueTimingsComponent implements OnInit, AfterContentInit {
         return;
       }
     }
-      this.isNextDisabled = false;
+    this.isNextDisabled = false;
   }
 }

@@ -29,6 +29,10 @@ export class AuthenticationService extends BaseRestApiService {
     protected override http: HttpClient
   ) {
     super(http);
+    // this._userObject = Users[3];
+    // this._userID = this._userObject.userID;
+    // this._email = this._userObject.email;
+    // this.emailSubject.next(this._email);
   }
 
   public get user(): User | undefined {

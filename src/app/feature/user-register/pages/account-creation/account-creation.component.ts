@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OtpPopupComponent } from 'src/app/shared/components/otp-popup/otp-popup.component';
@@ -11,7 +13,7 @@ import { VerifyEmailPopupComponent } from '../../components/verify-email-popup/v
   templateUrl: './account-creation.component.html',
   styleUrls: ['./account-creation.component.scss'],
 })
-export class AccountCreationComponent implements OnInit {
+export class AccountCreationComponent extends BaseComponent implements OnInit, AfterViewInit  {
   showOTPButton: boolean = false;
   userHasExistingAccount: boolean = false;
   mobileNumberExists: boolean = false;
@@ -24,11 +26,13 @@ export class AccountCreationComponent implements OnInit {
   password2FC: FormControl = new FormControl('');
 
   constructor(
+    protected override spinner: NgxSpinnerService,
     private fb: FormBuilder,
     private getUserInfoService: GetUserInfoService,
     private ngbModal: NgbModal,
     private storeUserInfoService: StoreUserInfoService
   ) {
+    super(spinner);
     this.signUpForm = fb.group({});
   }
 
@@ -37,6 +41,7 @@ export class AccountCreationComponent implements OnInit {
     this.signUpForm.addControl('mobile', this.mobileFC);
     this.signUpForm.addControl('password1', this.password1FC);
     this.signUpForm.addControl('password2', this.password2FC);
+    this.spinnerHide();
   }
 
   ngAfterViewInit(): void {

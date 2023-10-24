@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-rest-api.service';
@@ -32,5 +32,14 @@ export class GetUserInfoService extends BaseRestApiService {
 
   isPaymentVerified(email: string, mobile: string): Observable<any> {
     return this.get('users/is-payment-verified/' + email + '/' + mobile);
+  }
+
+  isUserVerified(email: string, mobile: string): Observable<any> {
+    console.log("email " + email + " mobile " + mobile);
+    let params : HttpParams = new HttpParams();
+    params = params.append("email", email);
+    params = params.append("mobile", mobile);
+
+    return this.getWithParams('users/is-verified', params);
   }
 }

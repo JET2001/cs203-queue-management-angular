@@ -10,23 +10,30 @@
   Please skip this step if you are attending the event alone.
 </p>
 <div class="register-button-container">
-    <app-group-register-invite [inviteeList] = "invitees" (keyStrokeDetected)="onKeyStrokeDetected()"></app-group-register-invite>
+    <app-group-register-invite [inviteeList] = "invitees" (keyStrokeDetected)="onKeyStrokeDetected()" [inviteeVerified]="inviteeVerified"></app-group-register-invite>
 
     <div class="button-container">
         <app-text-button buttonVariants="black" buttonText="Back to Concert Details" (buttonClick)="backToConcert()"></app-text-button>
-    
+
         <app-text-button
           buttonVariants="primary"
           buttonText="Verify Group Members"
           (buttonClick)="verify()"
-          >Verify Group Members</app-text-button>
+          ></app-text-button>
 
-          <app-text-button
+          <app-text-button *ngIf = "!modifyGroup"
           buttonVariants="primary"
           buttonText="Confirm Group"
           (buttonClick)="confirm()"
-          [isDisabled] = "!this.verified"
-          >Confirm Group</app-text-button>
+          [isDisabled] = "!isGroupVerified()"
+          ></app-text-button>
+
+          <app-text-button *ngIf = "modifyGroup"
+          buttonVariants="warning"
+          buttonText="Modify Group"
+          (buttonClick) = "confirm()"
+          [isDisabled]="!isGroupVerified()">
+          </app-text-button>
     </div>
 </div>
 </body>

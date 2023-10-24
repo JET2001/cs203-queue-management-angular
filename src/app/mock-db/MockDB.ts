@@ -64,43 +64,42 @@ export const events : Event[] = [
 //=======================================================================
 export const Users : User[] = [
   {
-    userID: "0",
-    mobileNo: "06598231539",
-    email: "jrteo.2022@smu.edu.sg",
-    password: "password1",
-    authenticatorID: "1",
-    isVerified: true
-  },
-  {
     userID: "1",
-    mobileNo: "+6598231539",
+    mobileNo: "06586616057",
     email: "david.zhu.2022@smu.edu.sg",
     password: "password2",
     authenticatorID: "2",
     isVerified: true
   },
   {
-    userID: "2",
-    mobileNo: "+6581996653",
+    userID: "2", // not authenticated user
+    mobileNo: "06597873327",
+    email: "ryan.yap.2022@smu.edu.sg",
+    password: "password5",
+    isVerified: true
+  },
+  {
+    userID: "3",
+    mobileNo: "06598231539",
+    email: "jrteo.2022@smu.edu.sg",
+    authenticatorID: "001",
+    isVerified: true
+  },
+  {
+    userID: "4",
+    mobileNo: "06581996652",
     email: "clarissatoh.2022@smu.edu.sg",
     password: "password3",
     authenticatorID: "3",
     isVerified: true
   },
   {
-    userID: "3",
-    mobileNo: "+6592366941",
+    userID: "5",
+    mobileNo: "06592366941",
     email: "benedictlee.2022@smu.edu.sg",
     password: "password4",
     authenticatorID: "4",
     isVerified: true
-  },
-  {
-    userID: "4", // not authenticated user
-    mobileNo: "+6581996653",
-    email: "ryan.yap.2022@smu.edu.sg",
-    password: "password5",
-    isVerified: false
   }
 ];
 

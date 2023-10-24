@@ -1,3 +1,5 @@
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
 import { Event } from 'src/app/models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
@@ -9,16 +11,24 @@ import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/
   templateUrl: './upcoming-concerts.component.html',
   styleUrls: ['./upcoming-concerts.component.scss'],
 })
-export class UpcomingConcertsComponent implements OnInit {
+export class UpcomingConcertsComponent extends BaseComponent implements OnInit {
   @Input() userID: string | undefined = undefined;
   events: Event[];
+  id2EventMap: Map<string, Event>;
+  hasConcertsLoaded: boolean = false;
+
   constructor(
+    protected override spinner: NgxSpinnerService,
     private getEventInfoService: GetEventInfoService,
     private storeEventInfoService: StoreEventInfoService,
     private router: Router
-  ) {}
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
+    this.id2EventMap = new Map<string, Event>();
+
     this.getEventInfoService.loadAllEvents().subscribe((data: any) => {
       // clean the data
       this.events = new Array();
@@ -33,47 +43,21 @@ export class UpcomingConcertsComponent implements OnInit {
           isHighlighted: eventData.highlighted,
         };
         this.events.push(event);
+        this.id2EventMap.set(event.eventID, event);
       }
+      this.hasConcertsLoaded = true;
     });
   }
 
   handleButtonClick(eventID: string): void {
-    // const eventSelected = this.getEventInfoService.getEventInfo(eventID);
-    // if (eventSelected == undefined) return;
-    // this.storeEventInfoService.eventInfo = {
-    //   eventID: eventID,
-    //   eventTitle: eventSelected.name,
-    //   maxQueueable: eventSelected.maxQueueable,
-    // };
-    this.getEventInfoService.getEventInfo(eventID).subscribe((data: any) => {
-      let event: Event = {
-        eventID: data.id,
-        name: data.name,
-        countries: [],
-        maxQueueable: data.maxQueueable,
-        description: data.description,
-        image: data.posterImagePath,
-        isHighlighted: data.highlighted,
-      };
-      this.storeEventInfoService.eventInfo = {
-        eventID: event.eventID,
-        eventTitle: event.name,
-        maxQueueable: event.maxQueueable,
-      };
-      this.router.navigate(['/events']);
-    });
-  }
-
-  private _buildEventSummary(event: Event): void {
-    let summaryStringBuilder = 'Coming to ';
-
-    // Build event summary
-    for (let i = 0; i < event.countries.length - 1; ++i) {
-      summaryStringBuilder = summaryStringBuilder + event.countries[i] + ', ';
-    }
-
-    summaryStringBuilder +=
-      'and ' + event.countries[event.countries.length - 1];
-    event.summary = summaryStringBuilder + '!';
+    const eventSelected : Event | undefined = this.id2EventMap.get(eventID);
+    if (eventSelected === undefined) return;
+    this.spinnerShow();
+    this.storeEventInfoService.eventInfo = {
+      eventID: eventID,
+      eventTitle: eventSelected.name,
+      maxQueueable: eventSelected.maxQueueable,
+    };
+    this.router.navigate(['/events']);
   }
 }

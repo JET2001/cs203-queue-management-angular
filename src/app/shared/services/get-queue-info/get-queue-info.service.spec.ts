@@ -1,26 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
+import { GetQueueInfoService } from './get-queue-info.service';
 import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { AuthenticationService } from './authentication.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-describe('AuthenticationService', () => {
-  let service: AuthenticationService;
+describe('GetQueueInfoService', () => {
+  let service: GetQueueInfoService;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
+
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(AuthenticationService);
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(GetQueueInfoService);
   });
-
 
   it('should be created', () => {
     expect(service).toBeTruthy();
