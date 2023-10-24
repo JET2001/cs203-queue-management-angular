@@ -8,7 +8,7 @@ export const eventRegisterRoutes : Routes = [
   {
     path: 'group',
     component: GroupRegistrationComponent,
-    canActivate: [groupRegisterGuard()]
+    // canActivate: [groupRegisterGuard()]
   },
   {
     path: 'queue',
@@ -18,6 +18,6 @@ export const eventRegisterRoutes : Routes = [
   {
     path: 'preview',
     component: RegistrationPreviewComponent,
-    canActivate: [registrationPreviewGuard()]
+    // canActivate: [registrationPreviewGuard()]
   },
 ]

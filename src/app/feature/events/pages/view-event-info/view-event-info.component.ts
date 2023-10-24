@@ -14,7 +14,10 @@ import {
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
+import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { QueueDTO } from 'src/app/models/dto/queues-dto';
 import { RegStatus, RegStepper } from '../../constants/reg-status';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-view-event-info',
@@ -29,10 +32,7 @@ export class ViewEventInfoComponent implements OnInit {
   eventInfo!: Event;
 
   // Registration group information
-  userRegGroupInfo!: RegGroup | undefined;
-  otherMemberEmailList: string[] = [];
-  otherMemberMobileList: string[] = [];
-  otherMemberConfirmList: number[] = [];
+  regGroupInfo: RegGroupDTOResp | undefined = undefined;
   hasUserConfirmed!: boolean;
 
   // Show Information
@@ -49,6 +49,8 @@ export class ViewEventInfoComponent implements OnInit {
 
   // Utility variables
   hasEventLoaded: boolean = false;
+  hasRegGroupInfoLoaded: boolean = false;
+
   constructor(
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
@@ -58,9 +60,7 @@ export class ViewEventInfoComponent implements OnInit {
     private getUserInfoService: GetUserInfoService,
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
-    private messageService: MessageService,
-
-    private delayCounter: DelayCounter // for demo only.
+    private messageService: MessageService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -68,10 +68,6 @@ export class ViewEventInfoComponent implements OnInit {
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
       return;
-    }
-
-    if (this.delayCounter.value <= 2) {
-      this.delayCounter.setCounter = this.delayCounter.value+1;
     }
 
     this.steps = [
@@ -113,7 +109,7 @@ export class ViewEventInfoComponent implements OnInit {
       },
     ];
 
-    // const temp = this.getEventInfoService.getEventInfo(this.eventID);
+    // Get event information
     this.getEventInfoService
       .getEventInfo(this.eventID)
       .subscribe((data: any) => {
@@ -128,20 +124,17 @@ export class ViewEventInfoComponent implements OnInit {
         };
         this.hasEventLoaded = true;
       });
-    // if (temp == undefined) {
-    //   this.router.navigate(['/home']);
-    //   return;
-    // }
-    // this.eventInfo = temp;
-    await this._updateUserEventInfo();
+
+    // Load user information if user is logged in.
+    // Note that this function will be also be triggered when the user logs in after being routed to this page.
+    this._updateUserEventInfo();
   }
 
-  ngAfterContentInit(): void {}
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
-  async handleUserLoginLogoutChange(): Promise<void> {
-    await this._updateUserEventInfo();
+  handleUserLoginLogoutChange(): void {
+    this._updateUserEventInfo();
   }
   // ============================================
   // Boolean conditions for displaying items on the DOM
@@ -159,11 +152,46 @@ export class ViewEventInfoComponent implements OnInit {
     );
   }
 
+  // Only user can modify group
+  showModifyGroupButton(): boolean {
+    return (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      this.regGroupInfo.groupLeaderUserId == this.authService.userID &&
+      this.registerStatus < RegStatus.REGISTERED
+    );
+  }
+
+  // Only non-group leader will need to accept an invitation from a leader
+  showConfirmRegButton(): boolean {
+    return (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      !this.hasUserConfirmed &&
+      this.registerStatus < RegStatus.REGISTERED
+    );
+  }
+
+  // Only non-group leader will have the option to leave group
+  showLeaveGroupButton(): boolean {
+    return (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      this.regGroupInfo.groupLeaderUserId != this.authService.userID &&
+      this.registerStatus < RegStatus.REGISTERED
+    );
+  }
   // =========================================================
   // Routing
   // =========================================================
   handleRegisterButtonClick(): void {
-    if (this.userRegGroupInfo == undefined) {
+    if (
+      this.authService.isLoggedIn &&
+      this.authService.isVerified &&
+      this.regGroupInfo == undefined &&
+      this.registerStatus == RegStatus.NOT_REGISTERED
+    ) {
+      this.storeRegGroupService.modifyGroup = false;
       this.router.navigate(['/events', 'register', 'group']);
     }
   }
@@ -172,9 +200,9 @@ export class ViewEventInfoComponent implements OnInit {
     // Only navigate if the user already has a group, and all members
     // in the group have confirmed, and that the queueIDs list is null.
     if (
-      this.userRegGroupInfo != undefined &&
-      this.userRegGroupInfo.hasAllUsersConfirmed &&
-      this.userRegGroupInfo!.queueIDs == undefined
+      this.regGroupInfo?.hasAllUsersConfirmed &&
+      this.regGroupInfo?.queueList?.length == 0 &&
+      this.registerStatus == RegStatus.GROUP_CONFIRMED
     ) {
       this.router.navigate(['/events', 'register', 'queue']);
     }
@@ -182,31 +210,85 @@ export class ViewEventInfoComponent implements OnInit {
 
   handleModifyGroupButtonClick(): void {
     // Only navigate if the user already has a group.
-    if (this.userRegGroupInfo != undefined) {
+    if (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      this.regGroupInfo.groupLeaderUserId == this.authService.userID &&
+      this.registerStatus < RegStatus.REGISTERED
+    ) {
       this.storeRegGroupService.modifyGroup = true;
+      this.storeRegGroupService.regGroup = this.regGroupInfo;
 
       this.router.navigate(['/events', 'register', 'group']);
     }
   }
+
+  handleConfirmRegButtonClick(): void {
+    if (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      !this.hasUserConfirmed &&
+      this.registerStatus < RegStatus.REGISTERED
+    ) {
+      this.storeRegGroupService.confirmUser(
+        this.authService.userID,
+        this.eventID,
+        this.regGroupInfo.regGroupID
+      ).subscribe(
+        (data: boolean) => {
+          if (data === true){
+            this._updateUserEventInfo();
+          }
+        },
+        (error: Error) => {
+          // TODO: Connection Error
+          // TODO: Unauthorized error
+          // TODO: Internal Server Error
+          // TODO: Conflict error
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  handleLeaveGroupButtonClick(): void {
+    if (
+      this.authService.isLoggedIn &&
+      this.regGroupInfo != undefined &&
+      this.regGroupInfo.groupLeaderUserId != this.authService.userID &&
+      this.registerStatus < RegStatus.REGISTERED
+    ) {
+      this.storeRegGroupService.removeUserFromGroup(
+        this.authService.userID,
+        this.eventID,
+        this.regGroupInfo.regGroupID
+      ).subscribe(
+        (data: boolean) => {
+          if (data === true){
+            this._updateUserEventInfo();
+          }
+        },
+        (error: Error) => {
+          // TODO: Connection Error
+          // TODO: Unauthorized Error
+          // TODO: Internal Server Error
+          // TODO: Conflict Error
+          console.log(error);
+        }
+      );
+    }
+
+  }
   // ==========================================================
   // Utility functions
   // ==========================================================
-  private async _updateUserEventInfo(): Promise<void> {
+  private _updateUserEventInfo(): void {
     this.userID = this.authService.userID; // update userID
     this._resetFields();
+    if (this.userID == undefined) return;
 
-    // this.getRegGroupService
-    //   .getRegGroupOfUser(this.eventID!, this.userID)
-    //   .subscribe((regGroup: any) => {
-    //     this.userRegGroupInfo = regGroup;
-    //   });
-
-    // Registration status of the user affects what button the user sees
-    // ie. to "REGISTER", "PENDING CONFIRMATION", "REGISTERED" etc.
-    // see reg-status.ts file for the statuses.
-    this._getRegistrationStatusOfUser();
-
-    this.activeIndex = this._mapRegStatusToRegStepper();
+    // Load user's registration group and queues
+    this._getUserRegGroupMemberInfo();
   }
 
   private _mapRegStatusToRegStepper(): number {
@@ -253,52 +335,108 @@ export class ViewEventInfoComponent implements OnInit {
     this.latestShowDate = latestShow;
   }
 
-  private _getRegistrationStatusOfUser(): void {
+  private _setRegistrationStatusOfUser(): void {
     if (this.authService.userID == undefined) {
       this.registerStatus = RegStatus.NOT_LOGGED_IN;
       return;
     }
 
-    if (this.userRegGroupInfo == undefined) {
+    if (this.regGroupInfo == undefined) {
       this.registerStatus = RegStatus.NOT_REGISTERED;
-    } else if (!this.userRegGroupInfo.hasAllUsersConfirmed) {
+    } else if (!this.regGroupInfo.hasAllUsersConfirmed) {
       this.registerStatus = RegStatus.PENDING_CONFIRMATION;
       return;
-    } else if (this.userRegGroupInfo.queueIDs == undefined) {
+    } else if (this.regGroupInfo.queueList?.length == 0) {
       this.registerStatus = RegStatus.GROUP_CONFIRMED;
-    } else if (this.userRegGroupInfo.purchaseID == undefined) {
+    } else if (this.regGroupInfo.purchaseID == undefined) {
       this.registerStatus = RegStatus.REGISTERED;
     } else {
       this.registerStatus = RegStatus.PURCHASED;
     }
   }
 
-  // private async _getUserRegGroupMemberInfo(): Promise<void> {
-  //   if (this.userRegGroupInfo) {
-  //     const groupUserIDs = this.userRegGroupInfo.userIDs;
-  //     for (let i = 0; i < groupUserIDs.length; ++i) {
-  //       if (groupUserIDs[i] != this.userID) {
-  //         await this.getUserInfoService
-  //           .loadUserInfo(groupUserIDs[i])
-  //           .then((user: User | undefined) => {
-  //             if (user == undefined) {
-  //               return;
-  //             }
-  //             this.otherMemberEmailList.push(user.email);
-  //             this.otherMemberConfirmList.push(
-  //               this.userRegGroupInfo!.confirmed[i]
-  //             );
-  //             this.otherMemberMobileList.push(user.mobileNo);
+  private _getUserRegGroupMemberInfo(): void {
+    if (this.eventID == undefined || !this.authService.isLoggedIn) {
+      this.registerStatus = RegStatus.NOT_LOGGED_IN;
+      return;
+    }
+    this.getRegGroupService
+      .getRegGroupOfUser(this.eventID, this.authService.userID)
+      .subscribe(
+        (data: any) => {
+          // Find group leader and userInfo
+          let userList: User[] = [];
+          let groupLeaderId: string = '';
 
-  //             this.storeRegGroupService.emailList = this.otherMemberEmailList;
-  //             this.storeRegGroupService.mobileList = this.otherMemberMobileList;
-  //           });
-  //       } else {
-  //         this.hasUserConfirmed = this.userRegGroupInfo.confirmed[i] == 1;
-  //       }
-  //     }
-  //   }
-  // }
+          // Load users
+          for (let user of data.userInfoList) {
+            // Find group leader of user's group
+            if (user.groupLeader) {
+              groupLeaderId = user.id;
+            }
+            // Store all group members of this user in a list.
+            if (user.id != this.authService.userID) {
+              let userObj = {
+                userID: user.id,
+                mobileNo: user.mobile,
+                email: user.email,
+                isVerified: true,
+                confirmed: user.confirmed,
+              };
+              userList.push(userObj);
+            } else {
+              this.hasUserConfirmed = user.confirmed;
+            }
+          }
+
+          // Load registered queues
+          let queueList: QueueDTO[] = this._fillRegisteredQueues(data);
+
+          this.regGroupInfo = {
+            userGroup: userList,
+            groupSize: userList.length + 1, // add the current user
+            regGroupID: data.groupId,
+            eventId: data.eventId,
+            hasAllUsersConfirmed: data.hasAllUsersConfirmed,
+            groupLeaderUserId: groupLeaderId,
+            queueList: queueList,
+          };
+
+          // Set Registration Status of user
+          this._setRegistrationStatusOfUser();
+
+          // Set the stepper
+          this.activeIndex = this._mapRegStatusToRegStepper();
+          this.hasRegGroupInfoLoaded = true;
+        },
+        (error: Error) => {
+          console.log(error);
+          this._setRegistrationStatusOfUser();
+          this.activeIndex = this._mapRegStatusToRegStepper();
+          this.hasRegGroupInfoLoaded = true;
+          if (error.message == '400') {
+            // User is not registered
+            return;
+          } else {
+            // TODO: Internal Server Error
+          }
+        }
+      );
+  }
+
+  private _fillRegisteredQueues(data: any): QueueDTO[] {
+    let queueList: QueueDTO[] = [];
+    for (let queue of data.queueList) {
+      let queueObj: QueueDTO = {
+        showID: queue.showId,
+        queueID: queue.queueId,
+        queueStartTime: queue.startDateTime,
+        queueEndTime: queue.endDateTime,
+      };
+      queueList.push(queueObj);
+    }
+    return queueList;
+  }
 
   private _isEarlier(timeA: Date, timeB: Date): boolean {
     return timeA.getTime() - timeB.getTime() < 0;
@@ -309,24 +447,20 @@ export class ViewEventInfoComponent implements OnInit {
   }
 
   private _resetFields(): void {
-    this.userRegGroupInfo = undefined;
-    this.otherMemberEmailList = [];
-    this.otherMemberMobileList = [];
-    this.otherMemberConfirmList = [];
+    this.regGroupInfo = undefined;
     this.hasUserConfirmed = false;
+    this.registerStatus = RegStatus.NOT_REGISTERED;
+    this.activeIndex = RegStepper.NOT_LOGGED_IN;
   }
 
-
-
-
-//====================
-// DEMO ONLY
-// ==================
+  //====================
+  // DEMO ONLY
+  // ==================
   routeToQueueButtonVisible(): boolean {
-    return this.delayCounter.value > 2;
+    return true;
   }
 
   handleQueueButtonClick(): void {
-    this.router.navigate(['/events','register', 'queue']);
+    this.router.navigate(['/events', 'register', 'queue']);
   }
 }
