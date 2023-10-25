@@ -5,6 +5,7 @@ import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-res
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import { Card } from 'src/app/models/card';
+import { User } from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -77,7 +78,7 @@ export class StoreUserInfoService extends BaseRestApiService {
     return axios.post(this.verifyOTPUrl, data, { headers });
   }
 
-  public storePaymentInfo(card: Card): Observable<any> {
-    return this.post('users/store-payment-info', card);
+  public storePaymentInfo(userID: String, card: Card): Observable<any> {
+    return this.post('users/store-payment-info', { userId: userID, card });
   }
 }
