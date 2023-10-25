@@ -78,7 +78,18 @@ export class StoreUserInfoService extends BaseRestApiService {
     return axios.post(this.verifyOTPUrl, data, { headers });
   }
 
-  public storePaymentInfo(userID: String, card: Card): Observable<any> {
-    return this.post('users/store-payment-info', { userId: userID, card });
+  public storePaymentInfo(card: Card): Observable<any> {
+    return this.post('users/store-payment-info', {
+      userId: card.userID,
+      cardNumber: card.cardNumber,
+      expDate: card.expDate,
+      name: card.name,
+      street: card.street,
+      city: card.city,
+      state: card.state,
+      zip: card.zip,
+      email: card.email,
+      mobile: card.mobile,
+    });
   }
 }

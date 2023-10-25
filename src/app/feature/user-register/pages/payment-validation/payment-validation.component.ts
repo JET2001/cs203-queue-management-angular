@@ -13,7 +13,7 @@ export class PaymentValidationComponent {
   cardNumberFG: FormGroup;
   cardNumberFC: FormControl;
   expDateFC: FormControl;
-  cvvFC: FormControl;
+  // cvvFC: FormControl;
   billingFG: FormGroup;
   nameFC: FormControl;
   streetFC: FormControl;
@@ -30,7 +30,7 @@ export class PaymentValidationComponent {
   ) {
     this.cardNumberFC = new FormControl('', []);
     this.expDateFC = new FormControl('', []);
-    this.cvvFC = new FormControl('', []);
+    // this.cvvFC = new FormControl('', []);
     this.nameFC = new FormControl('', []);
     this.streetFC = new FormControl('', []);
     this.cityFC = new FormControl('', []);
@@ -41,7 +41,7 @@ export class PaymentValidationComponent {
     this.cardNumberFG = fb.group([
       this.cardNumberFC,
       this.expDateFC,
-      this.cvvFC,
+      // this.cvvFC,
     ]);
     this.billingFG = fb.group([
       this.nameFC,
@@ -55,15 +55,20 @@ export class PaymentValidationComponent {
   }
 
   public showSaveButton(): boolean {
-    if (this.cardNumberFG.invalid || this.billingFG.invalid || this.cardNumberFG.untouched) return false;
+    if (
+      this.cardNumberFG.invalid ||
+      this.billingFG.invalid ||
+      this.cardNumberFG.untouched
+    )
+      return false;
     return true;
   }
 
   public saveCard(): void {
     const card: Card = {
+      userID: this.authService.userID!,
       cardNumber: this.cardNumberFC.value,
       expDate: this.expDateFC.value,
-      cvv: this.cvvFC.value,
       name: this.nameFC.value,
       street: this.streetFC.value,
       city: this.cityFC.value,
@@ -73,9 +78,6 @@ export class PaymentValidationComponent {
       mobile: this.mobileFC.value,
     };
     console.log(this.authService.user!);
-    this.storeUserInfoService.storePaymentInfo(
-      this.authService.user!.userID,
-      card
-    );
+    this.storeUserInfoService.storePaymentInfo(card).subscribe((value) => console.log(value));
   }
 }

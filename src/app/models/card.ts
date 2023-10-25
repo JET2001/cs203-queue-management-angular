@@ -1,7 +1,7 @@
 export interface Card {
+    userID: string,
     cardNumber: string,
     expDate: string,
-    cvv: string,
     name: string,
     street: string,
     city: string,
