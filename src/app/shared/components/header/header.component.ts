@@ -68,6 +68,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   logoutUser(): void {
     this.authService.userID = undefined;
     this.userLoggedOut.emit();
+    window.location.reload();
   }
 
   handleConcertsButtonClick(): void {
