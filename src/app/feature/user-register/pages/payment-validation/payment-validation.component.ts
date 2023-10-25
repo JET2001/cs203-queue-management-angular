@@ -55,7 +55,7 @@ export class PaymentValidationComponent {
   }
 
   public showSaveButton(): boolean {
-    if (this.cardNumberFG.invalid || this.billingFG.invalid) return false;
+    if (this.cardNumberFG.invalid || this.billingFG.invalid || this.cardNumberFG.untouched) return false;
     return true;
   }
 

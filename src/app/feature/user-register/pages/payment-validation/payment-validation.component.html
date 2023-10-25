@@ -15,7 +15,7 @@
           placeholder="MMYY"
           [inputValue]="expDateFC"
         ></app-input-field>
-        <app-input-field inputType="cvv" placeholder="CVV" [inputValue]="cvvFC"></app-input-field>
+        <!-- <app-input-field inputType="cvv" placeholder="CVV" [inputValue]="cvvFC"></app-input-field> -->
       </div>
     </div>
   </form>
@@ -33,5 +33,7 @@
       <app-input-field placeholder="Phone number" inputType="mobile"></app-input-field>
     </div>
   </form>
-  <app-text-button [buttonText]="'Save'" buttonVariants="primary"></app-text-button>
+  <div *ngIf="showSaveButton()">
+    <app-text-button [buttonText]="'Save'" buttonVariants="primary"></app-text-button>
+  </div>
 </div>

@@ -80,6 +80,8 @@ export class LoginPopupComponent extends BaseComponent implements OnInit {
                 } else {
                   this.allowLoginEvent.emit(true);
                   this.authService.user = user;
+                  this.authService.userID = user.userID;
+                  this.authService.email = user.email;
                 }
 
                 this.loginFG.reset();
