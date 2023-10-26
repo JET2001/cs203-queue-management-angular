@@ -15,23 +15,25 @@
           placeholder="MMYY"
           [inputValue]="expDateFC"
         ></app-input-field>
-        <app-input-field inputType="cvv" placeholder="CVV" [inputValue]="cvvFC"></app-input-field>
+        <!-- <app-input-field inputType="cvv" placeholder="CVV" [inputValue]="cvvFC"></app-input-field> -->
       </div>
     </div>
   </form>
   <h2> Billing Information </h2>
   <form [formGroup]="billingFG">
     <div class="billing-container">
-      <app-input-field placeholder="Name as shown on card"></app-input-field>
-      <app-input-field placeholder="Street"></app-input-field>
+      <app-input-field placeholder="Name as shown on card" [inputValue]="nameFC"></app-input-field>
+      <app-input-field placeholder="Street" [inputValue]="streetFC"></app-input-field>
       <div class="address-input">
-        <app-input-field placeholder="City"></app-input-field>
-        <app-input-field placeholder="State"></app-input-field>
-        <app-input-field placeholder="Zip/ Postal Code" inputType="zip"></app-input-field>
+        <app-input-field placeholder="City" [inputValue]="cityFC"></app-input-field>
+        <app-input-field placeholder="State" [inputValue]="stateFC"></app-input-field>
+        <app-input-field placeholder="Zip/ Postal Code" inputType="zip" [inputValue]="zipFC"></app-input-field>
       </div>
-      <app-input-field placeholder="Email address" inputType="email"></app-input-field>
-      <app-input-field placeholder="Phone number" inputType="mobile"></app-input-field>
+      <app-input-field placeholder="Email address" inputType="email" [inputValue]="emailFC"></app-input-field>
+      <app-input-field placeholder="Phone number" inputType="mobile" [inputValue]="mobileFC"></app-input-field>
     </div>
   </form>
-  <app-text-button [buttonText]="'Save'" buttonVariants="primary"></app-text-button>
+  <div *ngIf="showSaveButton()" class="save-button">
+    <app-text-button [buttonText]="'Save'" buttonVariants="primary" (buttonClick)="saveCard()"></app-text-button>
+  </div>
 </div>

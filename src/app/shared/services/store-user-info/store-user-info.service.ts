@@ -5,6 +5,7 @@ import { BaseRestApiService } from 'src/app/core/services/base-rest-api/base-res
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import { Card } from 'src/app/models/card';
+import { User } from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +79,17 @@ export class StoreUserInfoService extends BaseRestApiService {
   }
 
   public storePaymentInfo(card: Card): Observable<any> {
-    return this.post('users/store-payment-info', card);
+    return this.post('users/store-payment-info', {
+      userId: card.userID,
+      cardNumber: card.cardNumber,
+      expDate: card.expDate,
+      name: card.name,
+      street: card.street,
+      city: card.city,
+      state: card.state,
+      zip: card.zip,
+      email: card.email,
+      mobile: card.mobile,
+    });
   }
 }

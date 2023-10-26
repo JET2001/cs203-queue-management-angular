@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Card } from './../../../../models/card';
 import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
+import { Card } from './../../../../models/card';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-payment-validation',
@@ -12,7 +13,7 @@ export class PaymentValidationComponent {
   cardNumberFG: FormGroup;
   cardNumberFC: FormControl;
   expDateFC: FormControl;
-  cvvFC: FormControl;
+  // cvvFC: FormControl;
   billingFG: FormGroup;
   nameFC: FormControl;
   streetFC: FormControl;
@@ -24,11 +25,12 @@ export class PaymentValidationComponent {
 
   constructor(
     private fb: FormBuilder,
-    private storeUserInfoService: StoreUserInfoService
+    private storeUserInfoService: StoreUserInfoService,
+    private authService: AuthenticationService
   ) {
     this.cardNumberFC = new FormControl('', []);
     this.expDateFC = new FormControl('', []);
-    this.cvvFC = new FormControl('', []);
+    // this.cvvFC = new FormControl('', []);
     this.nameFC = new FormControl('', []);
     this.streetFC = new FormControl('', []);
     this.cityFC = new FormControl('', []);
@@ -39,7 +41,7 @@ export class PaymentValidationComponent {
     this.cardNumberFG = fb.group([
       this.cardNumberFC,
       this.expDateFC,
-      this.cvvFC,
+      // this.cvvFC,
     ]);
     this.billingFG = fb.group([
       this.nameFC,
@@ -53,15 +55,20 @@ export class PaymentValidationComponent {
   }
 
   public showSaveButton(): boolean {
-    if (this.cardNumberFG.invalid || this.billingFG.invalid) return false;
+    if (
+      this.cardNumberFG.invalid ||
+      this.billingFG.invalid ||
+      this.cardNumberFG.untouched
+    )
+      return false;
     return true;
   }
 
   public saveCard(): void {
     const card: Card = {
+      userID: this.authService.userID!,
       cardNumber: this.cardNumberFC.value,
       expDate: this.expDateFC.value,
-      cvv: this.cvvFC.value,
       name: this.nameFC.value,
       street: this.streetFC.value,
       city: this.cityFC.value,
@@ -70,6 +77,7 @@ export class PaymentValidationComponent {
       email: this.emailFC.value,
       mobile: this.mobileFC.value,
     };
-    this.storeUserInfoService.storePaymentInfo(card);
+    console.log(this.authService.user!);
+    this.storeUserInfoService.storePaymentInfo(card).subscribe((value) => console.log(value));
   }
 }
