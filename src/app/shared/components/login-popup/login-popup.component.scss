@@ -59,3 +59,10 @@
   border-width: 0px;
   background-color: transparent;
 }
+
+.error {
+  -webkit-text-fill-color: $error-1;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}

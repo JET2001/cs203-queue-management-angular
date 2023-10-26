@@ -55,11 +55,12 @@ export class LoginPopupComponent extends BaseComponent implements OnInit {
     let email = this.emailFC.value;
     this.authService
       .login(this.emailFC.value, mobile, this.passwordFC.value)
-      .subscribe(
-        (data: string | boolean) => {
+      .subscribe({
+        next: (token: string) => {
           // User gets a JWT token
-          if (typeof data == typeof '') {
-            this.authService.saveAuthToken(JSON.parse(JSON.stringify(data)));
+          console.log(token);
+          if (token !== 'false') {
+            this.authService.saveAuthToken(JSON.parse(JSON.stringify(token)));
 
             // Make another call to get the user object --> quite inefficient for now. But possibly can refactor.
             this.getUserInfoService
@@ -100,7 +101,7 @@ export class LoginPopupComponent extends BaseComponent implements OnInit {
             // Dismiss this active modal
             this.activeModal.dismiss();
             this.spinnerHide();
-            if (this.userIsVerified) {
+            if (this.userIsVerified && token) {
               // Authenticate user
               this.authService.authenticateUser().then((data: boolean) => {
                 console.log('here');
@@ -112,16 +113,15 @@ export class LoginPopupComponent extends BaseComponent implements OnInit {
             // return;
           } else {
             this.showInvalidLoginMessage = true;
-            this.loginFG.reset();
             this.spinnerHide();
           }
         },
-        (error: Error) => {
-          // console.log(error.message);
+        error: (error) => {
+          this.showInvalidLoginMessage = true;
           // if (error.message)
           this.spinnerHide();
-        }
-      );
+        },
+      });
   }
 
   private _fieldsAllValid(): boolean {
