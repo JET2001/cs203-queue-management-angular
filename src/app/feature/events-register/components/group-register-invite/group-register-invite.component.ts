@@ -3,7 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
-  Output
+  Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
@@ -35,6 +35,9 @@ export class GroupRegisterInviteComponent {
   // }
 
   verifyUser(idx: number): boolean | undefined {
+    // if (this.inviteeVerified[idx] === undefined) return false;
+    // if (this.inviteeVerified[idx]) return true;
+    // return false;
     return this.inviteeVerified[idx] != undefined;
   }
 
