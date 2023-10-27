@@ -78,6 +78,6 @@ export class PaymentValidationComponent {
       mobile: this.mobileFC.value,
     };
     console.log(this.authService.user!);
-    this.storeUserInfoService.storePaymentInfo(card).subscribe((value) => console.log(value));
+    this.storeUserInfoService.storePaymentInfo(card).subscribe(() => {});
   }
 }

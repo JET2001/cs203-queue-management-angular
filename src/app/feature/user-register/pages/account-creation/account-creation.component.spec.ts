@@ -95,8 +95,6 @@ describe('AccountCreationComponent', () => {
     );
     component.handleShowOTPButton();
     fixture.detectChanges();
-    console.log(component.showOTPButton)
-      console.log(component.mobileNumberExists)
     const showOTPButton = component.showOTPButton;
     expect(showOTPButton).toBeTruthy();
   }));
