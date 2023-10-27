@@ -9,9 +9,17 @@ import { GetRegistrationGroupService } from 'src/app/shared/services/get-registr
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  catchError,
+  forkJoin,
+  map,
+  of,
+  throwError,
+} from 'rxjs';
 import { User } from 'src/app/models/user';
-import {  RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
+import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { MAX_USERS_IN_GROUP } from '../../constants/event-register-constants';
 import { BaseComponent } from 'src/app/base/base.component';
 
@@ -20,7 +28,10 @@ import { BaseComponent } from 'src/app/base/base.component';
   templateUrl: './group-registration.component.html',
   styleUrls: ['./group-registration.component.scss'],
 })
-export class GroupRegistrationComponent extends BaseComponent implements OnInit {
+export class GroupRegistrationComponent
+  extends BaseComponent
+  implements OnInit
+{
   // Fields
   eventID!: string | undefined;
   groupID!: string | undefined;
@@ -29,7 +40,7 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
   keyStrokeDetected: boolean = false;
 
   // Parameters for modify group
-  regGroupInfo !: RegGroupDTOResp | undefined;
+  regGroupInfo!: RegGroupDTOResp | undefined;
   modifyGroup: boolean = false;
 
   // Invitees
@@ -71,13 +82,15 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
     this.modifyGroup = this.storeRegGroupService.modifyGroup;
 
     // In case user has a group, but wants to change group.
-    if (this.storeRegGroupService.modifyGroup && this.regGroupInfo !== undefined) {
-
+    if (
+      this.storeRegGroupService.modifyGroup &&
+      this.regGroupInfo !== undefined
+    ) {
       // load all fields into the original positions
       for (let i = 0; i < this.regGroupInfo.userGroup.length; ++i) {
         let user: User = this.regGroupInfo.userGroup[i];
         this.invitees[i][0].setValue(user.email);
-        let userMobile: string = "+".concat(user.mobileNo.substring(1));
+        let userMobile: string = '+'.concat(user.mobileNo.substring(1));
         this.invitees[i][1].setValue(userMobile);
       }
     }
@@ -89,7 +102,8 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
     this.spinnerShow();
     const emailList: string[] = [];
     const mobileList: string[] = [];
-    for(let invitee of this.invitees){ //invitee is of type formcontrol
+    for (let invitee of this.invitees) {
+      //invitee is of type formcontrol
       if (invitee[0].value === '' || invitee[1].value === '') continue;
 
       emailList.push(invitee[0].value);
@@ -101,15 +115,26 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
     mobileList.push(user.mobileNo);
 
     console.log(emailList, mobileList);
-    const eventID : string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
-    if (!this.modifyGroup){
+    const eventID: string = this.storeEventInfoService.eventInfo.eventID!; // won't be null, because of the auth guard.
+    if (!this.modifyGroup) {
       // Submits the group object.
       // Will route to the view-events page upon completion
-      this._handleCreateGroupSubmission(emailList, mobileList, user.email, eventID);
+      this._handleCreateGroupSubmission(
+        emailList,
+        mobileList,
+        user.email,
+        eventID
+      );
     } else {
       // Submits the group object for modification
       // Will route to the view-events page upon completion
-      this._handleModifyGroupSubmission(emailList, mobileList, user.email, user.userID, eventID);
+      this._handleModifyGroupSubmission(
+        emailList,
+        mobileList,
+        user.email,
+        user.userID,
+        eventID
+      );
     }
   }
 
@@ -123,29 +148,55 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
 
   verify(): void {
     this.spinnerShow();
-    setTimeout(() => {
-      try {
-        for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx){
-          this.inputIsValid(inviteeIdx).subscribe(
-            (data: boolean | undefined) => {
-              this.inviteeVerified[inviteeIdx] = data;
-            },
-            (error: Error) => {
-              this.inviteeVerified[inviteeIdx] = false;
-              console.log(error);
-            }
-          );
-        }
-        this.spinnerHide();
-      } catch (error) {
-        console.error('An error occurred in verify():', error);
-      }
-    }, 5000);
+    // setTimeout(() => {
+    // try {
+    //   for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx) {
+    //     this.inputIsValid(inviteeIdx).subscribe({
+    //       next: (data: boolean | undefined) => {
+    //         console.log(inviteeIdx + ' ' + data);
+    //         this.inviteeVerified[inviteeIdx] = data;
+    //       },
+    //       error: (error: Error) => {
+    //         this.inviteeVerified[inviteeIdx] = false;
+    //         console.log(error);
+    //       },
+    //     });
+    //   }
+    //   this.spinnerHide();
+    // } catch (error) {
+    //   console.error('An error occurred in verify():', error);
+    // }
+    //}
+    // , 5000);
+
+    // ...
+
+    const observables = [];
+
+    for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx) {
+      observables.push(
+        this.inputIsValid(inviteeIdx).pipe(
+          map((data: boolean | undefined) => {
+            this.inviteeVerified[inviteeIdx] = data;
+          }),
+          catchError((error: any) => {
+            this.inviteeVerified[inviteeIdx] = false;
+            console.log(error);
+            return throwError(() => new Error());
+          })
+        )
+      );
+    }
+
+    forkJoin(observables).subscribe(() => {
+      // This block will be executed when all observables complete
+      this.spinnerHide();
+    });
   }
 
   isGroupVerified(): boolean {
-    for (let status of this.inviteeVerified){
-      if (status !== true) return false;
+    for (let status of this.inviteeVerified) {
+      if (status === false) return false;
     }
     return true;
   }
@@ -153,7 +204,7 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
   inputIsValid(inviteeNum: number): Observable<boolean | undefined> {
     // Case 1: if both fields are empty, there can be no invitation. return true
     if (this._userInfoIsEmpty(inviteeNum)) {
-      return of(true);
+      return of(undefined);
     }
 
     // Case 2: if one field is empty, input is incomplete. return false
@@ -161,55 +212,100 @@ export class GroupRegistrationComponent extends BaseComponent implements OnInit 
       return of(false);
     }
 
-     // Case 3: if both fields are filled, check for validation using GetUserInfoService. if undefined is returned, return false
+    // Case 3: if both fields are filled, check for validation using GetUserInfoService. if undefined is returned, return false
     let email: string = this.invitees[inviteeNum][0].value;
+    var userExists: boolean = false;
     // there will be a '+', so concatenate '0'
-    let mobile: string = '0'.concat(this.invitees[inviteeNum][1].value.substring(1));
-    return this.getUserInfoService.getUserID(email, mobile);
+    let mobile: string = '0'.concat(
+      this.invitees[inviteeNum][1].value.substring(1)
+    );
+    // this.getUserInfoService.getUserID(email, mobile).subscribe({
+    //   next: (data) => {
+    //     console.log(data)
+    //     if (data) userExists = true;
+    //     console.log(userExists)
+    //     return(userExists)
+    //   },
+    //   error: () => {
+    //     console.log('here')
+    //     userExists = false;
+    //   },
+    // });
+    // console.log(userExists)
+    // return of(userExists);
+
+    return this.getUserInfoService.getUserID(email, mobile).pipe(
+      map((data) => {
+        if (data) {
+          userExists = true;
+          this.inviteeVerified[inviteeNum] = true;
+        }
+        return userExists;
+      }),
+      catchError((error) => {
+        console.log(error);
+        userExists = false;
+        this.inviteeVerified[inviteeNum] = false;
+        return of(userExists);
+      })
+    );
   }
 
   onKeyStrokeDetected() {
-      this.verified = false;
-      this.inviteeVerified = [undefined, undefined, undefined];
+    this.verified = false;
+    this.inviteeVerified = [undefined, undefined, undefined];
   }
-
 
   // ===================================================
   // Handle group submission
   // ===================================================
-  private _handleCreateGroupSubmission(emailList: string[], mobileList: string[], userEmail: string, eventID: string): void {
-    this.storeRegGroupService.saveGroup(emailList, mobileList, userEmail, eventID).subscribe(
-      (data: any) => {
-        this.router.navigate(['/events']);
-      },
-      (error: Error) => {
-        console.log(error);
-        this.router.navigate(['/events']);
-      }
-    );
+  private _handleCreateGroupSubmission(
+    emailList: string[],
+    mobileList: string[],
+    userEmail: string,
+    eventID: string
+  ): void {
+    this.storeRegGroupService
+      .saveGroup(emailList, mobileList, userEmail, eventID)
+      .subscribe(
+        (data: any) => {
+          this.router.navigate(['/events']);
+        },
+        (error: Error) => {
+          console.log(error);
+          this.router.navigate(['/events']);
+        }
+      );
   }
 
-  private _handleModifyGroupSubmission(emailList: string[], mobileList: string[], userEmail: string, userId: string, eventID: string): void {
-    this.storeRegGroupService.saveModifiedGroup(emailList, mobileList, userEmail, userId, eventID).subscribe(
-      (data: any) => {
-        this.router.navigate(['/events']);
-      },
-      (error: Error) => {
-        console.log(error);
-        this.router.navigate(['/events']);
-      }
-    );
+  private _handleModifyGroupSubmission(
+    emailList: string[],
+    mobileList: string[],
+    userEmail: string,
+    userId: string,
+    eventID: string
+  ): void {
+    this.storeRegGroupService
+      .saveModifiedGroup(emailList, mobileList, userEmail, userId, eventID)
+      .subscribe(
+        (data: any) => {
+          this.router.navigate(['/events']);
+        },
+        (error: Error) => {
+          console.log(error);
+          this.router.navigate(['/events']);
+        }
+      );
   }
-
-
 
   private _userInfoNotEmpty(idx: number): boolean {
-    return this.invitees[idx][0].value !== '' &&
-    this.invitees[idx][1].value !== '';
+    return !!this.invitees[idx][0].value && !!this.invitees[idx][1].value;
   }
 
-  private _userInfoIsEmpty(idx: number) : boolean {
-    return this.invitees[idx][0].value === '' &&
-    this.invitees[idx][1].value === '';
+  private _userInfoIsEmpty(idx: number): boolean {
+    // return (
+    //   this.invitees[idx][0].value === '' && this.invitees[idx][1].value === ''
+    // );
+    return !this.invitees[idx][0].value && !this.invitees[idx][1].value;
   }
 }

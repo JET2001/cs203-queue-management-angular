@@ -25,6 +25,8 @@ img {
 .status-msg {
   display: inline;
   text-wrap: nowrap;
+  white-space: nowrap;
+  width: max-content;
   margin-left: 10px;
 
   .success {
