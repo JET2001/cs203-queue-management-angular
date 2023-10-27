@@ -9,7 +9,15 @@ import { GetRegistrationGroupService } from 'src/app/shared/services/get-registr
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
-import { Observable, ReplaySubject, catchError, map, of } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  catchError,
+  forkJoin,
+  map,
+  of,
+  throwError,
+} from 'rxjs';
 import { User } from 'src/app/models/user';
 import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { MAX_USERS_IN_GROUP } from '../../constants/event-register-constants';
@@ -141,30 +149,54 @@ export class GroupRegistrationComponent
   verify(): void {
     this.spinnerShow();
     // setTimeout(() => {
-    try {
-      for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx) {
-        this.inputIsValid(inviteeIdx).subscribe({
-          next: (data: boolean | undefined) => {
-            console.log(inviteeIdx + ' ' + data);
-            this.inviteeVerified[inviteeIdx] = data;
-          },
-          error: (error: Error) => {
-            this.inviteeVerified[inviteeIdx] = false;
-            console.log(error);
-          },
-        });
-      }
-      this.spinnerHide();
-    } catch (error) {
-      console.error('An error occurred in verify():', error);
-    }
+    // try {
+    //   for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx) {
+    //     this.inputIsValid(inviteeIdx).subscribe({
+    //       next: (data: boolean | undefined) => {
+    //         console.log(inviteeIdx + ' ' + data);
+    //         this.inviteeVerified[inviteeIdx] = data;
+    //       },
+    //       error: (error: Error) => {
+    //         this.inviteeVerified[inviteeIdx] = false;
+    //         console.log(error);
+    //       },
+    //     });
+    //   }
+    //   this.spinnerHide();
+    // } catch (error) {
+    //   console.error('An error occurred in verify():', error);
+    // }
     //}
     // , 5000);
+
+    // ...
+
+    const observables = [];
+
+    for (let inviteeIdx = 0; inviteeIdx < MAX_USERS_IN_GROUP; ++inviteeIdx) {
+      observables.push(
+        this.inputIsValid(inviteeIdx).pipe(
+          map((data: boolean | undefined) => {
+            this.inviteeVerified[inviteeIdx] = data;
+          }),
+          catchError((error: any) => {
+            this.inviteeVerified[inviteeIdx] = false;
+            console.log(error);
+            return throwError(() => new Error());
+          })
+        )
+      );
+    }
+
+    forkJoin(observables).subscribe(() => {
+      // This block will be executed when all observables complete
+      this.spinnerHide();
+    });
   }
 
   isGroupVerified(): boolean {
     for (let status of this.inviteeVerified) {
-      if (status !== true || status !== undefined) return false;
+      if (status === false) return false;
     }
     return true;
   }
