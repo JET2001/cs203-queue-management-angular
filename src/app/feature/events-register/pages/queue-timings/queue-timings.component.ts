@@ -12,7 +12,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
-import { QueueTempStorageService } from './../../../../mock-db/queue-temp-storage/queue-temp-storage.service';
 import {
   GetShowInfoService,
   ShowInfo,
