@@ -34,7 +34,6 @@ export class VerifyEmailComponent extends BaseComponent implements OnInit {
 
   noError() {
     this.spinnerShow();
-    console.log('here');
     this.router.navigate(['/home']);
   }
 
