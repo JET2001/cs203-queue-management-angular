@@ -14,7 +14,7 @@ export class LandingPageComponent extends BaseComponent implements OnInit {
   userID!: string | undefined;
   constructor(
     protected override spinner: NgxSpinnerService,
-    private authService: AuthenticationService,
+    private authService: AuthenticationService
   ) {
     super(spinner);
   }
