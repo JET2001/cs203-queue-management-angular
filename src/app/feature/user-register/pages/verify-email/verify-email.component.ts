@@ -33,21 +33,15 @@ export class VerifyEmailComponent extends BaseComponent implements OnInit {
     });
   }
 
-  noError() {
+  noError(): void {
     this.spinnerShow();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Email verified successfully',
-    });
+    this.statusCommunicationService.saveMessage('Your email has been successfully verified', 'success');
     this.router.navigate(['/home']);
   }
 
-  hasError() {
+  hasError(): void {
     this.spinnerShow();
+    this.statusCommunicationService.saveMessage('Your verification link is invalid. Please contact us if you need another link.', 'error');
     this.router.navigate(['/home']);
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Token is invalid',
-    });
   }
 }
