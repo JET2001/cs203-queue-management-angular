@@ -1,9 +1,12 @@
+import { StatusCommunicationService } from 'src/app/core/services/status-communication/status-communication.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
 import { Card } from './../../../../models/card';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-payment-validation',
@@ -28,6 +31,8 @@ export class PaymentValidationComponent {
     private fb: FormBuilder,
     private storeUserInfoService: StoreUserInfoService,
     private authService: AuthenticationService,
+    private statusCommunicationService: StatusCommunicationService,
+    private messageService: MessageService,
     private router: Router,
   ) {
     this.cardNumberFC = new FormControl('', []);
@@ -81,7 +86,14 @@ export class PaymentValidationComponent {
     };
     console.log(this.authService.user!);
     this.storeUserInfoService.storePaymentInfo(card).subscribe(() => {
+      this.statusCommunicationService.saveMessage('Payment saved successfully', 'success');
       this.router.navigate(['/home']);
+    },
+    (error: HttpErrorResponse) => {
+      this.messageService.add({
+        summary: error.message,
+        severity: 'error'
+      });
     });
   }
 }
