@@ -2,11 +2,9 @@ import { BaseComponent } from './../../../../base/base.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MenuItem, Message, MessageService } from 'primeng/api';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
-import { DelayCounter } from 'src/app/mock-db/DelayCounter';
 import { Event } from 'src/app/models/event';
-import { RegGroup } from 'src/app/models/reg-group';
 import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import {
@@ -20,6 +18,9 @@ import { RegGroupDTOResp } from 'src/app/models/dto/reg-group-dto';
 import { QueueDTO } from 'src/app/models/dto/queues-dto';
 import { RegStatus, RegStepper } from '../../constants/reg-status';
 import { User } from 'src/app/models/user';
+import { StatusCommunicationService } from 'src/app/core/services/status-communication/status-communication.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NO_CONNECTION_MESSAGE } from 'src/app/core/constants/error-messages';
 
 @Component({
   selector: 'app-view-event-info',
@@ -67,6 +68,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
     private authService: AuthenticationService,
     private storeRegGroupService: StoreRegistrationGroupInfoService,
     private messageService: MessageService,
+    private statusCommunicationService: StatusCommunicationService
   ) {
     super(spinner);
   }
@@ -74,6 +76,7 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.queueList = [];
     this.eventID = this.storeEventInfoService.eventInfo.eventID;
+
     if (this.eventID == undefined) {
       this.router.navigate(['/home']);
       return;
@@ -132,17 +135,22 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
           isHighlighted: data.highlighted,
         };
         this.hasEventLoaded = true;
-      });
+      },
+      (error: HttpErrorResponse) => this._handleError(error));
 
     // Load user information if user is logged in.
     // Note that this function will be also be triggered when the user logs in after being routed to this page.
     this._updateUserEventInfo();
   }
 
-  // ngAfterViewInit(): void {
-  //   this.spinner.show();
-  // }
-
+  ngAfterViewInit(): void{
+    console.log(this.statusCommunicationService.hasMessage);
+    console.log(this.statusCommunicationService.message);
+    if (this.statusCommunicationService.hasMessage){
+      let message: Message = this.statusCommunicationService.message!;
+      this.messageService.add(message);
+    }
+  }
   // ===========================================
   // Handle case where user logs in and logs out from the View Events page
   // ===========================================
@@ -264,12 +272,8 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
             this._updateUserEventInfo();
           }
         },
-        (error: Error) => {
-          // TODO: Connection Error
-          // TODO: Unauthorized error
-          // TODO: Internal Server Error
-          // TODO: Conflict error
-          console.log(error);
+        (error: HttpErrorResponse) => {
+          this._handleError(error);
           this.spinnerHide();
         }
       );
@@ -294,12 +298,8 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
             this._updateUserEventInfo();
           }
         },
-        (error: Error) => {
-          // TODO: Connection Error
-          // TODO: Unauthorized Error
-          // TODO: Internal Server Error
-          // TODO: Conflict Error
-          console.log(error);
+        (error: HttpErrorResponse) => {
+          this._handleError(error);
           this.spinnerHide();
         }
       );
@@ -418,17 +418,12 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
           this.hasRegGroupInfoLoaded = true;
           this.spinnerHide();
         },
-        (error: Error) => {
-          console.log(error);
+        (error: HttpErrorResponse) => {
+          this._handleError(error);
           this._setRegistrationStatusOfUser();
           this.activeIndex = this._mapRegStatusToRegStepper();
           this.hasRegGroupInfoLoaded = true;
-          if (error.message == '400') {
-            // User is not registered
-          } else {
-            // TODO: Internal Server Error
 
-          }
           this.spinnerHide();
         }
       );
@@ -454,5 +449,16 @@ export class ViewEventInfoComponent extends BaseComponent implements OnInit {
     this.hasUserConfirmed = false;
     this.registerStatus = RegStatus.NOT_REGISTERED;
     this.activeIndex = RegStepper.NOT_LOGGED_IN;
+  }
+
+  private _handleError(error: HttpErrorResponse): void {
+    let message: string = '';
+    if (error.status == 0) message = NO_CONNECTION_MESSAGE;
+    else message = error.message;
+
+    this.messageService.add({
+      severity: 'error',
+      summary: message,
+    });
   }
 }

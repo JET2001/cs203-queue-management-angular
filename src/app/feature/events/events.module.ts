@@ -11,6 +11,7 @@ import { ViewShowsComponent } from './components/view-shows/view-shows.component
 import { eventRoutes } from './events.routing';
 import { ViewEventInfoComponent } from './pages/view-event-info/view-event-info.component';
 import { QueuesListComponent } from './components/queues-list/queues-list.component';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { QueuesListComponent } from './components/queues-list/queues-list.compon
     StepsModule,
   ],
   providers: [
+    HttpClient,
     MessageService
   ]
 })
