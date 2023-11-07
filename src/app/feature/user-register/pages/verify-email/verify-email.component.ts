@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BaseComponent } from 'src/app/base/base.component';
 import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
+import { ErrorMessagesService } from 'src/app/core/services/error-messages/error-messages.service';
 
 @Component({
   selector: 'app-verify-email',
@@ -17,7 +18,8 @@ export class VerifyEmailComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private storeUserInfoService: StoreUserInfoService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private errorMessageService: ErrorMessagesService
   ) {
     super(spinner);
   }
@@ -34,6 +36,10 @@ export class VerifyEmailComponent extends BaseComponent implements OnInit {
 
   noError() {
     this.spinnerShow();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Email verified successfully'
+    });
     this.router.navigate(['/home']);
   }
 

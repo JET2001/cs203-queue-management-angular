@@ -9,6 +9,7 @@ import { PaymentValidationComponent } from './pages/payment-validation/payment-v
 import { userRegisterRoutes } from './user-register.routing';
 import { SetupPaymentPopupComponent } from './components/setup-payment-popup/setup-payment-popup.component';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -24,5 +25,6 @@ import { VerifyEmailComponent } from './pages/verify-email/verify-email.componen
     SharedModule,
     ReactiveFormsModule,
   ],
+  providers: [MessageService]
 })
 export class UserRegistrationModule {}

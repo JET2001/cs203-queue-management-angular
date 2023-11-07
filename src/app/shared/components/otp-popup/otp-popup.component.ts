@@ -30,8 +30,18 @@ export class OtpPopupComponent extends BaseComponent {
     this.spinnerShow();
     this.storeUserInfoService.verifyOtp(otp).then((value) => {
       this.otpVerified = value.data.valid;
+      if (this.otpVerified){
+        this.messageService.add({
+          severity: 'success',
+          summary: "Your mobile has been verified"
+        });
+      }
       this.mobileVerified.emit(this.otpVerified);
       if (!this.otpVerified) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Please verify your mobile to create an account'
+        });
       } else {
         this.activeModal.close();
       }

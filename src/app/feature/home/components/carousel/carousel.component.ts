@@ -119,7 +119,6 @@ export class CarouselComponent extends BaseComponent implements OnInit {
   }
 
   handleLearnMoreButtonClick(eventID: string): void {
-    // console.log(eventID);
     this.spinnerShow();
     const eventSelected : Event | undefined = this.id2CarousellEvent.get(eventID);
 
