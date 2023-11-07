@@ -9,6 +9,10 @@ import { Event } from '../../../../models/event';
 import { GetEventInfoService } from '../../../../shared/services/get-event-info/get-event-info-service';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { BaseComponent } from 'src/app/base/base.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorMessagesService } from 'src/app/core/services/error-messages/error-messages.service';
+import { MessageService } from 'primeng/api';
+import { NO_CONNECTION_MESSAGE } from 'src/app/core/constants/error-messages';
 
 @Component({
   selector: 'app-carousel',
@@ -21,6 +25,7 @@ export class CarouselComponent extends BaseComponent implements OnInit {
   isCarousellReady: boolean = false;
   id2CarousellEvent: Map<string, Event>;
 
+
   constructor(
     protected override spinner: NgxSpinnerService,
     private getEventInfoService: GetEventInfoService,
@@ -28,7 +33,9 @@ export class CarouselComponent extends BaseComponent implements OnInit {
     private storeEventInfoService: StoreEventInfoService,
     private authService: AuthenticationService,
     private getRegGroupService: GetRegistrationGroupService,
-    private activeModal: NgbModal
+    private activeModal: NgbModal,
+    private errorMessageService: ErrorMessagesService,
+    private messageService: MessageService
   ) {
     super(spinner);
   }
@@ -37,8 +44,45 @@ export class CarouselComponent extends BaseComponent implements OnInit {
     this.id2CarousellEvent = new Map<string, Event>();
 
     this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
-      this._loadCarousellEvents(data);
-    });
+      // Get highlighted events from data
+      for (let obj of data) {
+        let event: Event = {
+          eventID: obj.id,
+          name: obj.name,
+          countries: obj.countries,
+          maxQueueable: obj.maxQueueable,
+          description: obj.description,
+          image: obj.posterImagePath,
+          isHighlighted: obj.highlighted,
+        };
+
+        this._buildEventSummary(event);
+
+        this.events.push(event);
+        this.id2CarousellEvent.set(event.eventID, event);
+      }
+      this.isCarousellReady = true;
+    },
+    (error: HttpErrorResponse) => {
+      let message: string = "";
+      if (error.status == 0) message = NO_CONNECTION_MESSAGE;
+      else message = error.message;
+
+      this.messageService.add({
+        severity: 'error',
+        summary: message
+      });
+    }
+    );
+
+    // Errors from another page
+    if (this.errorMessageService.hasError){
+      this.messageService.add({
+        severity: 'error',
+        summary: this.errorMessageService.message
+      });
+    }
+
   }
 
   handleRegisterButtonClick(eventID: string): void {
@@ -64,9 +108,10 @@ export class CarouselComponent extends BaseComponent implements OnInit {
     this.getRegGroupService.getRegGroupOfUser(eventID, this.authService.userID).subscribe(
       (data: any) => {
         // User has already registered --> route user to events page.
+        this.errorMessageService.message = "You have already registered for this event";
         this.router.navigate(['/events']);
       },
-      (error: Error) => {
+      (error: HttpErrorResponse) => {
         // User has not registered. Now we can route to group-register.
         this.router.navigate(['/events','register', 'group']);
       }
@@ -87,29 +132,6 @@ export class CarouselComponent extends BaseComponent implements OnInit {
       this.router.navigate(['/events']);
     }
     this.spinnerHide();
-  }
-
-  private _loadCarousellEvents(data: any): void {
-    this.getEventInfoService.loadAllCarousellEvents().subscribe((data: any) => {
-      // Get highlighted events from data
-      for (let obj of data) {
-        let event: Event = {
-          eventID: obj.id,
-          name: obj.name,
-          countries: obj.countries,
-          maxQueueable: obj.maxQueueable,
-          description: obj.description,
-          image: obj.posterImagePath,
-          isHighlighted: obj.highlighted,
-        };
-
-        this._buildEventSummary(event);
-
-        this.events.push(event);
-        this.id2CarousellEvent.set(event.eventID, event);
-      }
-      this.isCarousellReady = true;
-    });
   }
 
   private _buildEventSummary(event: Event): void {

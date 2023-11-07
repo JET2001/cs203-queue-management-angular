@@ -7,6 +7,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { baseURL } from '../../constants/api-paths';
+import { NO_CONNECTION_MESSAGE } from '../../constants/error-messages';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,6 @@ export abstract class BaseRestApiService {
       'Content-Type': 'application/json',
     }),
   };
-  // constructor() {}
 
   // Post request
   protected post(path: string, data: any): Observable<any> {
@@ -84,7 +84,15 @@ export abstract class BaseRestApiService {
 
   // Error handling --> this method can be overwritten if more fine grained error handling is required.
   // The default implementation creates a string in an error object
-  protected handleError(error: HttpErrorResponse): Error {
-    return new Error(error.status.toString());
+  protected handleError(error: HttpErrorResponse): HttpErrorResponse {
+    // Not sure why this doesn't work though...
+    if (error.status == 0){
+      const httpError: HttpErrorResponse = new HttpErrorResponse({
+        status: 0,
+        statusText: NO_CONNECTION_MESSAGE
+      });
+      return httpError;
+    }
+    return error;
   }
 }
