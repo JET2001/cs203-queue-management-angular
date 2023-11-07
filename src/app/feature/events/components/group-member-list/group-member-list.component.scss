@@ -3,20 +3,23 @@
 .item {
   display: flex;
   flex-direction: row;
+  column-gap: 5px;
 }
 
 .email {
-  width: 85%;
+  // width: 85%;
 }
 
 .confirm {
-  width: 5%;
+  // width: 5%;
   img {
-    width: 100%;
-    height: auto;
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
   }
 }
 
 .vacant p {
   -webkit-text-fill-color: $gray-2;
+  text-wrap: nowrap;
 }
