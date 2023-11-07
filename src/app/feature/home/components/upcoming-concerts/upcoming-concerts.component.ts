@@ -6,7 +6,7 @@ import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorMessagesService } from 'src/app/core/services/error-messages/error-messages.service';
+import { StatusCommunicationService } from 'src/app/core/services/status-communication/status-communication.service';
 import { MessageService } from 'primeng/api';
 import { NO_CONNECTION_MESSAGE } from 'src/app/core/constants/error-messages';
 
@@ -26,7 +26,7 @@ export class UpcomingConcertsComponent extends BaseComponent implements OnInit {
     private getEventInfoService: GetEventInfoService,
     private storeEventInfoService: StoreEventInfoService,
     private router: Router,
-    private errorMessageService: ErrorMessagesService,
+    private statusCommunicationService: StatusCommunicationService,
     private messageService: MessageService
   ) {
     super(spinner);
@@ -55,13 +55,13 @@ export class UpcomingConcertsComponent extends BaseComponent implements OnInit {
         this.hasConcertsLoaded = true;
       },
       (error: HttpErrorResponse) => {
-        let message: string = "";
-        if (error.status == 0)message = NO_CONNECTION_MESSAGE;
+        let message: string = '';
+        if (error.status == 0) message = NO_CONNECTION_MESSAGE;
         else message = error.message;
 
         this.messageService.add({
           severity: 'error',
-          summary: message
+          summary: message,
         });
       }
     );

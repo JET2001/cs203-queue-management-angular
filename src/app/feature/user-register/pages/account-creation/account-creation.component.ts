@@ -9,7 +9,7 @@ import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/st
 import { VerifyEmailPopupComponent } from '../../components/verify-email-popup/verify-email-popup.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { ErrorMessagesService } from 'src/app/core/services/error-messages/error-messages.service';
+import { StatusCommunicationService } from 'src/app/core/services/status-communication/status-communication.service';
 import { NO_CONNECTION_MESSAGE } from 'src/app/core/constants/error-messages';
 
 @Component({
@@ -39,7 +39,7 @@ export class AccountCreationComponent
     private ngbModal: NgbModal,
     private storeUserInfoService: StoreUserInfoService,
     private messageService: MessageService,
-    private errorMessageService: ErrorMessagesService
+    private statusCommunicationService: StatusCommunicationService
   ) {
     super(spinner);
     this.signUpForm = fb.group({});
@@ -52,10 +52,10 @@ export class AccountCreationComponent
     this.signUpForm.addControl('password2', this.password2FC);
     this.spinnerHide();
 
-    if (this.errorMessageService.hasError) {
+    if (this.statusCommunicationService.hasError) {
       this.messageService.add({
         severity: 'error',
-        summary: this.errorMessageService.message,
+        summary: this.statusCommunicationService.message,
       });
     }
   }
