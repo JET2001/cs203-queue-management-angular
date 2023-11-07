@@ -1,36 +1,32 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { ViewEventInfoComponent } from './view-event-info.component';
-import { TextButtonComponent } from 'src/app/shared/components/text-button/text-button.component';
-import { HeaderComponent } from 'src/app/shared/components/header/header.component';
-import { ViewShowsComponent } from '../../components/view-shows/view-shows.component';
-import { TableModule } from 'primeng/table';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { StepsModule } from 'primeng/steps';
-import { MessageService } from 'primeng/api';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MessagesModule } from 'primeng/messages';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { Router, RouterModule } from '@angular/router';
-import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
-import { GetUserInfoService } from 'src/app/shared/services/get-user-info/get-user-info.service';
+import { TableModule } from 'primeng/table';
+import { of, throwError } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { HeaderComponent } from 'src/app/shared/components/header/header.component';
+import { TextButtonComponent } from 'src/app/shared/components/text-button/text-button.component';
+import { GetEventInfoService } from 'src/app/shared/services/get-event-info/get-event-info-service';
+import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
 import { StoreRegistrationGroupInfoService } from 'src/app/shared/services/store-registration-group-info/store-registration-group-info.service';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { async, of, throwError } from 'rxjs';
-import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
 import { GroupMemberListComponent } from '../../components/group-member-list/group-member-list.component';
 import { QueuesListComponent } from '../../components/queues-list/queues-list.component';
+import { ViewShowsComponent } from '../../components/view-shows/view-shows.component';
 import { RegStatus, RegStepper } from '../../constants/reg-status';
+import { ViewEventInfoComponent } from './view-event-info.component';
 
 describe('ViewEventInfoComponent', () => {
   let component: ViewEventInfoComponent;
