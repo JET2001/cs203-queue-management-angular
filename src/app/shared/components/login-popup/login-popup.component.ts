@@ -104,7 +104,6 @@ export class LoginPopupComponent extends BaseComponent implements OnInit {
             if (this.userIsVerified && token) {
               // Authenticate user
               this.authService.authenticateUser().then((data: boolean) => {
-                console.log('here');
                 // Log in user
                 this.authService.email = email;
               });

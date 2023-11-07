@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { StoreUserInfoService } from 'src/app/shared/services/store-user-info/store-user-info.service';
 import { Card } from './../../../../models/card';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment-validation',
@@ -26,7 +27,8 @@ export class PaymentValidationComponent {
   constructor(
     private fb: FormBuilder,
     private storeUserInfoService: StoreUserInfoService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router,
   ) {
     this.cardNumberFC = new FormControl('', []);
     this.expDateFC = new FormControl('', []);
@@ -78,6 +80,8 @@ export class PaymentValidationComponent {
       mobile: this.mobileFC.value,
     };
     console.log(this.authService.user!);
-    this.storeUserInfoService.storePaymentInfo(card).subscribe(() => {});
+    this.storeUserInfoService.storePaymentInfo(card).subscribe(() => {
+      this.router.navigate(['/home']);
+    });
   }
 }
