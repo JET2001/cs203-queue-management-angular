@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Message } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'
@@ -6,22 +7,27 @@ import { Injectable } from '@angular/core';
 export class StatusCommunicationService {
 
   private _message: string | undefined;
+  private _severity: 'success' | 'warning' | 'info' | 'error' | undefined = undefined;
   private isErrorNew : boolean = false;
 
 
-  public get hasError(): boolean {
-    return this.isErrorNew && this._message !== undefined;
+  public get hasMessage(): boolean {
+    return this.isErrorNew && this._message !== undefined && this._severity !== undefined;
   }
 
-  public get message(): string | undefined {
+  public get message(): Message | undefined {
     if (!this.isErrorNew) return undefined;
     this.isErrorNew = false;
-    return this._message;
+    return {
+      severity: this._severity,
+      summary: this._message
+    };
   }
 
-  public set message(errorMessage: string | undefined) {
+  public saveMessage(messageText: string, severity: 'success' | 'warning' | 'info' | 'error'): void {
     this.isErrorNew = true;
-    this._message = errorMessage;
+    this._message = messageText;
+    this._severity = severity;
   }
 
 }

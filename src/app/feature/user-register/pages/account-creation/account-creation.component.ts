@@ -52,11 +52,8 @@ export class AccountCreationComponent
     this.signUpForm.addControl('password2', this.password2FC);
     this.spinnerHide();
 
-    if (this.statusCommunicationService.hasError) {
-      this.messageService.add({
-        severity: 'error',
-        summary: this.statusCommunicationService.message,
-      });
+    if (this.statusCommunicationService.hasMessage) {
+      this.messageService.add(this.statusCommunicationService.message!);
     }
   }
 

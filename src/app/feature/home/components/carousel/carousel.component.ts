@@ -76,11 +76,8 @@ export class CarouselComponent extends BaseComponent implements OnInit {
     );
 
     // Errors from another page
-    if (this.statusCommunicationService.hasError) {
-      this.messageService.add({
-        severity: 'error',
-        summary: this.statusCommunicationService.message,
-      });
+    if (this.statusCommunicationService.hasMessage) {
+      this.messageService.add(this.statusCommunicationService.message!);
     }
   }
 
@@ -110,8 +107,7 @@ export class CarouselComponent extends BaseComponent implements OnInit {
       .subscribe(
         (data: any) => {
           // User has already registered --> route user to events page.
-          this.statusCommunicationService.message =
-            'You have already registered for this event';
+          this.statusCommunicationService.saveMessage('You have already registered for this event', 'info');
           this.router.navigate(['/events']);
         },
         (error: HttpErrorResponse) => {
