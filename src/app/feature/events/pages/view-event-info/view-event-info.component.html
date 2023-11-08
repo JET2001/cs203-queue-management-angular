@@ -114,10 +114,6 @@
           <app-queues-list [queueList]="queueList"></app-queues-list>
         </div>
       </div>
-      <div *ngIf="showQueuesInfo()" class = 'queue-info-group'>
-        <h2>Registered Queues and Shows</h2>
-        <app-queues-list [queueList]="queueList"></app-queues-list>
-      </div>
     </div>
     <div class="event-desc-group">
       <div *ngIf="hasEventLoaded" class="description">

@@ -1,5 +1,3 @@
-import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/base/base.component';
 import {
   AfterContentInit,
   Component,
@@ -9,18 +7,18 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/base/base.component';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { QueueTimingPopupComponent } from 'src/app/feature/events-register/components/registration-confirmation-popup/queue-timing-popup';
-import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
-import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
-import { QueueTempStorageService } from './../../../../mock-db/queue-temp-storage/queue-temp-storage.service';
-import {
-  GetShowInfoService,
-  ShowInfo,
-} from './../../../../shared/services/get-show-info/get-show-info.service';
 import { QueueDTOResp } from 'src/app/models/dto/queues-dto';
 import { GetQueueInfoService } from 'src/app/shared/services/get-queue-info/get-queue-info.service';
 import { GetRegistrationGroupService } from 'src/app/shared/services/get-registration-group/get-registration-group.service';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { StoreEventInfoService } from 'src/app/shared/services/store-event-info/store-event-info.service';
+import { StoreQueueTimingService } from 'src/app/shared/services/store-queue-timing/store-queue-timing.service';
+import {
+  ShowInfo
+} from './../../../../shared/services/get-show-info/get-show-info.service';
 
 @Component({
   selector: 'app-queue-timings',
